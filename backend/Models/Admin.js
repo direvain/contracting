@@ -29,7 +29,6 @@ const AdminModel = mongoose.model('admin', AdminSchema);
 
 const admin = new AdminModel({
     email: "abc@gmail.com",
-    password: "12345678"
+    password: "123"
 });
-
 export default AdminModel;

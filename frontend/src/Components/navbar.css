@@ -1,0 +1,54 @@
+
+.navBarall {
+    @import url('https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;700&display=swap'); 
+    font-family: "Poppins", "Anton", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.navBarall a{
+    text-decoration: none;
+
+}
+.navBarall .header{
+    position:fixed;
+    top:0;
+    left: 0;
+    width: 100%;
+    padding: 10px 5% ;
+    background-color: #ffffff9a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+
+}
+.navBarall .logo img {
+    width: 100px;
+    height: auto;
+    display: block; 
+}
+
+.navBarall .navbar a{
+    position: relative;
+    font-size: 18px;
+    color:#000000;
+    font-weight: 500;
+    margin-left:40px ;
+}
+
+.navBarall .navbar a::before{
+    content: '';
+    position: absolute;
+    top:100%;
+    left:0;
+    width: 0%;
+    height: 2px;
+    background: #000000;
+    transition: .4s;
+}
+
+.navBarall .navbar a:hover:before{
+    width: 100%;
+
+}

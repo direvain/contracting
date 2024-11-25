@@ -62,6 +62,8 @@ function App() {
                                             allowedRoles={['admin']}
                                             element={<AdminHome />}
                                           />} />
+
+                      
       </Routes>
     </div>
   );
