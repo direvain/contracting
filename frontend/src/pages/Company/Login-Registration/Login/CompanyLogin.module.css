@@ -1,41 +1,32 @@
-*,
-::before,
-::after {
-    box-sizing: border-box;
-    padding: 0;
+body {
     margin: 0;
 }
 
-html,
-body {
-    height: 100%;
-    width: 100%;
-}
-
-body {
+.companyBody {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; 
     background-image: url("../../../../../public/images/background.png");
     background-repeat: no-repeat;
     background-size: cover;
+    height: 100vh;
 }
 
 .companyLoginContainer {
     background-color: #ffffff9a;
-    padding: 15px 23px;
+    padding: 20px 48px;
+    width: 20%;
+    padding-top: 15px;
     border-radius: 10px;
-    width: 100%;
-    max-width: 600px;
     box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
 }
 
-.companyLoginContainer>.companyLoginH1 {
+.companyLoginH1 {
+    font-size: 25pt;
     text-align: center;
-    margin-bottom: 20px;
 }
 
-.companyLoginContainer>.companyFormLogin {
+.companyFormLogin {
     display: flex;
     flex-direction: column;
     gap: 10px;

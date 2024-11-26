@@ -67,37 +67,39 @@ function AdminLogin() {
     }
 
     return (
-        <div className={styles.adminContainer}>
-            <h1 className={styles.adminLoginH1}>Admin Login</h1>
-            <form className={styles.adminFormLogin} onSubmit={handleLogin}>
-                <div className={styles.adminDiv}>
-                    <label className={styles.adminLoginLabel} htmlFor='email'>Email</label>
-                    <input
-                        className={styles.adminLoginInput}
-                        onChange={handleChange}
-                        onPaste={handlePaste}
-                        type='email'
-                        name='email'
-                        placeholder='Enter your email...'
-                        value={loginInfo.email}
-                    />
-                </div>
-                <div className={styles.adminDiv}>
-                    <label className={styles.adminLoginLabel} htmlFor='password'>Password</label>
-                    <input
-                        className={styles.adminLoginInput}
-                        onChange={handleChange}
-                        onPaste={handlePaste}
-                        type='password'
-                        name='password'
-                        placeholder='Enter your password...'
-                        value={loginInfo.password}
-                    />
-                </div>
-                <button className={styles.adminLoginButton} type='submit'>Login</button>
-            </form>
-            <ToastContainer /> {/* يتم استخدامه لعرض رسائل النجاح أو الخطأ أو أي نوع آخر من الإشعارات التي يحتاج المستخدم لرؤيتها */}
-        </div>
+        <section className={styles.adminBody}>
+            <div className={styles.adminContainer}>
+                <h1 className={styles.adminLoginH1}>Admin Login</h1>
+                <form className={styles.adminFormLogin} onSubmit={handleLogin}>
+                    <div className={styles.adminDiv}>
+                        <label className={styles.adminLoginLabel} htmlFor='email'>Email</label>
+                        <input
+                            className={styles.adminLoginInput}
+                            onChange={handleChange}
+                            onPaste={handlePaste}
+                            type='email'
+                            name='email'
+                            placeholder='Enter your email...'
+                            value={loginInfo.email}
+                        />
+                    </div>
+                    <div className={styles.adminDiv}>
+                        <label className={styles.adminLoginLabel} htmlFor='password'>Password</label>
+                        <input
+                            className={styles.adminLoginInput}
+                            onChange={handleChange}
+                            onPaste={handlePaste}
+                            type='password'
+                            name='password'
+                            placeholder='Enter your password...'
+                            value={loginInfo.password}
+                        />
+                    </div>
+                    <button className={styles.adminLoginButton} type='submit'>Login</button>
+                </form>
+                <ToastContainer /> {/* يتم استخدامه لعرض رسائل النجاح أو الخطأ أو أي نوع آخر من الإشعارات التي يحتاج المستخدم لرؤيتها */}
+            </div>
+        </section>
     )
 }
 
