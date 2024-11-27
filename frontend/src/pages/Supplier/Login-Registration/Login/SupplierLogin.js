@@ -68,43 +68,45 @@ function SupplierLogin() {
     }
 
     return (
-        <div className={styles.supplierContainer}>
-            <h1 className={styles.supplierLoginH1}>Supplier Login</h1>
-            <form className={styles.supplierFormLogin} onSubmit={handleLogin}>
-                <div className={styles.supplierDiv}>
-                    <label className={styles.supplierLoginLabel} htmlFor='username'>Username</label>
-                    <input
-                        className={styles.supplierLoginInput}
-                        onChange={handleChange}
-                        onPaste={handlePaste}
-                        type='username'
-                        name='username'
-                        placeholder='Enter your company ID for username...'
-                        value={loginInfo.username}
-                    />
-                </div>
-                <div className={styles.supplierDiv}>
-                    <label className={styles.supplierLoginLabel} htmlFor='password'>Password</label>
-                    <input
-                        className={styles.supplierLoginInput}
-                        onChange={handleChange}
-                        onPaste={handlePaste}
-                        type='password'
-                        name='password'
-                        placeholder='Enter your password...'
-                        value={loginInfo.password}
-                    />
-                </div>
-                <button className={styles.supplierLoginButton} type='submit'>Login</button>
-                <span className={styles.supplierLoginSpan}>Does't have an account?
-                    <Link className={styles.supplierLoginLink} to="/supplier-registration"> Registration</Link>
-                </span>
-                <span className={styles.supplierLoginSpan}>If you are a company?
-                    <Link className={styles.supplierLoginLink} to="/company-login"> Company</Link>
-                </span>
-            </form>
-            <ToastContainer /> {/* يتم استخدامه لعرض رسائل النجاح أو الخطأ أو أي نوع آخر من الإشعارات التي يحتاج المستخدم لرؤيتها */}
-        </div>
+        <section className={styles.supplierBody}>
+            <div className={styles.supplierLoginContainer}>
+                <h1 className={styles.supplierLoginH1}>Supplier Login</h1>
+                <form className={styles.supplierFormLogin} onSubmit={handleLogin}>
+                    <div className={styles.supplierDiv}>
+                        <label className={styles.supplierLoginLabel} htmlFor='username'>Username</label>
+                        <input
+                            className={styles.supplierLoginInput}
+                            onChange={handleChange}
+                            onPaste={handlePaste}
+                            type='username'
+                            name='username'
+                            placeholder='Enter your company ID for username...'
+                            value={loginInfo.username}
+                        />
+                    </div>
+                    <div className={styles.supplierDiv}>
+                        <label className={styles.supplierLoginLabel} htmlFor='password'>Password</label>
+                        <input
+                            className={styles.supplierLoginInput}
+                            onChange={handleChange}
+                            onPaste={handlePaste}
+                            type='password'
+                            name='password'
+                            placeholder='Enter your password...'
+                            value={loginInfo.password}
+                        />
+                    </div>
+                    <button className={styles.supplierLoginButton} type='submit'>Login</button>
+                    <span className={styles.supplierLoginSpan}>Does't have an account?
+                        <Link className={styles.supplierLoginLink} to="/supplier-registration"> Registration</Link>
+                    </span>
+                    <span className={styles.supplierLoginSpan}>If you are a company?
+                        <Link className={styles.supplierLoginLink} to="/company-login"> Company</Link>
+                    </span>
+                </form>
+                <ToastContainer /> {/* يتم استخدامه لعرض رسائل النجاح أو الخطأ أو أي نوع آخر من الإشعارات التي يحتاج المستخدم لرؤيتها */}
+            </div>
+        </section>
     )
 }
 
