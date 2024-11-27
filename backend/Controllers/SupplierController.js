@@ -6,6 +6,9 @@ import env from "dotenv";
 env.config();
 
 const registration = async (req, res) => {
+    // console.log(req.body);
+    // console.log(req.commercialRegister);
+    // console.log(req.body.commercialRegister);
     try {
         const { supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister } = req.body;
         const supplier = await SupplierModel.findOne({ username });
@@ -13,8 +16,13 @@ const registration = async (req, res) => {
             return res.status(409)
                 .json({ message: 'Username is already exist', success: false });
         }
+        // console.log("after: " + commercialRegister)
+
         const supplierModel = new SupplierModel({ supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister });
         supplierModel.password = await bcrypt.hash(password, 10);
+        // supplierModel.commercialRegister = Buffer.from(commercialRegister, 'base64').toString('utf8');
+        
+
         await supplierModel.save();
         res.status(201)
             .json({
@@ -55,7 +63,8 @@ const login = async (req, res) => {
                 message: "Login Success",
                 success: true,
                 jwtToken,
-                role: supplier.role
+                role: supplier.role,
+                supplierProduct: supplier.supplierProduct
             })
     } catch (err) {
         res.status(500)
