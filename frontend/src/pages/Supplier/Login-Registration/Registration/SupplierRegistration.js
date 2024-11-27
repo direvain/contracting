@@ -105,123 +105,125 @@ function SupplierRegistration() {
         }
     }
     return (
-        <div className={styles.supplierRegistrationContainer}>
-            <h1 className={styles.supplierRegistrationH1}>Supplier Registration</h1>
-            <form className={styles.supplierFormRegistration} onSubmit={handleRegistration}>
-                <div className={styles.supplierRegistrationDiv}>
-                    <label className={styles.supplierRegistrationLabel} htmlFor='supplierName'>Supplier Name</label>
-                    <input
-                        className={styles.supplierRegistrationInput}
-                        onChange={handleChange}
-                        onPaste={handlePaste}
-                        type='text'
-                        name='supplierName'
-                        placeholder='Enter your supplier name...'
-                        value={registrationInfo.supplierName}
-                        autoFocus
-                    />
-                </div>
-                <div className={styles.supplierRegistrationDiv}>
-                    <label className={styles.supplierRegistrationLabel} htmlFor='email'>Email</label>
-                    <input
-                        className={styles.supplierRegistrationInput}
-                        onChange={handleChange}
-                        onPaste={handlePaste}
-                        type='email'
-                        name='email'
-                        placeholder='Enter your email...'
-                        value={registrationInfo.email}
-                    />
-                </div>
-                <div className={styles.supplierRegistrationDiv}>
-                    <label className={styles.supplierRegistrationLabel} htmlFor='username'>Username</label>
-                    <input
-                        className={styles.supplierRegistrationInput}
-                        onChange={handleChange}
-                        onKeyPress={handleKeyPress}
-                        onPaste={handlePaste}
-                        type='username'
-                        name='username'
-                        inputmode="numeric" 
-                        maxlength="9"
-                        placeholder='Enter your company ID for username...'
-                        value={registrationInfo.username}
-                    />
-                </div>
-                <div className={styles.supplierRegistrationDiv}>
-                    <label className={styles.supplierRegistrationLabel} htmlFor='supplierPhone'>Supplier Phone</label>
-                    <input
-                        className={styles.supplierRegistrationInput}
-                        onChange={handleChange}
-                        onKeyPress={handleKeyPress}
-                        onPaste={handlePaste}
-                        type='tel'
-                        name='supplierPhone'
-                        inputmode="numeric" 
-                        maxlength="10"
-                        placeholder='Enter your Supplier Phone...'
-                        value={registrationInfo.supplierPhone}
-                    />
-                </div>
-                <div className={styles.supplierRegistrationDiv}>
-                    <label className={styles.supplierRegistrationLabel} htmlFor='password'>Password</label>
-                    <input
-                        className={styles.supplierRegistrationInput}
-                        onChange={handleChange}
-                        onPaste={handlePaste}
-                        type='password'
-                        name='password'
-                        placeholder='Enter your password...'
-                        value={registrationInfo.password}
-                    />
-                </div>
-                <div className={styles.supplierRegistrationDiv}>
-                    <label className={styles.supplierRegistrationLabel} htmlFor='confirmPassword'>Confirm Password</label>
-                    <input
-                        className={styles.supplierRegistrationInput}
-                        onChange={handleChange}
-                        onPaste={handlePaste}
-                        type='password'
-                        name='confirmPassword'
-                        placeholder='Enter your Confirm Password...'
-                        value={registrationInfo.confirmPassword}
-                    />
-                </div>
-                <div className={styles.supplierRegistrationDiv}>
-                    <label className={styles.supplierRegistrationLabel} htmlFor='supplierProduct'>Supplier Product</label>
-                    <select
-                        className={styles.supplierRegistrationSelect}
-                        name="supplierProduct" 
-                        onChange={handleChange}
-                        value={registrationInfo.supplierProduct} 
-                    >
-                        <option value="">Select an option</option>
-                        <option value="Concrete">Concrete</option>
-                        <option value="Cement">Cement</option>
-                    </select>
-                </div>
-                <div className={styles.supplierRegistrationDiv}>
-                    <label className={styles.supplierRegistrationLabel} htmlFor='commercialRegister'>Commercial Register</label>
-                    <input 
-                        className={styles.supplierCommercialRegister}
-                        onChange={handleChange}
-                        type='file'
-                        name='commercialRegister'
-                        accept="application/pdf"
-                        value={registrationInfo.commercialRegister}
-                    />
-                </div>
+        <section className={styles.supplierBody}>
+            <div className={styles.supplierRegistrationContainer}>
+                <h1 className={styles.supplierRegistrationH1}>Supplier Registration</h1>
+                <form className={styles.supplierFormRegistration} onSubmit={handleRegistration}>
+                    <div className={styles.supplierRegistrationDiv}>
+                        <label className={styles.supplierRegistrationLabel} htmlFor='supplierName'>Supplier Name</label>
+                        <input
+                            className={styles.supplierRegistrationInput}
+                            onChange={handleChange}
+                            onPaste={handlePaste}
+                            type='text'
+                            name='supplierName'
+                            placeholder='Enter your supplier name...'
+                            value={registrationInfo.supplierName}
+                            autoFocus
+                        />
+                    </div>
+                    <div className={styles.supplierRegistrationDiv}>
+                        <label className={styles.supplierRegistrationLabel} htmlFor='email'>Email</label>
+                        <input
+                            className={styles.supplierRegistrationInput}
+                            onChange={handleChange}
+                            onPaste={handlePaste}
+                            type='email'
+                            name='email'
+                            placeholder='Enter your email...'
+                            value={registrationInfo.email}
+                        />
+                    </div>
+                    <div className={styles.supplierRegistrationDiv}>
+                        <label className={styles.supplierRegistrationLabel} htmlFor='username'>Username</label>
+                        <input
+                            className={styles.supplierRegistrationInput}
+                            onChange={handleChange}
+                            onKeyPress={handleKeyPress}
+                            onPaste={handlePaste}
+                            type='username'
+                            name='username'
+                            inputmode="numeric" 
+                            maxlength="9"
+                            placeholder='Enter your company ID for username...'
+                            value={registrationInfo.username}
+                        />
+                    </div>
+                    <div className={styles.supplierRegistrationDiv}>
+                        <label className={styles.supplierRegistrationLabel} htmlFor='supplierPhone'>Supplier Phone</label>
+                        <input
+                            className={styles.supplierRegistrationInput}
+                            onChange={handleChange}
+                            onKeyPress={handleKeyPress}
+                            onPaste={handlePaste}
+                            type='tel'
+                            name='supplierPhone'
+                            inputmode="numeric" 
+                            maxlength="10"
+                            placeholder='Enter your Supplier Phone...'
+                            value={registrationInfo.supplierPhone}
+                        />
+                    </div>
+                    <div className={styles.supplierRegistrationDiv}>
+                        <label className={styles.supplierRegistrationLabel} htmlFor='password'>Password</label>
+                        <input
+                            className={styles.supplierRegistrationInput}
+                            onChange={handleChange}
+                            onPaste={handlePaste}
+                            type='password'
+                            name='password'
+                            placeholder='Enter your password...'
+                            value={registrationInfo.password}
+                        />
+                    </div>
+                    <div className={styles.supplierRegistrationDiv}>
+                        <label className={styles.supplierRegistrationLabel} htmlFor='confirmPassword'>Confirm Password</label>
+                        <input
+                            className={styles.supplierRegistrationInput}
+                            onChange={handleChange}
+                            onPaste={handlePaste}
+                            type='password'
+                            name='confirmPassword'
+                            placeholder='Enter your Confirm Password...'
+                            value={registrationInfo.confirmPassword}
+                        />
+                    </div>
+                    <div className={styles.supplierRegistrationDiv}>
+                        <label className={styles.supplierRegistrationLabel} htmlFor='supplierProduct'>Supplier Product</label>
+                        <select
+                            className={styles.supplierRegistrationSelect}
+                            name="supplierProduct" 
+                            onChange={handleChange}
+                            value={registrationInfo.supplierProduct} 
+                        >
+                            <option value="">Select an option</option>
+                            <option value="Concrete">Concrete</option>
+                            <option value="Cement">Cement</option>
+                        </select>
+                    </div>
+                    <div className={styles.supplierRegistrationDiv}>
+                        <label className={styles.supplierRegistrationLabel} htmlFor='commercialRegister'>Commercial Register</label>
+                        <input 
+                            className={styles.supplierCommercialRegister}
+                            onChange={handleChange}
+                            type='file'
+                            name='commercialRegister'
+                            accept="application/pdf"
+                            value={registrationInfo.commercialRegister}
+                        />
+                    </div>
 
-                <button className={styles.supplierRegistrationButton} type='submit'>Registration</button>
-                <span className={styles.supplierRegistrationSpan}>Already have an account ?
-                    <Link className={styles.supplierRegistrationLink} to="/supplier-login"> Login</Link>
-                </span>
-                <span className={styles.supplierRegistrationSpan}>If you are a contracting company?
-                    <Link className={styles.supplierRegistrationLink} to="/company-registration"> Contracting Company</Link>
-                </span>
-            </form>
-            <ToastContainer />
-        </div>
+                    <button className={styles.supplierRegistrationButton} type='submit'>Registration</button>
+                    <span className={styles.supplierRegistrationSpan}>Already have an account ?
+                        <Link className={styles.supplierRegistrationLink} to="/supplier-login"> Login</Link>
+                    </span>
+                    <span className={styles.supplierRegistrationSpan}>If you are a contracting company?
+                        <Link className={styles.supplierRegistrationLink} to="/company-registration"> Contracting Company</Link>
+                    </span>
+                </form>
+                <ToastContainer />
+            </div>
+        </section>
     )
 }
 

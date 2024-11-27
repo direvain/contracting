@@ -1,25 +1,16 @@
-*,
-::before,
-::after {
-    box-sizing: border-box;
-    padding: 0;
+body {
     margin: 0;
 }
-
-html,
-body {
-    height: 100%;
-    width: 100%;
-}
-
-body {
+.supplierBody {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; 
     background-image: url("../../../../../public/images/background.png");
     background-repeat: no-repeat;
     background-size: cover;
+    height: 100vh;
 }
+
 
 /* Container Styles */
 .supplierRegistrationContainer {
@@ -32,8 +23,9 @@ body {
 }
 
 .supplierRegistrationH1 {
+    font-size: 25pt;
     text-align: center;
-    margin-bottom: 20px;
+    margin-top: -5px;
 }
 
 /* Form Styles */
@@ -55,7 +47,7 @@ body {
 .supplierRegistrationInput, .supplierCommercialRegister, .supplierRegistrationSelect {
     width: 100%;
     font-size: 20px;
-    padding: 10px;
+    padding: 10px 0px;
     border: none;
     outline: none;
     border-bottom: 1px solid black;

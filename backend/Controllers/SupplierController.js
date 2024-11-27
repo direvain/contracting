@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import SupplierModel from "../Models/Supplier.js";
 import env from "dotenv";
-
+import SupplierRegister from "../Models/registrationSupplier"
 env.config();
 
 const registration = async (req, res) => {
@@ -18,7 +18,7 @@ const registration = async (req, res) => {
         }
         // console.log("after: " + commercialRegister)
 
-        const supplierModel = new SupplierModel({ supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister });
+        const supplierModel = new SupplierModelRegister({ supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister });
         supplierModel.password = await bcrypt.hash(password, 10);
         // supplierModel.commercialRegister = Buffer.from(commercialRegister, 'base64').toString('utf8');
         

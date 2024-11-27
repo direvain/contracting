@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { handleError, handleSuccess } from '../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
 import styles from './AdminHome.module.css';
-import NavBar from '../../../Components/navbar'
+import NavBar from '../../../Components/navBAr/navbar';
 
 function AdminHome() {
 const [suppliers, setSuppliers] = useState([]); 
