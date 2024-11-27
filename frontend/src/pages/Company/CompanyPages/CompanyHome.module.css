@@ -2,23 +2,47 @@ body {
     margin: 0;
 }
 
-.companyBody {
-
-}
-
 /* Card */
 .companyHomeContainerCard {
     display: flex;
     justify-content: center;
+    align-items: center;
+    min-height: 62.2vh;
+    flex-direction: row;
     gap: 10px;
-    height: '100vh';
-    background-color: '#f5f5f5';
+    flex-wrap: wrap; /* يجعل العناصر تتكيف مع أحجام الشاشات الأصغر */
 }
 
-.cementCardMedia{
+.cementCardMedia {
     background-image: url('../../../../public/images/background.png');
+    background-size: cover; /* يجعل الخلفية تتكيف مع حجم العنصر */
+    background-position: center;
 }
 
-.cardContent{
+.concreteCardMedia {
+    background-image: url('../../../../public/images/background.png');
+    background-size: cover; /* يجعل الخلفية تتكيف مع حجم العنصر */
+    background-position: center;
+}
+
+.cardContent {
     text-align: center;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .companyHomeContainerCard {
+        flex-direction: column; /* العناصر تتحول إلى عمودي للشاشات الصغيرة */
+        gap: 20px;
+    }
+
+    .cementCardMedia {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .cardContent {
+        font-size: 14px; /* تصغير النص للشاشات الصغيرة */
+    }
 }
