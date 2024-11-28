@@ -25,12 +25,6 @@ function AdminLogin() {
         setLoginInfo(copyLoginInfo); // نقوم بتحديث الحالة باستخدام دالة
     }
 
-        // input في اي paste منع عمل 
-        const handlePaste = (e) => {
-            e.preventDefault();
-            handleError("Paste is not allowed.");
-        };
-
     const handleLogin = async (e) => {
         e.preventDefault(); // يمنع إعادة تحميل الصفحة عند ارسال النموذج
         const { email, password } = loginInfo;
@@ -76,7 +70,6 @@ function AdminLogin() {
                         <input
                             className={styles.adminLoginInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='email'
                             name='email'
                             placeholder='Enter your email...'
@@ -88,7 +81,6 @@ function AdminLogin() {
                         <input
                             className={styles.adminLoginInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='password'
                             name='password'
                             placeholder='Enter your password...'

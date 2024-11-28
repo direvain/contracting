@@ -1,11 +1,17 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 
 function Navbar(props) {
     const [isActive, setIsActive] = useState(false);
+    const [dropdownActive, setDropdownActive] = useState(false);
 
     const toggleNavbar = () => {
         setIsActive(prev => !prev); // Toggle the state
+    };
+    
+    const toggleDropdown = () => {
+        setDropdownActive(prev => !prev);
     };
 
     return (
@@ -24,19 +30,39 @@ function Navbar(props) {
                 <div className={`${styles.navbarCollapse} ${isActive ? styles.active : ''}`}>
                     <ul className={styles.navbarNav}>
                         <li className={styles.navItem}>
-                            <a className={styles.navLink} href="#">{props.one}</a>
+                            <Link className={styles.navLink} to={props.pathOne}>{props.one}</Link>
+                        </li>
+                        <li className={`${styles.navItem} ${styles.dropdown}`}>
+                            <button
+                                className={`${styles.navLink} ${styles.dropdownToggle}`}
+                                aria-expanded={dropdownActive}
+                                onClick={toggleDropdown}
+                            >
+                                {props.two}
+                            </button>
+                            <ul className={`${styles.dropdownMenu} ${dropdownActive ? styles.show : ''}`}>
+                                <li className={styles.dropdownItem}>
+                                    <Link className={styles.navLink} to={props.pathTwo1}>{props.two1}</Link>
+                                </li>
+                                <li className={styles.dropdownItem}>
+                                    <Link className={styles.navLink} to={props.pathTwo2}>{props.two2}</Link>
+                                </li>
+                                <li className={styles.dropdownItem}>
+                                    <Link className={styles.navLink} to={props.pathTwo3}>{props.two3}</Link>
+                                </li>
+                            </ul>
                         </li>
                         <li className={styles.navItem}>
-                            <a className={styles.navLink} href="#">{props.two}</a>
+                            <Link className={styles.navLink} to={props.pathThree}>{props.three}</Link>
                         </li>
                         <li className={styles.navItem}>
-                            <a className={styles.navLink} href="#">{props.three}</a>
+                            <Link className={styles.navLink} to={props.pathFour}>{props.four}</Link>
+                        </li>
+                        <li className={styles.navItem}> 
+                            <Link className={styles.navLink} to={props.pathFive}>{props.five}</Link>
                         </li>
                         <li className={styles.navItem}>
-                            <a className={styles.navLink} href="#">{props.four}</a>
-                        </li>
-                        <li className={styles.navItem}>
-                            <a className={styles.navLink} href="#">{props.five}</a>
+                            <button className={`${styles.navLink} ${styles.logout}`} onClick={props.logout}>Logout</button>
                         </li>
                     </ul>
                 </div>
