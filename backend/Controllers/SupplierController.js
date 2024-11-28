@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import SupplierModel from "../Models/Supplier.js";
 import env from "dotenv";
-import SupplierRegister from "../Models/registrationSupplier"
 env.config();
 
 const registration = async (req, res) => {

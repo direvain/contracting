@@ -1,88 +1,88 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleError, handleSuccess } from '../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
+import CompanyList from './CompanyList';
+import SupplierList from './SupplierList';
 import styles from './AdminHome.module.css';
-import NavBar from '../../../Components/navBAr/navbar';
+import NavBar from '../../../Components/navBAr/Navbar';
 
 function AdminHome() {
-const [suppliers, setSuppliers] = useState([]); 
-const [companies, setCompanies] = useState([]); 
- const [loggedInUser, setLoggedInUser] = useState('');
-const navigate = useNavigate();
+  const [view, setView] = useState("home"); // Manage current view
+  const [suppliers, setSuppliers] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        setLoggedInUser(localStorage.getItem('loggedInUser'))
-    }, [])
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('role');
+    handleSuccess('User Logged out');
+    setTimeout(() => {
+      navigate('/admin');
+    }, 1000);
+  };
 
-    const handleLogout = (e) => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('loggedInUser');
-        localStorage.removeItem('role');
-        handleSuccess('User Loggedout');
-        setTimeout(() => {
-            navigate('/admin');
-        }, 1000)
-    }
-    const asd = (e) => {
+  const handleViewChange = (newView) => {
+    setView(newView);
+  };
 
-        setTimeout(() => {
-            navigate('/admin/home/supplier');
-        }, 1000)
-    }
-    const fetchData = async () => 
-    {
-        try 
-        {
-            const url = `http://localhost:8080/products`; // Ensure this URL is correct
-            const headers = 
-            {
-                headers: 
-                    {
-                        'Authorization': localStorage.getItem('token'),
-                    }
-            };
-            const response = await fetch(url, headers);
-            if (!response.ok) 
-            {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const result = await response.json(); // fetch all data 
-            console.log(result);
-            const suppliersResult = result[0] || []; // access the supplier array
-            const companiesResult = result[0] || []; // access the companies array
-            setCompanies(companiesResult);
-            setSuppliers(suppliersResult);
-        } 
-        catch (err) 
-        {
-            console.error('Failed to fetch suppliers:', err); // Debugging line
-            handleError(err);
+  const fetchProducts = async () => {
+    try {
+        const url = `http://localhost:8080/products`;
+        const token = localStorage.getItem('token');
+        const headers = {
+            headers: {
+                Authorization: token,
+            },
+        };
+        const response = await fetch(url, headers);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    };
-    useEffect(() => {
-        fetchData();
-    }, [])
 
-    return (
-            <div>
-                <NavBar
-                logo="logo"
-                one="Supplier"
-                two="Companies"
-                three="Logout"
-                four="add admin"
-                />
-                <h1>{loggedInUser}</h1>
-                <h1>asdasdasdasd</h1>
-                <div className='button-container'>
-                    <button onClick={asd} className='sdf'>Supplier</button>
-                    <button onClick={asd} className='sdf'>Companies</button>
-                    <button onClick={handleLogout} className='sdf'>Logout</button>
-                </div>
-                <ToastContainer />
-            </div> 
-    )
+        const result = await response.json();
+        console.log("API Result:", result); // Add this to debug
+        const suppliersResult = result[0] || [];
+        const companiesResult = result[1] || [];
+        setSuppliers(suppliersResult);
+        setCompanies(companiesResult);
+    } catch (err) {
+        handleError(err);
+    }
+};
+
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  return (
+    <div className={styles.adminBody}>
+      <NavBar
+        logo="Admin Panel"
+        one="Suppliers"
+        two="Companies"
+        three="Logout"
+        four="Add Admin"
+        five="Dashboard"
+        onClickOne={() => handleViewChange("suppliers")}
+        onClickTwo={() => handleViewChange("companies")}
+        onClickThree={handleLogout}
+        onClickFour={() => handleViewChange("add-admin")}
+        onClickFive={() => handleViewChange("home")}
+      />
+
+      <div>
+        {view === "home" && <h2>Welcome, Admin!</h2>}
+        {view === "suppliers" && <SupplierList suppliers={suppliers} />}
+        {view === "companies" && <CompanyList companies={companies} />}
+        {view === "add-admin" && <h2>Add Admin Feature Coming Soon!</h2>}
+      </div>
+
+      <ToastContainer />
+    </div>
+  );
 }
 
 export default AdminHome;
