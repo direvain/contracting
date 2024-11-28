@@ -1,10 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;700&display=swap'); 
+
 /* footer.module.css */
 .footer {
-    background-color: rgb(241, 13, 13);
+    background-color: #776B5D;
     color: #fff;
     padding: 20px 0;
     text-align: center;
-    font-family: Arial, sans-serif;
 }
 
 .container {
@@ -17,13 +18,12 @@
     padding: 0 15px;
 }
 
-.logoSection {
-    margin-bottom: 20px;
-}
-
 .logo {
+    margin-top: -20px;
     width: 120px;
-    height: auto;
+    height: 80px;
+    max-width: 100%;
+    object-fit: contain;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
@@ -33,7 +33,7 @@
 }
 
 .footerCollapse {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .itemList {
@@ -49,15 +49,54 @@
 .itemLink {
     text-decoration: none;
     color: #fff;
+    font-size: 1rem;
 }
 
 .itemLink:hover {
     color: yellow;
 }
 
+/* Dropdown Menu */
+.dropdownMenu {
+    display: none;
+    position: absolute;
+    width: 150px;
+    background-color: #776B5D;
+    color: #fff;
+    box-shadow: 0 5px 10px 7px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 0.5rem 0;
+    text-align: center;
+    z-index: 999;
+    list-style: none;
+}
+
+.dropdownMenu.show {
+    display: block;
+}
+
+.dropdownItem .itemLink {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+
+.dropdownItem .itemLink:hover {
+    color: yellow;
+}
+
+.item .dropdownToggle{
+    font-size: 1rem;
+    background-color: transparent;
+    border: none;
+}
+
 .copyright {
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 .copyrightText {

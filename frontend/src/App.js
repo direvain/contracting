@@ -12,9 +12,17 @@ import SupplierLogin from "./pages/Supplier/Login-Registration/Login/SupplierLog
 import SupplierRegistration from "./pages/Supplier/Login-Registration/Registration/SupplierRegistration";
 import CementHome from "./pages/Supplier/CementPages/CementHome";
 import ConcreteHome from "./pages/Supplier/ConcretePages/ConcreteHome";
+
 import CompanyLogin from "./pages/Company/Login-Registration/Login/CompanyLogin";
 import CompanyRegistration from "./pages/Company/Login-Registration/Registration/CompanyRegistration";
 import CompanyHome from "./pages/Company/CompanyPages/CompanyHome";
+import CementOrder from './pages/Company/CompanyPages/Cement/CementOrder';
+import ConcreteOrder from './pages/Company/CompanyPages/Concrete/ConcreteOrder';
+import PreparingOrders from './pages/Company/CompanyPages/PreparingOrders/PreparingOrders';
+import PendingOrders from './pages/Company/CompanyPages/PendingOrders/PendingOrders';
+import PastOrders from './pages/Company/CompanyPages/PastOrders/PastOrders';
+import Profile from './pages/Company/CompanyPages/Profile/Profile';
+
 import AdminLogin from "./pages/Admin/Login/AdminLogin";
 import AdminHome from "./pages/Admin/AdminPages/AdminHome";
 
@@ -64,6 +72,42 @@ function App() {
                                                 allowedRoles={['company']}
                                                 element={<CompanyHome />}
                                               />} /> 
+        <Route path="/company/home/cement-order" element={<PrivateRoute
+                                              isAuthenticated={isAuthenticated}
+                                              role={role}
+                                              allowedRoles={['company']}
+                                              element={<CementOrder />}
+                                            />}/>
+        <Route path="/company/home/concrete-order" element={<PrivateRoute
+                                                isAuthenticated={isAuthenticated}
+                                                role={role}
+                                                allowedRoles={['company']}
+                                                element={<ConcreteOrder />}
+                                              />}/>
+        <Route path="/company/home/preparing-orders" element={<PrivateRoute
+                                                isAuthenticated={isAuthenticated}
+                                                role={role}
+                                                allowedRoles={['company']}
+                                                element={<PreparingOrders />}
+                                              />}/>
+        <Route path="/company/home/pending-orders" element={<PrivateRoute
+                                                isAuthenticated={isAuthenticated}
+                                                role={role}
+                                                allowedRoles={['company']}
+                                                element={<PendingOrders />}
+                                              />}/>
+        <Route path="/company/home/past-orders" element={<PrivateRoute
+                                                isAuthenticated={isAuthenticated}
+                                                role={role}
+                                                allowedRoles={['company']}
+                                                element={<PastOrders />}
+                                              />}/>
+        <Route path="/company/home/profile" element={<PrivateRoute
+                                                isAuthenticated={isAuthenticated}
+                                                role={role}
+                                                allowedRoles={['company']}
+                                                element={<Profile />}
+                                              />}/>
 
         <Route path="/admin" element={<AdminLogin />} /> 
         <Route path="/admin/home" element={<PrivateRoute

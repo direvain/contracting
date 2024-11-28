@@ -25,12 +25,6 @@ function CompanyLogin() {
         setLoginInfo(copyLoginInfo); // نقوم بتحديث الحالة باستخدام دالة
     }
 
-    // input في اي paste منع عمل 
-    const handlePaste = (e) => {
-        e.preventDefault();
-        handleError("Paste is not allowed.");
-    };
-
     const handleLogin = async (e) => {
         e.preventDefault(); // يمنع إعادة تحميل الصفحة عند ارسال النموذج
         const { username, password } = loginInfo;
@@ -76,7 +70,6 @@ function CompanyLogin() {
                         <input
                             className={styles.companyLoginInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='username'
                             name='username'
                             placeholder='Enter your company ID for username...'
@@ -88,7 +81,6 @@ function CompanyLogin() {
                         <input
                             className={styles.companyLoginInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='password'
                             name='password'
                             placeholder='Enter your password...'

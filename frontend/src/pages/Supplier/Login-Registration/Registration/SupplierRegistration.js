@@ -46,13 +46,6 @@ function SupplierRegistration() {
         }
     };
 
-    // input في اي paste منع عمل 
-    const handlePaste = (e) => {
-        e.preventDefault();
-        handleError("Paste is not allowed.");
-    };
-
-
     const handleRegistration = async (e) => {
         e.preventDefault();
         // تحديد الحقول المطلوبة
@@ -114,7 +107,6 @@ function SupplierRegistration() {
                         <input
                             className={styles.supplierRegistrationInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='text'
                             name='supplierName'
                             placeholder='Enter your supplier name...'
@@ -127,7 +119,6 @@ function SupplierRegistration() {
                         <input
                             className={styles.supplierRegistrationInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='email'
                             name='email'
                             placeholder='Enter your email...'
@@ -140,7 +131,6 @@ function SupplierRegistration() {
                             className={styles.supplierRegistrationInput}
                             onChange={handleChange}
                             onKeyPress={handleKeyPress}
-                            onPaste={handlePaste}
                             type='username'
                             name='username'
                             inputmode="numeric" 
@@ -155,7 +145,6 @@ function SupplierRegistration() {
                             className={styles.supplierRegistrationInput}
                             onChange={handleChange}
                             onKeyPress={handleKeyPress}
-                            onPaste={handlePaste}
                             type='tel'
                             name='supplierPhone'
                             inputmode="numeric" 
@@ -169,7 +158,6 @@ function SupplierRegistration() {
                         <input
                             className={styles.supplierRegistrationInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='password'
                             name='password'
                             placeholder='Enter your password...'
@@ -181,7 +169,6 @@ function SupplierRegistration() {
                         <input
                             className={styles.supplierRegistrationInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='password'
                             name='confirmPassword'
                             placeholder='Enter your Confirm Password...'
