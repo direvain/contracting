@@ -27,6 +27,11 @@ function CompanyRegistration() {
     }
 
     // Phone منع ادخال احرف مثلا في ال 
+    const validatePhoneNumber = (e) => {
+        if (!/^[0-9]{10}$/.test(e.key)) {
+            handleError("Phone number must be 10 digits");
+        }
+    };
     const handleKeyPress = (e) => {
         if (!/^[0-9]$/.test(e.key)) {
             e.preventDefault(); // منع الإدخال إذا لم يكن رقماً
@@ -121,6 +126,7 @@ function CompanyRegistration() {
                             className={styles.companyRegistrationInput}
                             onChange={handleChange}
                             onKeyPress={handleKeyPress}
+                            onSubmit={validatePhoneNumber}
                             type='tel'
                             name='companyPhone'
                             inputmode="numeric" 

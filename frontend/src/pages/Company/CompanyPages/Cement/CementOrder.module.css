@@ -1,0 +1,68 @@
+.cementOrderContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 62.2vh;
+}
+
+.cementOrderRow{
+    background-color: #ffffff9a;
+    text-align: center;
+    padding: 20px 48px;
+    width: 30%;
+    border-radius: 10px;
+    box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+}
+
+.cementOrderH1 {
+    text-align: center;
+    font-size: 25pt;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.cementOrderForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cementOrderContainer .cementOrderDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+.cementOrderLabel {
+    font-size: 20px;
+}
+
+.cementOrderContainer .cementOrderInput {
+    width: 100%;
+    font-size: 20px;
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid black;
+    background-color: #ffffff00;
+}
+
+.cementOrderContainer .cementOrderInput::placeholder {
+    font-size: 12px;
+    font-style: italic;
+}
+
+.cementOrderContainer .cementOrderButton {
+    background-color: rgb(109, 102, 109);
+    border: none;
+    font-size: 20px;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin: 10px 0;
+    text-transform: uppercase;
+}
+
+.cementOrderContainer .cementOrderButton:hover {
+    background-color: rgb(54, 54, 54);
+}

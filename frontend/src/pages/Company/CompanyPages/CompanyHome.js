@@ -14,16 +14,18 @@ function CompanyHome() {
         localStorage.removeItem('role');
         handleSuccess('User Loggedout');
         setTimeout(() => {
-            navigate('/supplier-login');
+            navigate('/company-login');
         }, 1000)
     }
 
+    // for card
     const handleConcrete = async (e) => {
         setTimeout(() => { 
             navigate('/company/home/concrete-order') // (function) سيتم تنفيذها بعد انتهاء الوقت
         }, 1000)
     }
     
+    // for card
     const handleCement = async (e) => {
         setTimeout(() => { 
             navigate('/company/home/cement-order') // (function) سيتم تنفيذها بعد انتهاء الوقت
@@ -114,8 +116,11 @@ function CompanyHome() {
                 one="Home"
                 pathOne="/company/home"
                 two="Orders"
+                two1="Preparing orders"
                 pathTwo1="/company/home/preparing-orders"
+                two2="Pending orders"
                 pathTwo2="/company/home/pending-orders"
+                two3="Past orders"
                 pathTwo3="/company/home/past-orders"
                 three="Cement"
                 pathThree="/company/home/cement-order"

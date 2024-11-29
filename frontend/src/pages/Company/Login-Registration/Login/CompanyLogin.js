@@ -83,7 +83,8 @@ function CompanyLogin() {
                             onChange={handleChange}
                             type='password'
                             name='password'
-                            placeholder='Enter your password...'
+                            placeholder='    text-transform: uppercase;
+'
                             value={loginInfo.password}
                         />
                     </div>

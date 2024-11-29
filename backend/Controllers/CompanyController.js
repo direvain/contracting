@@ -45,7 +45,7 @@ const login = async (req, res) => {
                 .json({ message: errorMsg, success: false });
         }
         const jwtToken = jwt.sign(
-            { email: company.email, _id: company._id, role: company.role }, // يحتوي على المعلومات التي تريد تضمينها
+            { email: company.email, id: company._id, role: company.role }, // يحتوي على المعلومات التي تريد تضمينها
             process.env.JWT_SECRET, // هو مفتاح سري يستخدم لتوقيع الرمز
             { expiresIn: '24h' } // optional ---> الرمز سينتهي بعد 24 ساعه من انشائه
         )

@@ -19,7 +19,7 @@ function AdminHome() {
         localStorage.removeItem('role');
         handleSuccess('User Loggedout');
         setTimeout(() => {
-            navigate('/supplier-login');
+            navigate('/admin');
         }, 1000)
     }
 
