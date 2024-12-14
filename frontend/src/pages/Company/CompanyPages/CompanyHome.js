@@ -15,21 +15,23 @@ function CompanyHome() {
         handleSuccess('User Loggedout');
         setTimeout(() => {
             navigate('/company-login');
-        }, 1000)
+        }, 500)
     }
 
     // for card
     const handleConcrete = async (e) => {
+        e.preventDefault();
         setTimeout(() => { 
             navigate('/company/home/concrete-order') // (function) سيتم تنفيذها بعد انتهاء الوقت
-        }, 1000)
+        }, 500)
     }
     
     // for card
-    const handleCement = async (e) => {
+    const handleCement = (e) => {
+        e.preventDefault();
         setTimeout(() => { 
             navigate('/company/home/cement-order') // (function) سيتم تنفيذها بعد انتهاء الوقت
-        }, 1000)
+        }, 500)
     }
 
     return(
@@ -38,12 +40,12 @@ function CompanyHome() {
                 one="Home"
                 pathOne="/company/home"
                 two="Orders"
-                two1="Preparing orders"
-                pathTwo1="/company/home/preparing-orders"
+                two1="Under preparing orders"
+                pathTwo1="/company/home/under-preparing-orders"
                 two2="Pending orders"
                 pathTwo2="/company/home/pending-orders"
-                two3="Past orders"
-                pathTwo3="/company/home/past-orders"
+                two3="Old orders"
+                pathTwo3="/company/home/old-orders"
                 three="Cement"
                 pathThree="/company/home/cement-order"
                 four="Concrete"
@@ -116,12 +118,12 @@ function CompanyHome() {
                 one="Home"
                 pathOne="/company/home"
                 two="Orders"
-                two1="Preparing orders"
-                pathTwo1="/company/home/preparing-orders"
+                two1="Under preparing orders"
+                pathTwo1="/company/home/under-preparing-orders"
                 two2="Pending orders"
                 pathTwo2="/company/home/pending-orders"
-                two3="Past orders"
-                pathTwo3="/company/home/past-orders"
+                two3="Old orders"
+                pathTwo3="/company/home/old-orders"
                 three="Cement"
                 pathThree="/company/home/cement-order"
                 four="Concrete"

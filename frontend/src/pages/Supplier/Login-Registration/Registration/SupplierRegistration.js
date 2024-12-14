@@ -10,7 +10,7 @@ function SupplierRegistration() {
     const [registrationInfo, setRegistrationInfo] = useState({
         supplierName: '',
         email: '',
-        username: '',
+        supplierID: '',
         password: '',
         confirmPassword: '',
         supplierPhone: '',
@@ -42,20 +42,40 @@ function SupplierRegistration() {
     const handleKeyPress = (e) => {
         if (!/^[0-9]$/.test(e.key)) {
             e.preventDefault(); // منع الإدخال إذا لم يكن رقماً
-            handleError("Please enter a number");
+            handleError("Negative numbers are not allowed. Please enter a positive value");
         }
+    };
+
+    // Phone validation: Phone number must start with 077, 078, or 079 and be followed by 7 digits
+    const handlePhoneValidation = (value) => {
+        if (value.length !== 10) {
+            handleError('Phone number must be exactly 10 digits long.');
+            return false;
+        }
+    
+        if (!/^(077|078|079)[0-9]{7}$/.test(value)) {
+            handleError('Phone number must start with 077, 078, or 079 and be followed by 7 digits.');
+            return false;
+        }
+    
+        return true;
     };
 
     const handleRegistration = async (e) => {
         e.preventDefault();
         // تحديد الحقول المطلوبة
-        const requiredFields = ['supplierName', 'email', 'username', 'supplierPhone', 'password', 'confirmPassword',  'supplierProduct', 'commercialRegister'];
+        const requiredFields = ['supplierName', 'email', 'supplierID', 'supplierPhone', 'password', 'confirmPassword',  'supplierProduct', 'commercialRegister'];
 
         // التحقق من وجود الحقول المطلوبة
         const missingFields = requiredFields.filter(field => !registrationInfo[field]);
 
         if (missingFields.length > 0) {
             return handleError(`The following fields are required: ${missingFields.join(', ')}`);
+        }
+
+        // التحقق من صحة رقم الهاتف
+        if (!handlePhoneValidation(registrationInfo.supplierPhone)) {
+            return;
         }
 
         // if(file == null) {
@@ -85,7 +105,7 @@ function SupplierRegistration() {
                 handleSuccess(message);
                 setTimeout(() => {
                     navigate('/supplier-login')
-                }, 1000)
+                }, 500)
             } else if (error) {
                 const details = error?.details[0].message;
                 handleError(details);
@@ -126,17 +146,17 @@ function SupplierRegistration() {
                         />
                     </div>
                     <div className={styles.supplierRegistrationDiv}>
-                        <label className={styles.supplierRegistrationLabel} htmlFor='username'>Username</label>
+                        <label className={styles.supplierRegistrationLabel} htmlFor='supplierID'>Supplier ID</label>
                         <input
                             className={styles.supplierRegistrationInput}
                             onChange={handleChange}
                             onKeyPress={handleKeyPress}
-                            type='username'
-                            name='username'
+                            type='supplierID'
+                            name='supplierID'
                             inputmode="numeric" 
                             maxlength="9"
-                            placeholder='Enter your company ID for username...'
-                            value={registrationInfo.username}
+                            placeholder='Enter your supplier ID ...'
+                            value={registrationInfo.supplierID}
                         />
                     </div>
                     <div className={styles.supplierRegistrationDiv}>
@@ -145,6 +165,7 @@ function SupplierRegistration() {
                             className={styles.supplierRegistrationInput}
                             onChange={handleChange}
                             onKeyPress={handleKeyPress}
+                            onBlur={(e) => handlePhoneValidation(e.target.value)}
                             type='tel'
                             name='supplierPhone'
                             inputmode="numeric" 
@@ -184,8 +205,8 @@ function SupplierRegistration() {
                             value={registrationInfo.supplierProduct} 
                         >
                             <option value="">Select an option</option>
-                            <option value="Concrete">Concrete</option>
-                            <option value="Cement">Cement</option>
+                            <option value="concrete">Concrete</option>
+                            <option value="cement">Cement</option>
                         </select>
                     </div>
                     <div className={styles.supplierRegistrationDiv}>

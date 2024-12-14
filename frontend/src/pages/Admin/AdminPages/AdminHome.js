@@ -20,7 +20,7 @@ function AdminHome() {
         handleSuccess('User Loggedout');
         setTimeout(() => {
             navigate('/admin');
-        }, 1000)
+        }, 500)
     }
 
     const fetchProducts = async () => {

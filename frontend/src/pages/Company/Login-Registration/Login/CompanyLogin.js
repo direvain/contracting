@@ -9,7 +9,7 @@ import styles from './CompanyLogin.module.css';
 function CompanyLogin() {
 
     const [loginInfo, setLoginInfo] = useState({
-        username: '',
+        companyID: '',
         password: ''
     })
 
@@ -27,9 +27,9 @@ function CompanyLogin() {
 
     const handleLogin = async (e) => {
         e.preventDefault(); // يمنع إعادة تحميل الصفحة عند ارسال النموذج
-        const { username, password } = loginInfo;
-        if (!username || !password) { // يتحقق مما اذا كانت القيمة غير موجوده (ان تكون فارغة او غير معرفه)
-            return handleError('username and password are required')
+        const { companyID, password } = loginInfo;
+        if (!companyID || !password) { // يتحقق مما اذا كانت القيمة غير موجوده (ان تكون فارغة او غير معرفه)
+            return handleError('companyID and password are required')
         }
 
         // this code sends login information to a local server using a POST request in JSON format.
@@ -50,7 +50,7 @@ function CompanyLogin() {
                 localStorage.setItem('role', role);
                 setTimeout(() => { 
                     navigate('/company/home') // (function) سيتم تنفيذها بعد انتهاء الوقت
-                }, 1000) // الوقت الذي سيتم الانتظار فيه قبل تنفيذ الدالة، وهو 1000 مللي ثانية، أي 1 ثانية
+                }, 500) // الوقت الذي سيتم الانتظار فيه قبل تنفيذ الدالة، وهو 1000 مللي ثانية، أي 1 ثانية
             } else if (!success) {
                 handleError(message);
             }
@@ -66,14 +66,15 @@ function CompanyLogin() {
                 <h1 className={styles.companyLoginH1}>Contracting <br />Company Login</h1>
                 <form className={styles.companyFormLogin} onSubmit={handleLogin}>
                     <div className={styles.companyLoginDiv}>
-                        <label className={styles.companyLoginLabel} htmlFor='username'>Username</label>
+                        <label className={styles.companyLoginLabel} htmlFor='companyID'>Company ID</label>
                         <input
                             className={styles.companyLoginInput}
                             onChange={handleChange}
-                            type='username'
-                            name='username'
-                            placeholder='Enter your company ID for username...'
-                            value={loginInfo.username}
+                            type='companyID'
+                            name='companyID'
+                            placeholder='Enter your company ID ...'
+                            value={loginInfo.companyID}
+                            autoFocus
                         />
                     </div>
                     <div className={styles.companyDiv}>
@@ -83,8 +84,7 @@ function CompanyLogin() {
                             onChange={handleChange}
                             type='password'
                             name='password'
-                            placeholder='    text-transform: uppercase;
-'
+                            placeholder='Enter your password...'
                             value={loginInfo.password}
                         />
                     </div>

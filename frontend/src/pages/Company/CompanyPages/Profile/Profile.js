@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import {jwtDecode} from "jwt-decode";
 import { handleError, handleSuccess } from '../../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +8,10 @@ import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
 
 function Profile() {
-    const [dataCompany, setDataCompany] = useState('');
+    const token = localStorage.getItem("token");
+    const decodedData = jwtDecode(token);
+
+    const [companyCommercialRegister, setCompanyCommercialRegister] = useState('');
     const navigate = useNavigate();
 
     const handleLogout = (e) => {
@@ -16,13 +20,13 @@ function Profile() {
         handleSuccess('User Loggedout');
         setTimeout(() => {
             navigate('/company-login');
-        }, 1000)
+        }, 500)
     }
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchCommercialRegister = async () => {
             try {
-                const url = `http://localhost:8080/auth/company/data-company`;
+                const url = `http://localhost:8080/auth/company/company-commercial-register`;
                 const headers = {
                     headers: {
                         'Authorization': localStorage.getItem('token'),
@@ -31,12 +35,12 @@ function Profile() {
                 const response = await fetch(url, headers);
                 const result = await response.json();
                 console.log(result);
-                setDataCompany(result[0]);
+                setCompanyCommercialRegister(result);
             } catch (err) {
                 handleError(err);
             }
         }
-            fetchProducts();
+        fetchCommercialRegister();
     }, []);
 
     return(
@@ -45,12 +49,12 @@ function Profile() {
                 one="Home"
                 pathOne="/company/home"
                 two="Orders"
-                two1="Preparing orders"
-                pathTwo1="/company/home/preparing-orders"
+                two1="Under preparing orders"
+                pathTwo1="/company/home/under-preparing-orders"
                 two2="Pending orders"
                 pathTwo2="/company/home/pending-orders"
-                two3="Past orders"
-                pathTwo3="/company/home/past-orders"
+                two3="Old orders"
+                pathTwo3="/company/home/old-orders"
                 three="Cement"
                 pathThree="/company/home/cement-order"
                 four="Concrete"
@@ -62,16 +66,14 @@ function Profile() {
 
             <div className={styles.profileContainer}>
                 <div className={styles.profileRow}>
-                    <h1 className={styles.profileH1}>{dataCompany?.companyName} Profile</h1>
-                    <p><strong>Company Name:</strong> {dataCompany?.companyName}</p>
-                    <p><strong>Username:</strong> {dataCompany?.username}</p>
-                    <p><strong>Email:</strong> {dataCompany?.email}</p>
-                    <p><strong>Phone:</strong> {dataCompany?.companyPhone}</p>
+                    <h1 className={styles.profileH1}>{decodedData.companyName} Profile</h1>
+                    <p><strong>Company Name:</strong> {decodedData.companyName}</p>
+                    <p><strong>Company ID:</strong> {decodedData.companyID}</p>
+                    <p><strong>Email:</strong> {decodedData.email}</p>
+                    <p><strong>Phone:</strong> {decodedData.companyPhone}</p>
                     <p>
                         <strong>Commercial Register: </strong> 
-                        {dataCompany?.commercialRegister && (
-                            <a href={`http://localhost:5000/uploads/${dataCompany.commercialRegister}`} target="_blank" rel="noopener noreferrer">View PDF</a>
-                        )}
+                        <a href={`http://localhost:5000/uploads/${companyCommercialRegister.commercialRegister}`} target="_blank" rel="noopener noreferrer">View PDF</a>
                     </p>
                 </div>
             </div>
@@ -80,12 +82,12 @@ function Profile() {
                 one="Home"
                 pathOne="/company/home"
                 two="Orders"
-                two1="Preparing orders"
-                pathTwo1="/company/home/preparing-orders"
+                two1="Under preparing orders"
+                pathTwo1="/company/home/under-preparing-orders"
                 two2="Pending orders"
                 pathTwo2="/company/home/pending-orders"
-                two3="Past orders"
-                pathTwo3="/company/home/past-orders"
+                two3="Old orders"
+                pathTwo3="/company/home/old-orders"
                 three="Cement"
                 pathThree="/company/home/cement-order"
                 four="Concrete"
@@ -99,4 +101,4 @@ function Profile() {
     );
 }
 
-export default Profile;
+export { Profile };

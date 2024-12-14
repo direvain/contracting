@@ -50,7 +50,7 @@ function AdminLogin() {
                 localStorage.setItem('role', role);
                 setTimeout(() => { 
                     navigate('/admin/home') // (function) سيتم تنفيذها بعد انتهاء الوقت
-                }, 1000) // الوقت الذي سيتم الانتظار فيه قبل تنفيذ الدالة، وهو 1000 مللي ثانية، أي 1 ثانية
+                }, 500) // الوقت الذي سيتم الانتظار فيه قبل تنفيذ الدالة، وهو 1000 مللي ثانية، أي 1 ثانية
             } else if (!success) {
                 handleError(message);
             }
@@ -74,6 +74,7 @@ function AdminLogin() {
                             name='email'
                             placeholder='Enter your email...'
                             value={loginInfo.email}
+                            autoFocus
                         />
                     </div>
                     <div className={styles.adminDiv}>

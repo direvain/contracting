@@ -73,6 +73,7 @@
 
 .dropdownMenu.show {
     display: block;
+    width: 15%;
 }
 
 .dropdownItem .itemLink {
