@@ -51,14 +51,35 @@ CompanyRouter.get('/data-supplier', ensureAuthenticated, async (req, res) => {
     }
 });
 
-// Get All Data in Collection CementOrder
-CompanyRouter.get('/data-cement-order', ensureAuthenticated, async (req, res) => {
+// Get All Data in Collection Order
+CompanyRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
     try {
-        const dataCementOrder = await OrderModel.find();
-        if (!dataCementOrder) return res.status(404).json({ message: 'Order not found' });
-        res.json(dataCementOrder);
+        const status = req.query.status;
+        const id = jwt.decode(req.headers.authorization)._id;
+        const dataCementOrder = await OrderModel.find({ companyId: id, status: status });
+        if (!dataCementOrder || dataCementOrder.length === 0) return res.status(404).json({ message: 'Order not found' });
+
+        // جلب بيانات المورد والشركة من قاعدة البيانات
+        const supplierIds = dataCementOrder.map(item => item.supplierId);
+        const companyIds = dataCementOrder.map(item => item.companyId);
+        const dataSupplier = await SupplierModel.find({ _id: { $in: supplierIds } });
+        const dataCompany = await CompanyModel.find({ _id: { $in: companyIds } });
+
+        // تحويل البيانات حسب الحاجة
+        const result = dataCementOrder.map(item => {
+            const supplier = dataSupplier.find(s => s._id.toString() === item.supplierId.toString());
+            const company = dataCompany.find(c => c._id.toString() === item.companyId.toString());
+            return {
+                ...item._doc, // للحصول على خصائص العنصر مع تجنب مشاكل المرجعية
+                supplierName: supplier.supplierName,
+                companyName: company.companyName,
+                companyPhone: company.companyPhone
+            };
+        });
+
+        res.json(result);
     } catch (error) {
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: error.message });
     }
 });
 

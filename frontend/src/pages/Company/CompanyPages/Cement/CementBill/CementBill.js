@@ -20,8 +20,6 @@ function CementBill() {
     const [dataSupplier, setDataSupplier] = useState('');
     const [cementBillInfo, setCementBillInfo] = useState({
         type: 'cement',
-        companyName: decodedData.companyName,
-        companyPhone: decodedData.companyPhone,
         recipientName: '',
         recipientPhone: '',
         location: '',

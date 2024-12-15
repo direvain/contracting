@@ -1,4 +1,4 @@
-.OldOrdersContainer {
+.oldOrdersContainer {
     display: grid;
     grid-template-columns: 2fr; /* افتراضيًا عمود واحد للشاشات الصغيرة */
     gap: 20px; /* مسافة بين الصفوف */
@@ -6,7 +6,7 @@
     justify-items: center; /* يجعل العناصر في المنتصف أفقيًا */
 }
 
-.OldOrdersRow {
+.oldOrdersRow {
     background-color: #ffffff9a;
     border-radius: 10px;
     box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
@@ -15,35 +15,42 @@
     max-width: 640px; /* حد أقصى للعرض */
 }
 
-.OldOrdersDiv {
+.oldOrdersDiv {
     display: grid;
     grid-template-columns: 1fr; /* افتراضيًا عمود واحد */
 }
 
-.OldOrdersData {
+.oldOrdersData {
     font-size: 17px;
     margin-bottom: 8px;
 }
 
-.OldOrdersSupplierName{
+.oldOrdersSupplierName, .oldOrdersType {
     font-size: 18pt;
-    text-align: center;
     margin-top: 0;
 }
 
-.OldOrdersH2 {
+.oldOrdersH2 {
     text-align: center;
     font-size: 25pt;
     margin-bottom: 1px;
 }
 
+.oldOrdersP{
+    display: flex;
+    align-items: center; 
+    font-size: 17px;
+    justify-items: center;
+    height: 38.9vh;
+}
+
 /* استعلام الوسائط للشاشات الأكبر */
 @media (min-width: 768px) {
-    .OldOrdersContainer {
+    .oldOrdersContainer {
         grid-template-columns: repeat(1, 2fr); /* عمودان للشاشات الأكبر */
     }
 
-    .OldOrdersDiv {
+    .oldOrdersDiv {
         grid-template-columns: repeat(2, 1fr); /* تنظيم العناصر بعمودين */
     }
 }

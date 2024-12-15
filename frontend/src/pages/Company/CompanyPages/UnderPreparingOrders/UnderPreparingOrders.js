@@ -23,13 +23,14 @@ function UnderPreparingOrders() {
     useEffect(() => {
         const fetchDataCementOrder = async () => {
             try {
-                const url = `http://localhost:8080/auth/company/data-cement-order`;
-                const headers = {
+                const status = "under preparing";
+                const url = `http://localhost:8080/auth/company/order-data?status=${status}`;
+                const response = await fetch(url, {
+                    method: 'GET',
                     headers: {
-                        'Authorization': localStorage.getItem('token'),
+                        'Authorization': localStorage.getItem('token')
                     }
-                }
-                const response = await fetch(url, headers);
+                });
                 const result = await response.json();
                 setDataCementOrder(result);
             } catch (err) {
@@ -65,39 +66,61 @@ function UnderPreparingOrders() {
                 <h2 className={styles.underPreparingOrdersH2}>Under Preparing Orders</h2>
             </div>
             <div className={styles.underPreparingOrdersContainer}>
-                {(() => {
-                    {/* filter make in backend (send status ---> query parameter ) */}
-                    const underPreparingOrders = dataCementOrder.filter(order => order.status === "under preparing"); // Filter once
-                    return underPreparingOrders.length > 0 ? (
-                        underPreparingOrders.map((order, index) => (
-                            <div className={styles.underPreparingOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
-                                <div>
-                                    <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}><strong>Supplier name:</strong> {order.supplierName} </p>
-                                </div>
-                                <div className={styles.underPreparingOrdersDiv}>
-                                    <p className={styles.underPreparingOrdersData}><strong>Company name:</strong> {order.companyName} </p>
-                                    <p className={styles.underPreparingOrdersData}><strong>Company phone:</strong> {order.companyPhone} </p>
-                                    <p className={styles.underPreparingOrdersData}><strong>Recipient's name:</strong> {order.recipientName} </p>
-                                    <p className={styles.underPreparingOrdersData}><strong>Recipient's phone:</strong> {order.recipientPhone} </p>
-                                    <p className={styles.underPreparingOrdersData}><strong>Delivery time:</strong> {order.deliveryTime} </p>
-                                    <p className={styles.underPreparingOrdersData}><strong>Location:</strong> {order.location} </p>
-                                </div>
-                                <div className={styles.underPreparingOrdersDiv}>
-                                    <p className={styles.underPreparingOrdersData}><strong>Cement quantity:</strong> {order.cementQuantity} ton</p>
-                                    <p className={styles.underPreparingOrdersData}><strong>Number of cement bags:</strong> {order.cementNumberBags} </p>
-                                    <p className={styles.underPreparingOrdersData}><strong>Cement price:</strong> {order.price} JD</p>
-                                    <p className={styles.underPreparingOrdersData}><strong>Order request time:</strong> {order.orderRequestTime} </p>
-                                </div>
-                                {/* show when supplier press to button complete */}
-                                {/* <div className={styles.pendingOrdersDivButton}>
-                                    <button className={styles.pendingOrdersButton} onClick={() => deliveredOrder(order._id)}>Delivered</button>
-                                </div> */}
+                {dataCementOrder && dataCementOrder.length > 0 ? (
+                    dataCementOrder.map((order, index) => (
+                        <div className={styles.underPreparingOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
+                            <div className={styles.underPreparingOrdersDiv}>
+                                <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
+                                    <strong>Supplier name:</strong> {order.supplierName} 
+                                </p>
+                                <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersType}`}>
+                                    <strong>Order type:</strong> {order.type} 
+                                </p>
                             </div>
-                        ))
-                    ) : (
-                        <p underPreparingOrdersP>No under preparing orders found</p>
-                    );
-                })()}
+                            <hr />
+                            <div className={styles.underPreparingOrdersDiv}>
+                                <p className={styles.underPreparingOrdersData}>
+                                    <strong>Company name:</strong> {order.companyName} 
+                                </p>
+                                <p className={styles.underPreparingOrdersData}>
+                                    <strong>Company phone:</strong> {order.companyPhone} 
+                                </p>
+                                <p className={styles.underPreparingOrdersData}>
+                                    <strong>Recipient's name:</strong> {order.recipientName} 
+                                </p>
+                                <p className={styles.underPreparingOrdersData}>
+                                    <strong>Recipient's phone:</strong> {order.recipientPhone} 
+                                </p>
+                                <p className={styles.underPreparingOrdersData}>
+                                    <strong>Delivery time:</strong> {order.deliveryTime} 
+                                </p>
+                                <p className={styles.underPreparingOrdersData}>
+                                    <strong>Location:</strong> {order.location} 
+                                </p>
+                            </div>
+                            <div className={styles.underPreparingOrdersDiv}>
+                                <p className={styles.underPreparingOrdersData}>
+                                    <strong>Cement quantity:</strong> {order.cementQuantity} ton
+                                </p>
+                                <p className={styles.underPreparingOrdersData}>
+                                    <strong>Number of cement bags:</strong> {order.cementNumberBags} 
+                                </p>
+                                <p className={styles.underPreparingOrdersData}>
+                                    <strong>Cement price:</strong> {order.price} JD
+                                </p>
+                                <p className={styles.underPreparingOrdersData}>
+                                    <strong>Order request time:</strong> {order.orderRequestTime} 
+                                </p>
+                            </div>
+                            {/* show when supplier press to button complete */}
+                            {/* <div className={styles.pendingOrdersDivButton}>
+                                <button className={styles.pendingOrdersButton} onClick={() => deliveredOrder(order._id)}>Delivered</button>
+                            </div> */}
+                        </div>
+                    ))
+                ) : (
+                    <p className={styles.underPreparingOrdersP} >No under preparing orders found</p>
+                )}
             </div>
 
             <Footer 

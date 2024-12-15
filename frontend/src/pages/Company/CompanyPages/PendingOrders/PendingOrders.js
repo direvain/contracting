@@ -23,16 +23,17 @@ function PendingOrders() {
     useEffect(() => {
         const fetchDataCementOrder = async () => {
             try {
-                const url = `http://localhost:8080/auth/company/data-cement-order`;
-                const headers = {
+                const status = "pending";
+                const url = `http://localhost:8080/auth/company/order-data?status=${status}`;
+                const response = await fetch(url, {
+                    method: 'GET',
                     headers: {
-                        // ?status=pending
-                        'Authorization': localStorage.getItem('token'),
+                        'Authorization': localStorage.getItem('token')
                     }
-                }
-                const response = await fetch(url, headers,);
+                });
                 const result = await response.json();
                 setDataCementOrder(result);
+                console.log(result)
             } catch (err) {
                 handleError(err);
             }
@@ -66,35 +67,57 @@ function PendingOrders() {
                 <h2 className={styles.pendingOrdersH2}>Pending Orders</h2>
             </div>
             <div className={styles.pendingOrdersContainer}>
-                {(() => {
-                    {/* filter make in backend (send status ---> query parameter ) */}
-                    const pendingOrders = dataCementOrder.filter(order => order.status === "pending"); // Filter once
-                    return pendingOrders.length > 0 ? (
-                        pendingOrders.map((order, index) => (
-                            <div className={styles.pendingOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
-                                <div>
-                                    <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersSupplierName}`}><strong>Supplier name:</strong> {order.supplierName} </p>
-                                </div>
-                                <div className={styles.pendingOrdersDiv}>
-                                    <p className={styles.pendingOrdersData}><strong>Company name:</strong> {order.companyName} </p>
-                                    <p className={styles.pendingOrdersData}><strong>Company phone:</strong> {order.companyPhone} </p>
-                                    <p className={styles.pendingOrdersData}><strong>Recipient's name:</strong> {order.recipientName} </p>
-                                    <p className={styles.pendingOrdersData}><strong>Recipient's phone:</strong> {order.recipientPhone} </p>
-                                    <p className={styles.pendingOrdersData}><strong>Delivery time:</strong> {order.deliveryTime} </p>
-                                    <p className={styles.pendingOrdersData}><strong>Location:</strong> {order.location} </p>
-                                </div>
-                                <div className={styles.pendingOrdersDiv}>
-                                    <p className={styles.pendingOrdersData}><strong>Cement quantity:</strong> {order.cementQuantity} ton</p>
-                                    <p className={styles.pendingOrdersData}><strong>Number of cement bags:</strong> {order.cementNumberBags} </p>
-                                    <p className={styles.pendingOrdersData}><strong>Cement price:</strong> {order.price} JD</p>
-                                    <p className={styles.pendingOrdersData}><strong>Order request time:</strong> {order.orderRequestTime} </p>
-                                </div>
+                {dataCementOrder && dataCementOrder.length > 0 ? (
+                    dataCementOrder.map((order) => (
+                        <div className={styles.pendingOrdersRow} key={order._id}>
+                            <div className={styles.pendingOrdersDiv}>
+                                <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersSupplierName}`}>
+                                    <strong>Supplier name:</strong> {order.supplierName}
+                                </p>
+                                <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersType}`}>
+                                    <strong>Order type:</strong> {order.type}
+                                </p>
                             </div>
-                        ))
-                    ) : (
-                        <p pendingOrdersP>No pending orders found</p>
-                    );
-                })()}
+                            <hr />
+                            <div className={styles.pendingOrdersDiv}>
+                                <p className={styles.pendingOrdersData}>
+                                    <strong>Company name:</strong> {order.companyName}
+                                </p>
+                                <p className={styles.pendingOrdersData}>
+                                    <strong>Company phone:</strong> {order.companyPhone}
+                                </p>
+                                <p className={styles.pendingOrdersData}>
+                                    <strong>Recipient's name:</strong> {order.recipientName}
+                                </p>
+                                <p className={styles.pendingOrdersData}>
+                                    <strong>Recipient's phone:</strong> {order.recipientPhone}
+                                </p>
+                                <p className={styles.pendingOrdersData}>
+                                    <strong>Delivery time:</strong> {order.deliveryTime}
+                                </p>
+                                <p className={styles.pendingOrdersData}>
+                                    <strong>Location:</strong> {order.location}
+                                </p>
+                            </div>
+                            <div className={styles.pendingOrdersDiv}>
+                                <p className={styles.pendingOrdersData}>
+                                    <strong>Cement quantity:</strong> {order.cementQuantity} ton
+                                </p>
+                                <p className={styles.pendingOrdersData}>
+                                    <strong>Number of cement bags:</strong> {order.cementNumberBags}
+                                </p>
+                                <p className={styles.pendingOrdersData}>
+                                    <strong>Cement price:</strong> {order.price} JD
+                                </p>
+                                <p className={styles.pendingOrdersData}>
+                                    <strong>Order request time:</strong> {order.orderRequestTime}
+                                </p>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p className={styles.pendingOrdersP}>No pending orders found</p>
+                )}
             </div>
 
             <Footer 

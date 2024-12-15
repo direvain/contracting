@@ -21,9 +21,9 @@ SupplierRouter.post('/registration', registrationValidation, registration);
 // Define a route to handle PATCH requests for updating a cement order
 SupplierRouter.patch('/update-cement-order', ensureAuthenticated, async (req, res) => {
     try {
-        const { orderId, status } = req.body;
-        
-        const updateCementOrder = await OrderModel.findByIdAndUpdate(orderId, { status: status });
+        const id = jwt.decode(req.headers.authorization)._id;
+        const { status } = req.body;
+        const updateCementOrder = await OrderModel.findByIdAndUpdate(id, { status: status });
         if (!updateCementOrder) {
             return res.status(404).json({ message: "Order not found", success: false });
         }
@@ -49,16 +49,34 @@ SupplierRouter.get('/supplier-data', ensureAuthenticated, async (req, res) => {
     }
 });
 
-// Get All Data in Collection CementOrder
-SupplierRouter.get('/data-cement-order', ensureAuthenticated, async (req, res) => {
+// Get All Data in Collection Order
+SupplierRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
     try {
-        // req.headers.authorization
-        const dataCementOrders = await OrderModel.find();
-        if (!dataCementOrders) return res.status(404).json({ message: 'Order not found' });
-        CompanyModel.findById()
-        res.json(dataCementOrders);
+        const statuses = req.query.status.split(',');
+
+        const id = jwt.decode(req.headers.authorization)._id;
+        const dataCementOrders = await OrderModel.find({ supplierId: id, status: statuses });
+        if (!dataCementOrders || dataCementOrders.length === 0) return res.status(404).json({ message: 'Order not found' });
+
+        // جلب بيانات المورد والشركة من قاعدة البيانات
+        const companyIds = dataCementOrders.map(item => item.companyId);
+        const dataSupplier = await SupplierModel.findById( id );
+        const dataCompanies = await CompanyModel.find({ _id: { $in: companyIds } });
+
+        // تحويل البيانات حسب الحاجة
+        const result = dataCementOrders.map(item => {
+            const company = dataCompanies.find(c => c._id.toString() === item.companyId.toString());
+            return {
+                ...item._doc, // للحصول على خصائص العنصر مع تجنب مشاكل المرجعية
+                supplierName: dataSupplier.supplierName,
+                companyName: company.companyName,
+                companyPhone: company.companyPhone
+            };
+        });
+
+        res.json(result);
     } catch (error) {
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: error.message });
     }
 });
 
@@ -80,3 +98,17 @@ SupplierRouter.patch('/update-cement-price', ensureAuthenticated, async (req, re
 });
 
 export default SupplierRouter;
+
+
+
+
+
+
+
+// supplier + order not completed ---action---> completed
+
+// supplier + order completed ---action---> no action
+
+// company + order not completed ---action---> no action
+
+// company + order completed ---action---> delivered

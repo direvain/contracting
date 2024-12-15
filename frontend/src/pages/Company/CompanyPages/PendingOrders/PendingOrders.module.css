@@ -25,9 +25,8 @@
     margin-bottom: 8px;
 }
 
-.pendingOrdersSupplierName{
+.pendingOrdersSupplierName, .pendingOrdersType {
     font-size: 18pt;
-    text-align: center;
     margin-top: 0;
 }
 
@@ -56,6 +55,14 @@
 
 .pendingOrdersButton:hover{
     background-color: #aa0000;
+}
+
+.pendingOrdersP{
+    display: flex;
+    align-items: center; 
+    font-size: 17px;
+    justify-items: center;
+    height: 38.9vh;
 }
 
 /* استعلام الوسائط للشاشات الأكبر */

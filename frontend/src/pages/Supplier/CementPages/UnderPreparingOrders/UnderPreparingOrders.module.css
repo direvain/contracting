@@ -25,9 +25,8 @@
     margin-bottom: 8px;
 }
 
-.underPreparingOrdersSupplierName{
+.underPreparingOrdersSupplierName, .underPreparingOrdersType{
     font-size: 18pt;
-    text-align: center;
     margin-top: 0;
 }
 
@@ -37,11 +36,11 @@
     margin-bottom: 1px;
 }
 
-.pendingOrdersDivButton{
+.underPreparingOrdersDivButton{
     text-align: center;
 }
 
-.pendingOrdersButtonDelivered{
+.underPreparingOrdersButtonCompleted{
     background-color: #00aa00;
     width: 50%;
     border: none;
@@ -54,8 +53,16 @@
     text-transform: uppercase;
 }
 
-.pendingOrdersButtonDelivered:hover{
+.underPreparingOrdersButtonDelivered:hover{
     background-color: green;
+}
+
+.underPreparingOrdersP{
+    display: flex;
+    align-items: center; 
+    font-size: 17px;
+    justify-items: center;
+    height: 38.9vh;
 }
 
 /* استعلام الوسائط للشاشات الأكبر */

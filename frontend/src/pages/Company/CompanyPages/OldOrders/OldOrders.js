@@ -23,13 +23,14 @@ function OldOrders() {
     useEffect(() => {
         const fetchDataCementOrder = async () => {
             try {
-                const url = `http://localhost:8080/auth/company/data-cement-order`;
-                const headers = {
+                const status = "old";
+                const url = `http://localhost:8080/auth/company/order-data?status=${status}`;
+                const response = await fetch(url, {
+                    method: 'GET',
                     headers: {
-                        'Authorization': localStorage.getItem('token'),
+                        'Authorization': localStorage.getItem('token')
                     }
-                }
-                const response = await fetch(url, headers);
+                });
                 const result = await response.json();
                 setDataCementOrder(result);
             } catch (err) {
@@ -40,7 +41,7 @@ function OldOrders() {
     }, []);
 
     return(
-        <section className={styles.OldOrdersBody}>
+        <section className={styles.oldOrdersBody}>
             <Navbar 
                 one="Home"
                 pathOne="/company/home"
@@ -61,39 +62,61 @@ function OldOrders() {
             />
 
             
-            <div className={styles.OldOrdersTitle}>
-                <h2 className={styles.OldOrdersH2}>Old Orders</h2>
+            <div className={styles.oldOrdersTitle}>
+                <h2 className={styles.oldOrdersH2}>Old Orders</h2>
             </div>
-            <div className={styles.OldOrdersContainer}>
-                {(() => {
-                    {/* filter make in backend (send status ---> query parameter ) */}
-                    const OldOrders = dataCementOrder.filter(order => order.status === "old"); // Filter once
-                    return OldOrders.length > 0 ? (
-                        OldOrders.map((order, index) => (
-                            <div className={styles.OldOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
-                                <div>
-                                    <p className={`${styles.OldOrdersData} ${styles.OldOrdersSupplierName}`}><strong>Supplier name:</strong> {order.supplierName} </p>
-                                </div>
-                                <div className={styles.OldOrdersDiv}>
-                                    <p className={styles.OldOrdersData}><strong>Company name:</strong> {order.companyName} </p>
-                                    <p className={styles.OldOrdersData}><strong>Company phone:</strong> {order.companyPhone} </p>
-                                    <p className={styles.OldOrdersData}><strong>Recipient's name:</strong> {order.recipientName} </p>
-                                    <p className={styles.OldOrdersData}><strong>Recipient's phone:</strong> {order.recipientPhone} </p>
-                                    <p className={styles.OldOrdersData}><strong>Delivery time:</strong> {order.deliveryTime} </p>
-                                    <p className={styles.OldOrdersData}><strong>Location:</strong> {order.location} </p>
-                                </div>
-                                <div className={styles.OldOrdersDiv}>
-                                    <p className={styles.OldOrdersData}><strong>Cement quantity:</strong> {order.cementQuantity} ton</p>
-                                    <p className={styles.OldOrdersData}><strong>Number of cement bags:</strong> {order.cementNumberBags} </p>
-                                    <p className={styles.OldOrdersData}><strong>Cement price:</strong> {order.price} JD</p>
-                                    <p className={styles.OldOrdersData}><strong>Order request time:</strong> {order.orderRequestTime} </p>
-                                </div>
+            <div className={styles.oldOrdersContainer}>
+                {dataCementOrder && dataCementOrder.length > 0 ? (
+                    dataCementOrder.map((order) => (
+                        <div className={styles.oldOrdersRow} key={order._id}> 
+                            <div className={styles.oldOrdersDiv}>
+                                <p className={`${styles.oldOrdersData} ${styles.oldOrdersSupplierName}`}>
+                                    <strong>Supplier name:</strong> {order.supplierName} 
+                                </p>
+                                <p className={`${styles.oldOrdersData} ${styles.oldOrdersType}`}>
+                                    <strong>Order type:</strong> {order.type} 
+                                </p>
                             </div>
-                        ))
-                    ) : (
-                        <p OldOrdersP>No old orders found</p>
-                    );
-                })()}
+                            <hr />
+                            <div className={styles.oldOrdersDiv}>
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Company name:</strong> {order.companyName} 
+                                </p>
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Company phone:</strong> {order.companyPhone} 
+                                </p>
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Recipient's name:</strong> {order.recipientName} 
+                                </p>
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Recipient's phone:</strong> {order.recipientPhone} 
+                                </p>
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Delivery time:</strong> {order.deliveryTime} 
+                                </p>
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Location:</strong> {order.location} 
+                                </p>
+                            </div>
+                            <div className={styles.oldOrdersDiv}>
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Cement quantity:</strong> {order.cementQuantity} ton
+                                </p>
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Number of cement bags:</strong> {order.cementNumberBags} 
+                                </p>
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Cement price:</strong> {order.price} JD
+                                </p>
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Order request time:</strong> {order.orderRequestTime} 
+                                </p>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p className={styles.oldOrdersP}>No old orders found</p>
+                )}
             </div>
 
             <Footer 

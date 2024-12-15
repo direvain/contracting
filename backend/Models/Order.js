@@ -7,14 +7,6 @@ const OrderSchema = new mongoose.Schema({
         required: true,
         enum: ['cement', 'concrete'], // يحدد أنواع الطلبات المدعومة
     },
-    companyName: {
-        type: String,
-        required: true,
-    },
-    companyPhone: {
-        type: String,
-        required: true
-    },
     recipientName:{
         type:String,
         required:true
