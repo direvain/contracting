@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 const CompanyRegister = new mongoose.Schema({
     companyName: {
         type: String,

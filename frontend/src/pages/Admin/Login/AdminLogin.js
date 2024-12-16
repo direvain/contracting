@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { handleError, handleSuccess } from '../../../utils/utils';
@@ -25,12 +25,6 @@ function AdminLogin() {
         setLoginInfo(copyLoginInfo); // نقوم بتحديث الحالة باستخدام دالة
     }
 
-        // input في اي paste منع عمل 
-        const handlePaste = (e) => {
-            e.preventDefault();
-            handleError("Paste is not allowed.");
-        };
-
     const handleLogin = async (e) => {
         e.preventDefault(); // يمنع إعادة تحميل الصفحة عند ارسال النموذج
         const { email, password } = loginInfo;
@@ -55,7 +49,7 @@ function AdminLogin() {
                 localStorage.setItem('token', jwtToken); // يقوم بتخزين المعلومات داخل المتصفح ( -Application in browser للتأكد من انه تم الحفظ تذهب الى - key 'token' تحت مفتاح localStorage في jwt هنا خزن قيمة )
                 localStorage.setItem('role', role);
                 setTimeout(() => { 
-                    navigate('/admin/home') // (function) سيتم تنفيذها بعد انتهاء الوقت
+                    navigate('/admin/home/request-order') // (function) سيتم تنفيذها بعد انتهاء الوقت
                 }, 1000) // الوقت الذي سيتم الانتظار فيه قبل تنفيذ الدالة، وهو 1000 مللي ثانية، أي 1 ثانية
             } else if (!success) {
                 handleError(message);
@@ -76,7 +70,6 @@ function AdminLogin() {
                         <input
                             className={styles.adminLoginInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='email'
                             name='email'
                             placeholder='Enter your email...'
@@ -88,7 +81,6 @@ function AdminLogin() {
                         <input
                             className={styles.adminLoginInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='password'
                             name='password'
                             placeholder='Enter your password...'

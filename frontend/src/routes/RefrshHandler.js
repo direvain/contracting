@@ -23,8 +23,8 @@ function RefrshHandler({ setIsAuthenticated, setRole, setSupplierProduct }) {
           cement: ['/cement/home'],
           concrete: ['/concrete/home'],
         },
-        company: ['/company/home'],
-        admin: ['/admin/home'],
+        company: ['/company/home', '/company/home/cement-order', '/company/home/concrete-order', '/company/home/profile', '/company/home/preparing-orders', '/company/home/pending-orders', '/company/home/past-orders'],
+        admin: ['/admin/home', '/admin/home/request-order', '/admin/home/approve-order', "/admin/home/reject-order","/admin/home/Add-admin" ],
       };
 
       // التحقق إذا كان المسار الحالي من المسارات المسموحة

@@ -1,18 +1,17 @@
-import {Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { handleSuccess } from '../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
 import styles from './CompanyHome.module.css';
-import { Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
 import Navbar from '../../../Components/navBAr/Navbar';
 import Footer from '../../../Components/footer/Footer';
 
+import { Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
 
 function CompanyHome() {
     const navigate = useNavigate();
 
     const handleLogout = (e) => {
         localStorage.removeItem('token');
-        localStorage.removeItem('loggedInUser');
         localStorage.removeItem('role');
         handleSuccess('User Loggedout');
         setTimeout(() => {
@@ -20,15 +19,38 @@ function CompanyHome() {
         }, 1000)
     }
 
+    const handleConcrete = async (e) => {
+        setTimeout(() => { 
+            navigate('/company/home/concrete-order') // (function) سيتم تنفيذها بعد انتهاء الوقت
+        }, 1000)
+    }
+    
+    const handleCement = async (e) => {
+        setTimeout(() => { 
+            navigate('/company/home/cement-order') // (function) سيتم تنفيذها بعد انتهاء الوقت
+        }, 1000)
+    }
+
     return(
         <section className={styles.companyBody}>
             <Navbar 
                 one="Home"
-                two="nkladkj"
-                three="About Us"
-
+                pathOne="/company/home"
+                two="Orders"
+                two1="Preparing orders"
+                pathTwo1="/company/home/preparing-orders"
+                two2="Pending orders"
+                pathTwo2="/company/home/pending-orders"
+                two3="Past orders"
+                pathTwo3="/company/home/past-orders"
+                three="Cement"
+                pathThree="/company/home/cement-order"
+                four="Concrete"
+                pathFour="/company/home/concrete-order"
+                five="Profile"
+                pathFive="/company/home/profile"
+                logout={handleLogout}
             />
-            <button onClick={handleLogout}>Logout</button>
             
             <div className={styles.companyHomeContainerCard}>
                 {/* First Card */}
@@ -43,19 +65,18 @@ function CompanyHome() {
                         }
                     }}
                 >
-                    <CardActionArea>
+                    <CardActionArea onClick={handleCement}>
                         <CardMedia
                             className={styles.cementCardMedia}
                             component="img"
-                            height="140"
+                            height="170"
                         />
                         <CardContent className={styles.cardContent}>
                             <Typography gutterBottom variant="h5" component="div">
                                 Cement
                             </Typography>
                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                Lizards are a widespread group of squamate reptiles, with over 6,000 species,
-                                ranging across all continents except Antarctica.
+                                Click to start ordering cement for your construction.
                             </Typography>
                         </CardContent>
                     </CardActionArea>
@@ -72,19 +93,18 @@ function CompanyHome() {
                         }
                     }}
                 >
-                    <CardActionArea>
+                    <CardActionArea onClick={handleConcrete}>
                         <CardMedia
                             className={styles.concreteCardMedia}
                             component="img"
-                            height="140"
+                            height="170"
                         />
                         <CardContent className={styles.cardContent}>
                             <Typography gutterBottom variant="h5" component="div">
                                 Concrete
                             </Typography>
                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                Lizards are a widespread group of squamate reptiles, with over 6,000 species,
-                                ranging across all continents except Antarctica.
+                                Click to start ordering concrete for your construction.
                             </Typography>
                         </CardContent>
                     </CardActionArea>
@@ -93,8 +113,18 @@ function CompanyHome() {
 
             <Footer 
                 one="Home"
-                two="About Us"
-                three="Contact Us"
+                pathOne="/company/home"
+                two="Orders"
+                pathTwo1="/company/home/preparing-orders"
+                pathTwo2="/company/home/pending-orders"
+                pathTwo3="/company/home/past-orders"
+                three="Cement"
+                pathThree="/company/home/cement-order"
+                four="Concrete"
+                pathFour="/company/home/concrete-order"
+                five="Profile"
+                pathFive="/company/home/profile"
+                logout={handleLogout}
             />
             <ToastContainer />
         </section>

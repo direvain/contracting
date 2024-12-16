@@ -34,13 +34,6 @@ function CompanyRegistration() {
         }
     };
 
-    // input في اي paste منع عمل 
-    const handlePaste = (e) => {
-        e.preventDefault();
-        handleError("Paste is not allowed.");
-    };
-
-
     const handleRegistration = async (e) => {
         e.preventDefault();
         // تحديد الحقول المطلوبة
@@ -90,7 +83,6 @@ function CompanyRegistration() {
                         <input
                             className={styles.companyRegistrationInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='text'
                             name='companyName'
                             placeholder='Enter your company name...'
@@ -103,7 +95,6 @@ function CompanyRegistration() {
                         <input
                             className={styles.companyRegistrationInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='email'
                             name='email'
                             placeholder='Enter your email...'
@@ -116,7 +107,6 @@ function CompanyRegistration() {
                             className={styles.companyRegistrationInput}
                             onChange={handleChange}
                             onKeyPress={handleKeyPress}
-                            onPaste={handlePaste}
                             type='username'
                             name='username'
                             inputmode="numeric" 
@@ -131,7 +121,6 @@ function CompanyRegistration() {
                             className={styles.companyRegistrationInput}
                             onChange={handleChange}
                             onKeyPress={handleKeyPress}
-                            onPaste={handlePaste}
                             type='tel'
                             name='companyPhone'
                             inputmode="numeric" 
@@ -145,7 +134,6 @@ function CompanyRegistration() {
                         <input
                             className={styles.companyRegistrationInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='password'
                             name='password'
                             placeholder='Enter your password...'
@@ -157,7 +145,6 @@ function CompanyRegistration() {
                         <input
                             className={styles.companyRegistrationInput}
                             onChange={handleChange}
-                            onPaste={handlePaste}
                             type='password'
                             name='confirmPassword'
                             placeholder='Enter your Confirm Password...'
