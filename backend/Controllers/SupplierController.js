@@ -9,15 +9,24 @@ const registration = async (req, res) => {
     // console.log(req.commercialRegister);
     // console.log(req.body.commercialRegister);
     try {
-        const { supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister } = req.body;
-        const supplier = await SupplierModel.findOne({ username });
-        if (supplier) {
+        const { supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister } = req.body;
+        const checkSupplierName = await SupplierModel.findOne({ supplierName });
+        if (checkSupplierName) {
             return res.status(409)
-                .json({ message: 'Username is already exist', success: false });
+                .json({ message: 'Supplier name is already exist', success: false });
+        }
+        const checkSupplierID = await SupplierModel.findOne({ supplierID });
+        if (checkSupplierID) {
+            return res.status(409)
+                .json({ message: 'SupplierID is already exist', success: false });
         }
         // console.log("after: " + commercialRegister)
 
+<<<<<<< HEAD
         const supplierModel = new SupplierModelRegister({ supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister });
+=======
+        const supplierModel = new SupplierModel({ supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister });
+>>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
         supplierModel.password = await bcrypt.hash(password, 10);
         // supplierModel.commercialRegister = Buffer.from(commercialRegister, 'base64').toString('utf8');
         
@@ -39,9 +48,9 @@ const registration = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const supplier = await SupplierModel.findOne({ username });
-        const errorMsg = 'Auth failed username or password is wrong';
+        const { supplierID, password } = req.body;
+        const supplier = await SupplierModel.findOne({ supplierID });
+        const errorMsg = 'Auth failed supplierID or password is wrong';
         if (!supplier) {
             return res.status(403)
                 .json({ message: errorMsg, success: false });
@@ -52,7 +61,7 @@ const login = async (req, res) => {
                 .json({ message: errorMsg, success: false });
         }
         const jwtToken = jwt.sign(
-            { email: supplier.email, _id: supplier._id, role: supplier.role }, // يحتوي على المعلومات التي تريد تضمينها
+            { supplierName: supplier.supplierName, email: supplier.email, supplierID: supplier.supplierID, supplierPhone: supplier.supplierPhone, supplierProduct: supplier.supplierProduct, role: supplier.role, _id: supplier._id }, // يحتوي على المعلومات التي تريد تضمينها
             process.env.JWT_SECRET, // هو مفتاح سري يستخدم لتوقيع الرمز
             { expiresIn: '24h' } // optional ---> الرمز سينتهي بعد 24 ساعه من انشائه
         )

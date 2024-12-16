@@ -8,13 +8,28 @@ env.config();
 
 const registration = async (req, res) => {
     try {
+<<<<<<< HEAD
         const { companyName, email, username, password, companyPhone, commercialRegister } = req.body;
         const company = await CompanyModel.findOne({ username }); // this line for check if username is already exist 
         if (company) {
+=======
+        const { companyName, email, companyID, password, companyPhone, commercialRegister } = req.body;
+        const checkCompanyName = await CompanyModel.findOne({ companyName });
+        if (checkCompanyName) {
+>>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
             return res.status(409)
-                .json({ message: 'Username is already exist', success: false });
+                .json({ message: 'Company name is already exist', success: false });
         }
+<<<<<<< HEAD
         const companyModel = new CompanyModelRegister({ companyName, email, username, password, companyPhone, commercialRegister }); // const and password and save change it for what u want adn the new is name for the collection so change it 
+=======
+        const checkCompanyID = await CompanyModel.findOne({ companyID });
+        if (checkCompanyID) {
+            return res.status(409)
+                .json({ message: 'CompanyID is already exist', success: false });
+        }
+        const companyModel = new CompanyModel({ companyName, email, companyID, password, companyPhone, commercialRegister });
+>>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
         companyModel.password = await bcrypt.hash(password, 10);
         await companyModel.save();
         res.status(201)
@@ -25,7 +40,7 @@ const registration = async (req, res) => {
     } catch (err) {
         res.status(500)
             .json({
-                message: "Internal server error",
+                message: "Internal server error" + err.message,
                 success: false
             })
     }
@@ -33,9 +48,9 @@ const registration = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const company = await CompanyModel.findOne({ username });
-        const errorMsg = 'Auth failed username or password is wrong';
+        const { companyID, password } = req.body;
+        const company = await CompanyModel.findOne({ companyID });
+        const errorMsg = 'Auth failed companyID or password is wrong';
         if (!company) {
             return res.status(403)
                 .json({ message: errorMsg, success: false });
@@ -45,8 +60,8 @@ const login = async (req, res) => {
             return res.status(403)
                 .json({ message: errorMsg, success: false });
         }
-        const jwtToken = jwt.sign(
-            { email: company.email, _id: company._id, role: company.role }, // يحتوي على المعلومات التي تريد تضمينها
+        const jwtToken = jwt.sign( 
+            { companyName: company.companyName, email: company.email, companyID: company.companyID, companyPhone: company.companyPhone, role: company.role, _id: company._id,}, // يحتوي على المعلومات التي تريد تضمينها
             process.env.JWT_SECRET, // هو مفتاح سري يستخدم لتوقيع الرمز
             { expiresIn: '24h' } // optional ---> الرمز سينتهي بعد 24 ساعه من انشائه
         )

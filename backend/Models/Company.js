@@ -4,12 +4,13 @@ const CompanySchema = new mongoose.Schema({
     companyName: {
         type: String,
         required: true,
+        unique: true
     },
     email: {
         type: String,
         required: true,
     },
-    username: {
+    companyID: {
         type: Number,
         required: true,
         unique: true
@@ -19,7 +20,7 @@ const CompanySchema = new mongoose.Schema({
         required: true,
     },
     companyPhone: {
-        type: Number,
+        type: String,
         required: true
     },
     commercialRegister: {

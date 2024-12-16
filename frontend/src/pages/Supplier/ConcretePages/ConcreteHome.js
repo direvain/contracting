@@ -14,7 +14,7 @@ function ConcreteHome() {
         handleSuccess('User Loggedout');
         setTimeout(() => {
             navigate('/supplier-login');
-        }, 1000)
+        }, 500)
     }
 
     return<div>

@@ -4,7 +4,7 @@ const registrationValidation = (req, res, next) => {
     const schema = Joi.object({
         companyName: Joi.string().required(),
         email: Joi.string().email().required(),
-        username: Joi.string().length(9).required(),
+        companyID: Joi.string().length(9).required(),
         password: Joi.string().min(9).max(18).pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/).required().messages(
             {'string.min': 'Password must be at least 9 characters long.',
             'string.max': 'Password cannot exceed 18 characters.',
@@ -25,7 +25,7 @@ const registrationValidation = (req, res, next) => {
 
 const loginValidation = (req, res, next) => {
     const schema = Joi.object({
-        username: Joi.string().required(),
+        companyID: Joi.string().required(),
         password: Joi.string().required()
     });
     next();

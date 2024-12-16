@@ -8,7 +8,7 @@ import styles from './SupplierLogin.module.css';
 function SupplierLogin() {
 
     const [loginInfo, setLoginInfo] = useState({
-        username: '',
+        supplierID: '',
         password: ''
     })
 
@@ -27,9 +27,9 @@ function SupplierLogin() {
 
     const handleLogin = async (e) => {
         e.preventDefault(); // يمنع إعادة تحميل الصفحة عند ارسال النموذج
-        const { username, password } = loginInfo;
-        if (!username || !password) { // يتحقق مما اذا كانت القيمة غير موجوده (ان تكون فارغة او غير معرفه)
-            return handleError('username and password are required')
+        const { supplierID, password } = loginInfo;
+        if (!supplierID || !password) { // يتحقق مما اذا كانت القيمة غير موجوده (ان تكون فارغة او غير معرفه)
+            return handleError('supplierID and password are required')
         }
 
         // this code sends login information to a local server using a POST request in JSON format.
@@ -50,8 +50,8 @@ function SupplierLogin() {
                 localStorage.setItem('role', role);
                 localStorage.setItem('supplierProduct', supplierProduct);
                 setTimeout(() => { 
-                    supplierProduct === "Cement" ? navigate('/supplier/cement/home') : navigate('/supplier/concrete/home'); // (function) سيتم تنفيذها بعد انتهاء الوقت
-                }, 1000) // الوقت الذي سيتم الانتظار فيه قبل تنفيذ الدالة، وهو 1000 مللي ثانية، أي 1 ثانية
+                    supplierProduct === "Cement" ? navigate('/supplier/cement/pending-orders') : navigate('/supplier/concrete/home'); // (function) سيتم تنفيذها بعد انتهاء الوقت
+                }, 500)
             } else if (!success) {
                 handleError(message);
             }
@@ -67,14 +67,15 @@ function SupplierLogin() {
                 <h1 className={styles.supplierLoginH1}>Supplier Login</h1>
                 <form className={styles.supplierFormLogin} onSubmit={handleLogin}>
                     <div className={styles.supplierDiv}>
-                        <label className={styles.supplierLoginLabel} htmlFor='username'>Username</label>
+                        <label className={styles.supplierLoginLabel} htmlFor='supplierID'>Supplier ID</label>
                         <input
                             className={styles.supplierLoginInput}
                             onChange={handleChange}
-                            type='username'
-                            name='username'
-                            placeholder='Enter your company ID for username...'
-                            value={loginInfo.username}
+                            type='supplierID'
+                            name='supplierID'
+                            placeholder='Enter your supplier ID ...'
+                            value={loginInfo.supplierID}
+                            autoFocus
                         />
                     </div>
                     <div className={styles.supplierDiv}>

@@ -30,13 +30,13 @@ function Footer(props) {
                             </button>
                             <ul className={`${styles.dropdownMenu} ${dropdownActive ? styles.show : ''}`}>
                                 <li className={styles.dropdownItem}>
-                                    <Link className={styles.itemLink} to={props.pathTwo1}>Preparing orders</Link>
+                                    <Link className={styles.itemLink} to={props.pathTwo1}>{props.two1}</Link>
                                 </li>
                                 <li className={styles.dropdownItem}>
-                                    <Link className={styles.itemLink} to={props.pathTwo2}>Pending orders</Link>
+                                    <Link className={styles.itemLink} to={props.pathTwo2}>{props.two2}</Link>
                                 </li>
                                 <li className={styles.dropdownItem}>
-                                    <Link className={styles.itemLink} to={props.pathTwo3}>Past orders</Link>
+                                    <Link className={styles.itemLink} to={props.pathTwo3}>{props.two3}</Link>
                                 </li>
                             </ul>
                         </li>

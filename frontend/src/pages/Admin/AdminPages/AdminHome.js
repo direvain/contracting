@@ -10,6 +10,7 @@ function AdminHome() {
   const navigate = useNavigate();
 
 
+<<<<<<< HEAD
   const handleLogout = (e) => {
       localStorage.removeItem('token');
       localStorage.removeItem('loggedInUser');
@@ -19,6 +20,17 @@ function AdminHome() {
           navigate('/admin');
       }, 1000)
   }
+=======
+    const handleLogout = (e) => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('loggedInUser');
+        localStorage.removeItem('role');
+        handleSuccess('User Loggedout');
+        setTimeout(() => {
+            navigate('/admin');
+        }, 500)
+    }
+>>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
 
   return (
     <div>
