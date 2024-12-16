@@ -19,8 +19,8 @@ function AdminHome() {
         localStorage.removeItem('role');
         handleSuccess('User Loggedout');
         setTimeout(() => {
-            navigate('/supplier-login');
-        }, 1000)
+            navigate('/admin');
+        }, 500)
     }
 
     const fetchProducts = async () => {

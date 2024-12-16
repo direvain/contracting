@@ -20,10 +20,10 @@ function RefrshHandler({ setIsAuthenticated, setRole, setSupplierProduct }) {
       // تعريف المسارات المسموحة لكل دور
       const allowedPaths = {
         supplier: {
-          cement: ['/cement/home'],
-          concrete: ['/concrete/home'],
+          cement: ['/supplier/cement/under-preparing-orders', '/supplier/cement/pending-orders', '/supplier/cement/old-orders', '/supplier/cement/profile'],
+          concrete: ['/supplier/concrete/home'],
         },
-        company: ['/company/home', '/company/home/cement-order', '/company/home/concrete-order', '/company/home/profile', '/company/home/preparing-orders', '/company/home/pending-orders', '/company/home/past-orders'],
+        company: ['/company/home', '/company/home/cement-order', '/company/home/concrete-order', '/company/home/profile', '/company/home/under-preparing-orders', '/company/home/pending-orders', '/company/home/old-orders', '/company/home/cement-order/cement-bill'],
         admin: ['/admin/home'],
       };
 
@@ -36,7 +36,7 @@ function RefrshHandler({ setIsAuthenticated, setRole, setSupplierProduct }) {
       // إذا كان المسار غير مسموح، توجيه المستخدم إلى الصفحة المناسبة
       if (!isAllowed) {
         if (role === 'supplier' && supplierProduct) {
-          navigate(`/${role}/${supplierProduct}/home`, { replace: false });
+          navigate(`/${role}/${supplierProduct}/pending-orders`, { replace: false });
         } else {
           navigate(`/${role}/home`, { replace: false });
         }

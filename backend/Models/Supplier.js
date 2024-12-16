@@ -4,12 +4,13 @@ const SupplierSchema = new mongoose.Schema({
     supplierName: {
         type: String,
         required: true,
+        unique: true
     },
     email: {
         type: String,
         required: true
     },
-    username: {
+    supplierID: {
         type: Number,
         required: true,
         unique: true
@@ -19,7 +20,7 @@ const SupplierSchema = new mongoose.Schema({
         required: true,
     },
     supplierPhone: {
-        type: Number,
+        type: String,
         required: true
     },
     supplierProduct: {
@@ -30,6 +31,10 @@ const SupplierSchema = new mongoose.Schema({
         type: Buffer, // Store the file as binary data
         // contentType: String, // Store the MIME type (e.g., application/pdf)
         required: true
+    },
+    price:{
+        type:Number,
+        default: 5
     },
     role: {
         type: String,

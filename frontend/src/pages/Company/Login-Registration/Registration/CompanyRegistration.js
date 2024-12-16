@@ -9,7 +9,7 @@ function CompanyRegistration() {
     const [registrationInfo, setRegistrationInfo] = useState({
         companyName: '',
         email: '',
-        username: '',
+        companyID: '',
         password: '',
         confirmPassword: '',
         companyPhone: '',
@@ -30,20 +30,40 @@ function CompanyRegistration() {
     const handleKeyPress = (e) => {
         if (!/^[0-9]$/.test(e.key)) {
             e.preventDefault(); // منع الإدخال إذا لم يكن رقماً
-            handleError("Please enter a number");
+            handleError("Numbers only! Letters are not allowed");
         }
     };
-
+    
+    // Phone validation: Phone number must start with 077, 078, or 079 and be followed by 7 digits
+    const handlePhoneValidation = (value) => {
+        if (value.length !== 10) {
+            handleError('Phone number must be exactly 10 digits long.');
+            return false;
+        }
+    
+        if (!/^(077|078|079)[0-9]{7}$/.test(value)) {
+            handleError('Phone number must start with 077, 078, or 079 and be followed by 7 digits.');
+            return false;
+        }
+    
+        return true;
+    };
+    
     const handleRegistration = async (e) => {
         e.preventDefault();
         // تحديد الحقول المطلوبة
-        const requiredFields = ['companyName', 'email', 'username', 'password', 'confirmPassword', 'companyPhone', 'commercialRegister'];
+        const requiredFields = ['companyName', 'email', 'companyID', 'password', 'confirmPassword', 'companyPhone', 'commercialRegister'];
 
         // التحقق من وجود الحقول المطلوبة
         const missingFields = requiredFields.filter(field => !registrationInfo[field]);
 
         if (missingFields.length > 0) {
             return handleError(`The following fields are required: ${missingFields.join(', ')}`);
+        }
+
+        // التحقق من صحة رقم الهاتف
+        if (!handlePhoneValidation(registrationInfo.companyPhone)) {
+            return;
         }
 
         try {
@@ -61,7 +81,7 @@ function CompanyRegistration() {
                 handleSuccess(message);
                 setTimeout(() => {
                     navigate('/company-login')
-                }, 1000)
+                }, 500)
             } else if (error) {
                 const details = error?.details[0].message;
                 handleError(details);
@@ -73,6 +93,7 @@ function CompanyRegistration() {
             handleError(err);
         }
     }
+    
     return (
         <section className={styles.companyBody}>
             <div className={styles.companyRegistrationContainer}>
@@ -102,17 +123,17 @@ function CompanyRegistration() {
                         />
                     </div>
                     <div className={styles.companyRegistrationDiv}>
-                        <label className={styles.companyRegistrationLabel} htmlFor='username'>Username</label>
+                        <label className={styles.companyRegistrationLabel} htmlFor='companyID'>Company ID</label>
                         <input
                             className={styles.companyRegistrationInput}
                             onChange={handleChange}
                             onKeyPress={handleKeyPress}
-                            type='username'
-                            name='username'
+                            type='companyID'
+                            name='companyID'
                             inputmode="numeric" 
                             maxlength="9"
-                            placeholder='Enter your company ID for username...'
-                            value={registrationInfo.username}
+                            placeholder='Enter your company ID ...'
+                            value={registrationInfo.companyID}
                         />
                     </div>
                     <div className={styles.companyRegistrationDiv}>
@@ -121,6 +142,7 @@ function CompanyRegistration() {
                             className={styles.companyRegistrationInput}
                             onChange={handleChange}
                             onKeyPress={handleKeyPress}
+                            onBlur={(e) => handlePhoneValidation(e.target.value)}
                             type='tel'
                             name='companyPhone'
                             inputmode="numeric" 
