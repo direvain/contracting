@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {jwtDecode} from "jwt-decode";
 import { handleError, handleSuccess } from '../../../../../utils/utils';
@@ -16,8 +16,8 @@ function CementBill() {
     const queryParams = new URLSearchParams(location.search);
     const amountOfCement = queryParams.get('amountOfCement');
     const supplierName = queryParams.get('supplierName');
+    const price = queryParams.get('price');
     
-    const [dataSupplier, setDataSupplier] = useState('');
     const [cementBillInfo, setCementBillInfo] = useState({
         type: 'cement',
         recipientName: '',
@@ -27,7 +27,7 @@ function CementBill() {
         orderRequestTime: new Date().toLocaleString('en-GB', {hour12: true}).replace(',', ''),
         cementQuantity: amountOfCement,
         cementNumberBags: amountOfCement * 20,
-        price: '',
+        price: (amountOfCement * 20 * price).toFixed(2),
         supplierName: supplierName
     });
 
@@ -124,40 +124,10 @@ function CementBill() {
                 handleError(message);
             }
             console.log(result);
-        } catch (err) {
-            handleError(err);
+        } catch (error) {
+            handleError(error);
         }
     }
-
-    useEffect(() => {        
-        const fetchDataSupplier = async () => {
-            try {
-                const url = `http://localhost:8080/auth/company/data-supplier`;
-                const headers = {
-                    headers: {
-                        'Authorization': localStorage.getItem('token'),
-                    }
-                }
-                const response = await fetch(url, headers);
-                const result = await response.json();
-                console.log(result);
-                // i need change because always come data index 0
-                setDataSupplier(result[0]);
-            } catch (err) {
-                handleError(err);
-            }
-        }
-        fetchDataSupplier();
-    }, []);
-    
-    useEffect(() => {
-        if (dataSupplier) {
-            setCementBillInfo((prev) => ({
-                ...prev,
-                price: amountOfCement * 20 * dataSupplier?.price 
-            }));
-        }
-    }, [dataSupplier]);
 
     return(
         <section className={styles.cementBillBody}>
@@ -211,8 +181,8 @@ function CementBill() {
                                 onBlur={(e) => handlePhoneValidation(e.target.value)}
                                 type='tel'
                                 name='recipientPhone'
-                                inputmode="numeric" 
-                                maxlength="10"
+                                inputMode="numeric" 
+                                maxLength="10"
                                 placeholder="Enter the recipient's phone"
                                 value={cementBillInfo.recipientPhone}
                             />
@@ -246,7 +216,7 @@ function CementBill() {
                             <p className={styles.cementBillP}><strong>Number of bags:<br /></strong> {amountOfCement * 20} bags</p>
                         </div>
                         <div className={styles.cementBillDiv}>
-                            <p className={styles.cementBillP}><strong>The price:<br /></strong> {amountOfCement * 20 * dataSupplier?.price} JD</p>
+                            <p className={styles.cementBillP}><strong>The price:<br /></strong> {(amountOfCement * 20 * price).toFixed(2)} JD</p>
                         </div>
                         <div className={styles.cementBillDiv}>
                             <p className={styles.cementBillP}><strong>Supplier name:<br /></strong> {supplierName} </p>

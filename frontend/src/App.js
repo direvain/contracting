@@ -14,10 +14,11 @@ import SupplierRegistration from "./pages/Supplier/Login-Registration/Registrati
 // Supplier-Concrete
 import ConcreteHome from "./pages/Supplier/ConcretePages/ConcreteHome";
 // Supplier-Cement
-import { UnderPreparingOrders as SupplierUnderPreparingOrders } from './pages/Supplier/CementPages/UnderPreparingOrders/UnderPreparingOrders';
-import { PendingOrders as SupplierPendingOrders } from './pages/Supplier/CementPages/PendingOrders/PendingOrders';
-import { OldOrders as SupplierOldOrders } from './pages/Supplier/CementPages/OldOrders/OldOrders';
-import { Profile as SupplierProfile } from './pages/Supplier/CementPages/Profile/Profile';
+import { UnderPreparingOrders as SupplierCementUnderPreparingOrders } from './pages/Supplier/CementPages/UnderPreparingOrders/UnderPreparingOrders';
+import { PendingOrders as SupplierCementPendingOrders } from './pages/Supplier/CementPages/PendingOrders/PendingOrders';
+import { OldOrders as SupplierCementOldOrders } from './pages/Supplier/CementPages/OldOrders/OldOrders';
+import { Profile as SupplierCementProfile } from './pages/Supplier/CementPages/Profile/Profile';
+import { Edit as SupplierCementProfileEdit } from './pages/Supplier/CementPages/Profile/Edit/Edit';
 
 // Company
 import CompanyLogin from "./pages/Company/Login-Registration/Login/CompanyLogin";
@@ -73,28 +74,35 @@ function App() {
                                                 role={role}
                                                 supplierProduct= {supplierProduct}
                                                 allowedRoles={['supplier']}
-                                                element={<SupplierUnderPreparingOrders />}
+                                                element={<SupplierCementUnderPreparingOrders />}
                                               />}/>
         <Route path="/supplier/cement/pending-orders" element={<PrivateRoute
                                                 isAuthenticated={isAuthenticated}
                                                 role={role}
                                                 supplierProduct= {supplierProduct}
                                                 allowedRoles={['supplier']}
-                                                element={<SupplierPendingOrders />}
+                                                element={<SupplierCementPendingOrders />}
                                               />}/>
         <Route path="/supplier/cement/old-orders" element={<PrivateRoute
                                                 isAuthenticated={isAuthenticated}
                                                 role={role}
                                                 supplierProduct= {supplierProduct}
                                                 allowedRoles={['supplier']}
-                                                element={<SupplierOldOrders />}
+                                                element={<SupplierCementOldOrders />}
                                               />}/>
         <Route path="/supplier/cement/profile" element={<PrivateRoute
                                                 isAuthenticated={isAuthenticated}
                                                 role={role}
                                                 supplierProduct= {supplierProduct}
                                                 allowedRoles={['supplier']}
-                                                element={<SupplierProfile />}
+                                                element={<SupplierCementProfile />}
+                                              />}/>
+        <Route path="/supplier/cement/profile/edit" element={<PrivateRoute
+                                                isAuthenticated={isAuthenticated}
+                                                role={role}
+                                                supplierProduct= {supplierProduct}
+                                                allowedRoles={['supplier']}
+                                                element={<SupplierCementProfileEdit />}
                                               />}/>
         
         {/* Company */}

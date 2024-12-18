@@ -27,18 +27,18 @@ CompanyRouter.get('/company-commercial-register', ensureAuthenticated, async (re
     try {
         const id = jwt.decode(req.headers.authorization)._id;
         const companyCommercialRegister = await CompanyModel.findOne({ _id: id })
-        if (!companyCommercialRegister) return res.status(404).json({ message: 'Commercial register not found' });
+        if (!companyCommercialRegister) return res.status(404).json({ message: 'Commercial register not found', success: false });
         res.json(companyCommercialRegister.commercialRegister);
     } catch (error) {
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
     }
 });
 
-// Get Price in Collection Supplier - in bill
+// Get Price in Collection Supplier - in CementOrder
 CompanyRouter.get('/data-supplier', ensureAuthenticated, async (req, res) => {
     try {
         const dataSupplier = await SupplierModel.find({ supplierProduct: 'cement' });
-        if (!dataSupplier) return res.status(404).json({ message: 'Supplier not found' });
+        if (!dataSupplier) return res.status(404).json({ message: 'Supplier not found', success: false });
         res.json(dataSupplier.map( item => {
             return {
                 supplierId: item._id,
@@ -47,39 +47,63 @@ CompanyRouter.get('/data-supplier', ensureAuthenticated, async (req, res) => {
             }
         }));
     } catch (error) {
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
+    }
+});
+
+// Define a route to handle PATCH requests for updating a cement order
+CompanyRouter.patch('/update-cement-order', ensureAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.body;
+        const { status } = req.body;
+        const updateCementOrder = await OrderModel.findByIdAndUpdate(id, { status: status });
+        if (!updateCementOrder) {
+            return res.status(404).json({ message: "Order not found", success: false });
+        }
+        res.status(200).json({ message: "", success: true });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
     }
 });
 
 // Get All Data in Collection Order
-CompanyRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
+CompanyRouter.get('/order-cement-data', ensureAuthenticated, async (req, res) => {
     try {
-        const status = req.query.status;
+        const statuses = req.query.statuses.split(',');
         const id = jwt.decode(req.headers.authorization)._id;
-        const dataCementOrder = await OrderModel.find({ companyId: id, status: status });
-        if (!dataCementOrder || dataCementOrder.length === 0) return res.status(404).json({ message: 'Order not found' });
+        const dataCementOrder = await OrderModel.find({ companyId: id, status: statuses });
+        if (!dataCementOrder || dataCementOrder.length === 0) return res.status(404).json({ message: 'Order not found', success: false });
 
         // جلب بيانات المورد والشركة من قاعدة البيانات
         const supplierIds = dataCementOrder.map(item => item.supplierId);
-        const companyIds = dataCementOrder.map(item => item.companyId);
         const dataSupplier = await SupplierModel.find({ _id: { $in: supplierIds } });
-        const dataCompany = await CompanyModel.find({ _id: { $in: companyIds } });
+        const dataCompany = await CompanyModel.findById( id );
 
         // تحويل البيانات حسب الحاجة
         const result = dataCementOrder.map(item => {
             const supplier = dataSupplier.find(s => s._id.toString() === item.supplierId.toString());
-            const company = dataCompany.find(c => c._id.toString() === item.companyId.toString());
             return {
-                ...item._doc, // للحصول على خصائص العنصر مع تجنب مشاكل المرجعية
+                id: item._id,
+                type: item.type,
+                recipientName: item.recipientName,
+                recipientPhone: item.recipientPhone,
+                location: item.location,
+                deliveryTime: item.deliveryTime,
+                orderRequestTime: item.orderRequestTime,
+                status: item.status,
+                price: item.price ,
+                cementQuantity: item.cementQuantity,
+                cementNumberBags: item.cementNumberBags,
                 supplierName: supplier.supplierName,
-                companyName: company.companyName,
-                companyPhone: company.companyPhone
+                companyName: dataCompany.companyName,
+                companyPhone: dataCompany.companyPhone
             };
         });
 
         res.json(result);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
     }
 });
 

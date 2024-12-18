@@ -8,7 +8,6 @@ function ConcreteHome() {
 
     const handleLogout = (e) => {
         localStorage.removeItem('token');
-        localStorage.removeItem('loggedInUser');
         localStorage.removeItem('role');
         localStorage.removeItem('supplierProduct');
         handleSuccess('User Loggedout');

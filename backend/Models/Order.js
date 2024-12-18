@@ -32,7 +32,7 @@ const OrderSchema = new mongoose.Schema({
         default: 'pending'
     },
     price: {
-        type:Number,
+        type: String,
         required:true
     },
     // Special fields in cement

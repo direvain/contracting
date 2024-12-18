@@ -21,7 +21,7 @@ SupplierRouter.post('/registration', registrationValidation, registration);
 // Define a route to handle PATCH requests for updating a cement order
 SupplierRouter.patch('/update-cement-order', ensureAuthenticated, async (req, res) => {
     try {
-        const id = jwt.decode(req.headers.authorization)._id;
+        const { id } = req.body;
         const { status } = req.body;
         const updateCementOrder = await OrderModel.findByIdAndUpdate(id, { status: status });
         if (!updateCementOrder) {
@@ -30,7 +30,7 @@ SupplierRouter.patch('/update-cement-order', ensureAuthenticated, async (req, re
         res.status(200).json({ message: "", success: true });
     }
     catch (error) {
-        res.status(500).json({ message: "Internal server errror:" + error.message, success: false });
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
     }
 });
 
@@ -39,24 +39,23 @@ SupplierRouter.get('/supplier-data', ensureAuthenticated, async (req, res) => {
     try {
         const id = jwt.decode(req.headers.authorization)._id;
         const supplierData = await SupplierModel.findOne({ _id: id })
-        if (!supplierData) return res.status(404).json({ message: 'Supplier not found' });
+        if (!supplierData) return res.status(404).json({ message: 'Supplier not found', success: false });
         res.json({
             commercialRegister: supplierData.commercialRegister,
             price: supplierData.price
         });
     } catch (error) {
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
     }
 });
 
 // Get All Data in Collection Order
-SupplierRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
+SupplierRouter.get('/order-cement-data', ensureAuthenticated, async (req, res) => {
     try {
-        const statuses = req.query.status.split(',');
-
+        const statuses = req.query.statuses.split(',');
         const id = jwt.decode(req.headers.authorization)._id;
         const dataCementOrders = await OrderModel.find({ supplierId: id, status: statuses });
-        if (!dataCementOrders || dataCementOrders.length === 0) return res.status(404).json({ message: 'Order not found' });
+        if (!dataCementOrders || dataCementOrders.length === 0) return res.status(404).json({ message: 'Order not found', success: false });
 
         // جلب بيانات المورد والشركة من قاعدة البيانات
         const companyIds = dataCementOrders.map(item => item.companyId);
@@ -67,7 +66,17 @@ SupplierRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
         const result = dataCementOrders.map(item => {
             const company = dataCompanies.find(c => c._id.toString() === item.companyId.toString());
             return {
-                ...item._doc, // للحصول على خصائص العنصر مع تجنب مشاكل المرجعية
+                id: item._id,
+                type: item.type,
+                recipientName: item.recipientName,
+                recipientPhone: item.recipientPhone,
+                location: item.location,
+                deliveryTime: item.deliveryTime,
+                orderRequestTime: item.orderRequestTime,
+                status: item.status,
+                price: item.price ,
+                cementQuantity: item.cementQuantity,
+                cementNumberBags: item.cementNumberBags,
                 supplierName: dataSupplier.supplierName,
                 companyName: company.companyName,
                 companyPhone: company.companyPhone
@@ -76,7 +85,7 @@ SupplierRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
 
         res.json(result);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
     }
 });
 
@@ -93,7 +102,7 @@ SupplierRouter.patch('/update-cement-price', ensureAuthenticated, async (req, re
         res.status(200).json({ message: "Price has been updated", success: true });
     }
     catch (error) {
-        res.status(500).json({ message: "Internal server errror:" + error.message, success: false });
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
     }
 });
 

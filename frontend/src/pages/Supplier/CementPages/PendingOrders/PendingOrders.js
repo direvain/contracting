@@ -20,10 +20,11 @@ function PendingOrders() {
         }, 500)
     }
 
-    const acceptOrder = async () => {
+    const orderAccepted = async (id) => {
         try{
             const data = {
-                "status": "under preparing"
+                "id": id,
+                "status": "under_preparing"
             }
             const url = 'http://localhost:8080/auth/supplier/update-cement-order';
             const response = await fetch(url, {
@@ -51,9 +52,10 @@ function PendingOrders() {
         }
     }
 
-    const rejectOrder = async () => {
+    const orderRejected = async (id) => {
         try{
             const data = {
+                "id": id,
                 "status": "rejected"
             }
             const url = 'http://localhost:8080/auth/supplier/update-cement-order';
@@ -84,8 +86,8 @@ function PendingOrders() {
     
     const fetchOrderData = async () => {
         try {
-            const status = "pending";
-            const url = `http://localhost:8080/auth/supplier/order-data?status=${status}`;
+            const statuses = "pending";
+            const url = `http://localhost:8080/auth/supplier/order-cement-data?statuses=${statuses}`;
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -123,14 +125,17 @@ function PendingOrders() {
             </div>
             <div className={styles.pendingOrdersContainer}>
                 {orderData && orderData.length > 0 ? (
-                    orderData.map((order) => (
-                        <div className={styles.pendingOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
+                    orderData.map((order, index) => (
+                        <div className={styles.pendingOrdersRow} key={index}> 
+                            <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersSupplierName}`}>
+                                <strong>Supplier name:</strong> {order.supplierName} 
+                            </p>
                             <div className={styles.pendingOrdersDiv}>
-                                <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersSupplierName}`}>
-                                    <strong>Supplier name:</strong> {order.supplierName} 
+                                <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersStatus}`}>
+                                    <strong>Order status:</strong> {order.status} 
                                 </p>
                                 <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersType}`}>
-                                    <strong>Order Type:</strong> {order.type} 
+                                    <strong>Order type:</strong> {order.type} 
                                 </p>
                             </div>
                             <div className={styles.pendingOrdersDiv}>
@@ -168,8 +173,8 @@ function PendingOrders() {
                                 </p>
                             </div>
                             <div className={styles.pendingOrdersDivButton}>
-                                <button className={styles.pendingOrdersButtonAccept} onClick={() => acceptOrder()}>Accept</button>
-                                <button className={styles.pendingOrdersButtonReject} onClick={() => rejectOrder()}>Reject</button>
+                                <button className={styles.pendingOrdersButtonAccept} onClick={() => orderAccepted(order.id)}>Accept</button>
+                                <button className={styles.pendingOrdersButtonReject} onClick={() => orderRejected(order.id)}>Reject</button>
                             </div>
                         </div>
                     ))

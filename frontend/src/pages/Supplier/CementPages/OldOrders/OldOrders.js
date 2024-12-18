@@ -23,8 +23,8 @@ function OldOrders() {
     useEffect(() => {
         const fetchOrderData = async () => {
             try {
-                const status = "old";
-                const url = `http://localhost:8080/auth/supplier/order-data?status=${status}`;
+                const statuses = "delivered,rejected";
+                const url = `http://localhost:8080/auth/supplier/order-cement-data?statuses=${statuses}`;
                 const response = await fetch(url, {
                     method: 'GET',
                     headers: {
@@ -61,11 +61,14 @@ function OldOrders() {
             </div>
             <div className={styles.oldOrdersContainer}>
                 {orderData && orderData.length > 0 ? (
-                    orderData.map((order) => (
-                        <div className={styles.oldOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
+                    orderData.map((order, index) => (
+                        <div className={styles.oldOrdersRow} key={index}> 
+                            <p className={`${styles.oldOrdersData} ${styles.oldOrdersSupplierName}`}>
+                                <strong>Supplier name:</strong> {order.supplierName} 
+                            </p>
                             <div className={styles.oldOrdersDiv}>
-                                <p className={`${styles.oldOrdersData} ${styles.oldOrdersSupplierName}`}>
-                                    <strong>Supplier name:</strong> {order.supplierName} 
+                                <p className={`${styles.oldOrdersData} ${styles.oldOrdersStatus}`}>
+                                    <strong>Order status:</strong> {order.status} 
                                 </p>
                                 <p className={`${styles.oldOrdersData} ${styles.oldOrdersType}`}>
                                     <strong>Order type:</strong> {order.type} 

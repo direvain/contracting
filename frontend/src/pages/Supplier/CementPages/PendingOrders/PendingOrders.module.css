@@ -25,9 +25,14 @@
     margin-bottom: 8px;
 }
 
-.pendingOrdersSupplierName, .pendingOrdersType{
+.pendingOrdersSupplierName, .pendingOrdersType, .pendingOrdersStatus{
     font-size: 18pt;
     margin-top: 0;
+}
+
+.pendingOrdersSupplierName {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .pendingOrdersH2 {

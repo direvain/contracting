@@ -20,23 +20,56 @@ function UnderPreparingOrders() {
         }, 500)
     }
 
-    useEffect(() => {
-        const fetchDataCementOrder = async () => {
-            try {
-                const status = "under preparing";
-                const url = `http://localhost:8080/auth/company/order-data?status=${status}`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': localStorage.getItem('token')
-                    }
-                });
-                const result = await response.json();
-                setDataCementOrder(result);
-            } catch (err) {
-                handleError(err);
+    const orderDelivered = async (id) => {
+        try{
+            const data = {
+                "id": id,
+                "status": "delivered"
             }
+            const url = 'http://localhost:8080/auth/company/update-cement-order';
+            const response = await fetch(url, {
+                method: "PATCH",
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            const { success, message, error } = result;
+            if (success) {
+                handleSuccess(message + "Order has been delivered");
+            } else if (error) {
+                const details = error?.details[0].message;
+                handleError(details);
+            } else if (!success) {
+                handleError(message);
+            }
+            console.log(result);
+            fetchDataCementOrder();
+        } catch (error) {
+            handleError('Error dropping order:', error);
         }
+    }
+
+    const fetchDataCementOrder = async () => {
+        try {
+            const statuses = "under_preparing,completed";
+            const url = `http://localhost:8080/auth/company/order-cement-data?statuses=${statuses}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                }
+            });
+            const result = await response.json();
+            setDataCementOrder(result);
+        } catch (err) {
+            handleError(err);
+        }
+    }
+
+    useEffect(() => {
         fetchDataCementOrder();
     }, []);
 
@@ -60,7 +93,6 @@ function UnderPreparingOrders() {
                 pathFive="/company/home/profile"
                 logout={handleLogout}
             />
-
             
             <div className={styles.underPreparingOrdersTitle}>
                 <h2 className={styles.underPreparingOrdersH2}>Under Preparing Orders</h2>
@@ -68,10 +100,13 @@ function UnderPreparingOrders() {
             <div className={styles.underPreparingOrdersContainer}>
                 {dataCementOrder && dataCementOrder.length > 0 ? (
                     dataCementOrder.map((order, index) => (
-                        <div className={styles.underPreparingOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
+                        <div className={styles.underPreparingOrdersRow} key={index}>
+                            <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
+                                <strong>Supplier name:</strong> {order.supplierName} 
+                            </p>
                             <div className={styles.underPreparingOrdersDiv}>
-                                <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
-                                    <strong>Supplier name:</strong> {order.supplierName} 
+                                <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersStatus}`}>
+                                    <strong>Order status:</strong> {order.status} 
                                 </p>
                                 <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersType}`}>
                                     <strong>Order type:</strong> {order.type} 
@@ -112,10 +147,11 @@ function UnderPreparingOrders() {
                                     <strong>Order request time:</strong> {order.orderRequestTime} 
                                 </p>
                             </div>
-                            {/* show when supplier press to button complete */}
-                            {/* <div className={styles.pendingOrdersDivButton}>
-                                <button className={styles.pendingOrdersButton} onClick={() => deliveredOrder(order._id)}>Delivered</button>
-                            </div> */}
+                            {order.status === 'completed' && (
+                                <div className={styles.pendingOrdersDivButton}>
+                                    <button className={styles.pendingOrdersButtonDelivered} onClick={() => orderDelivered(order.id)}>Delivered</button>
+                                </div>
+                            )}
                         </div>
                     ))
                 ) : (

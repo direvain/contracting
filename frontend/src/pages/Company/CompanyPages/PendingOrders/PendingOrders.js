@@ -23,8 +23,8 @@ function PendingOrders() {
     useEffect(() => {
         const fetchDataCementOrder = async () => {
             try {
-                const status = "pending";
-                const url = `http://localhost:8080/auth/company/order-data?status=${status}`;
+                const statuses = "pending";
+                const url = `http://localhost:8080/auth/company/order-cement-data?statuses=${statuses}`;
                 const response = await fetch(url, {
                     method: 'GET',
                     headers: {
@@ -62,17 +62,19 @@ function PendingOrders() {
                 logout={handleLogout}
             />
 
-            
             <div className={styles.pendingOrdersTitle}>
                 <h2 className={styles.pendingOrdersH2}>Pending Orders</h2>
             </div>
             <div className={styles.pendingOrdersContainer}>
                 {dataCementOrder && dataCementOrder.length > 0 ? (
-                    dataCementOrder.map((order) => (
-                        <div className={styles.pendingOrdersRow} key={order._id}>
+                    dataCementOrder.map((order, index) => (
+                        <div className={styles.pendingOrdersRow} key={index}>
+                            <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersSupplierName}`}>
+                                <strong>Supplier name:</strong> {order.supplierName}
+                            </p>
                             <div className={styles.pendingOrdersDiv}>
-                                <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersSupplierName}`}>
-                                    <strong>Supplier name:</strong> {order.supplierName}
+                                <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersStatus}`}>
+                                    <strong>Order status:</strong> {order.status}
                                 </p>
                                 <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersType}`}>
                                     <strong>Order type:</strong> {order.type}

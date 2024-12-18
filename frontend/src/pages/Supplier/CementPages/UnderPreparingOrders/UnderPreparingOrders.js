@@ -20,10 +20,11 @@ function UnderPreparingOrders() {
         }, 500)
     }
 
-    const orderCompleted = async () => {
+    const orderCompleted = async (id) => {
         try{
             const data = {
-                "status": "old"
+                "id": id,
+                "status": "completed"
             }
             const url = 'http://localhost:8080/auth/supplier/update-cement-order';
             const response = await fetch(url, {
@@ -37,7 +38,7 @@ function UnderPreparingOrders() {
             const result = await response.json();
             const { success, message, error } = result;
             if (success) {
-                handleSuccess(message + 'Order has been delivered');
+                handleSuccess(message + 'Order has been completed');
             } else if (error) {
                 const details = error?.details[0].message;
                 handleError(details);
@@ -53,8 +54,8 @@ function UnderPreparingOrders() {
 
     const fetchOrderData = async () => {
         try {
-            const statuses = "under preparing,completed";
-            const url = `http://localhost:8080/auth/supplier/order-data?status=${statuses}`;
+            const statuses = "under_preparing,completed";
+            const url = `http://localhost:8080/auth/supplier/order-cement-data?statuses=${statuses}`;
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -93,11 +94,14 @@ function UnderPreparingOrders() {
             </div>
             <div className={styles.underPreparingOrdersContainer}>
                 {orderData && orderData.length > 0 ? (
-                    orderData.map((order) => (
-                        <div className={styles.underPreparingOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
+                    orderData.map((order, index) => (
+                        <div className={styles.underPreparingOrdersRow} key={index}> 
+                            <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
+                                <strong>Supplier name:</strong> {order.supplierName} 
+                            </p>
                             <div className={styles.underPreparingOrdersDiv}>
-                                <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
-                                    <strong>Supplier name:</strong> {order.supplierName} 
+                                <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersStatus}`}>
+                                    <strong>Order status:</strong> {order.status} 
                                 </p>
                                 <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersType}`}>
                                     <strong>Order type:</strong> {order.type} 
@@ -137,10 +141,11 @@ function UnderPreparingOrders() {
                                     <strong>Order request time:</strong> {order.orderRequestTime} 
                                 </p>
                             </div>
-                            <div className={styles.pendingOrdersDivButton}>
-                                {/* {if (status = 'under preparing') } */}
-                                <button className={styles.pendingOrdersButtonCompleted} onClick={() => orderCompleted()}>completed</button>
-                            </div>
+                            {order.status === 'under_preparing' && (
+                                <div className={styles.underPreparingOrdersDivButton}>
+                                    <button className={styles.underPreparingOrdersButtonCompleted} onClick={() => orderCompleted(order.id)}>completed</button>
+                                </div>
+                            )}
                         </div>
                     ))
                 ) : (

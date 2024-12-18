@@ -89,7 +89,7 @@
 .dropdownMenu {
     display: none;
     position: absolute;
-    width: 180px;
+    width: 200px;
     background-color: #776B5D;
     color: #fff;
     box-shadow: 0 5px 10px 7px rgba(0, 0, 0, 0.1);
