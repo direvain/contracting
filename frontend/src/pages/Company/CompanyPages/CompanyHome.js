@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { handleSuccess } from '../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
 import styles from './CompanyHome.module.css';
-import Navbar from '../../../Components/navBAr/Navbar';
+import Navbar from '../../../Components/navbar/Navbar';
 import Footer from '../../../Components/footer/Footer';
 
 import { Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CompanyList from '../fetchData/login/CompanyList';
 import SupplierList from '../fetchData/login/SupplierList';
 import styles from './Approve.module.css';
-import NavBar from '../../../../Components/navBAr/Navbar';
+import NavBar from '../../../../Components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
 
 function ApproveRegister()

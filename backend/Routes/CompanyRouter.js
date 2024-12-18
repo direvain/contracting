@@ -1,22 +1,14 @@
-<<<<<<< HEAD
-  import express from "express";
 import bodyParser from "body-parser";
 import { registration, login } from "../Controllers/CompanyController.js";
 import { registrationValidation, loginValidation } from "../Middlewares/CompanyValidation.js";
 import CompanyModelRegister from "../Models/registrationCompany.js"
 import CompanyModel from "../Models/Company.js"     
 import ensureAuthenticated from "../Middlewares/Auth.js"
-=======
 import express from "express";
 import jwt from "jsonwebtoken";
-import { registration, login } from "../Controllers/CompanyController.js";
-import { registrationValidation, loginValidation } from "../Middlewares/CompanyValidation.js";
 import cementOrder from "../Controllers/OrderController.js";
-import ensureAuthenticated from "../Middlewares/Auth.js";
-import CompanyModel from "../Models/Company.js";
 import SupplierModel from "../Models/Supplier.js";
 import OrderModel from "../Models/Order.js";
->>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
 
 const app = express();
 app.use(bodyParser.json()); 
@@ -26,12 +18,12 @@ const CompanyRouter = express.Router();
 CompanyRouter.post('/login', loginValidation, login);
 CompanyRouter.post('/registration', registrationValidation, registration);
 
-<<<<<<< HEAD
+
 // fetch register company data 
 CompanyRouter.get('/register', ensureAuthenticated, async (req, res) => {
     try {
         const companies = await CompanyModelRegister.find(); // Fetch all documents
-        res.status(200).json([companies]); // Send them as array 
+        res.status(200).json([companies]);
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch data" });
     }
@@ -98,7 +90,9 @@ CompanyRouter.patch("/approve/:id", async (req, res) => {
         {
                 res.status(500).json({ error: `Failed to  approve Company` });
         }
-=======
+
+
+    });
 // ----------------------------- Concrete -----------------------------
 
 
@@ -166,7 +160,6 @@ CompanyRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
->>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
 });
 
 

@@ -1,15 +1,4 @@
 import express from "express";
-<<<<<<< HEAD
-import bodyParser from "body-parser";
-import { registration, login } from "../Controllers/SupplierController.js";
-import { registrationValidation, loginValidation } from "../Middlewares/SupplierValidation.js";
-import SupplierModelRegister from "../Models/registrationSupplier.js"
-import SupplierModel from "../Models/Supplier.js";
-import ensureAuthenticated from "../Middlewares/Auth.js"
-const SupplierRouter = express.Router();
-
-
-=======
 import jwt from "jsonwebtoken";
 import { registration, login } from "../Controllers/SupplierController.js";
 import { registrationValidation, loginValidation } from "../Middlewares/SupplierValidation.js";
@@ -21,7 +10,6 @@ import CompanyModel from "../Models/Company.js";
 const SupplierRouter = express.Router();
 
 // Login & Registration
->>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
 SupplierRouter.post('/login', loginValidation, login);
 SupplierRouter.post('/registration', registrationValidation, registration);
 // fetch register supplier data 

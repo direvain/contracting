@@ -18,11 +18,6 @@ const port = process.env.PORT;
 app.use("/auth", AdminRouter);
 app.use("/auth/supplier", SupplierRouter);
 app.use("/auth/company", CompanyRouter);
-<<<<<<< HEAD
-=======
-
->>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
-
 app.listen(port, () => {
     console.log(`Server is running on ${port}`);
 });

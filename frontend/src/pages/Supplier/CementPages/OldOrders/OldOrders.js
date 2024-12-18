@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { handleError, handleSuccess } from '../../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
 import styles from './OldOrders.module.css';
-import Navbar from '../../../../components/navbar/Navbar';
-import Footer from '../../../../components/footer/Footer';
+import Navbar from '../../../../Components/navbar/Navbar';
+import Footer from '../../../../Components/footer/Footer';
 
 function OldOrders() {
     const [orderData, setOrderData] = useState([]);

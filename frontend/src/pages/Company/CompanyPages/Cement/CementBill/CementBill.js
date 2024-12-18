@@ -4,8 +4,8 @@ import {jwtDecode} from "jwt-decode";
 import { handleError, handleSuccess } from '../../../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
 import styles from './CementBill.module.css';
-import Navbar from '../../../../../components/navbar/Navbar';
-import Footer from '../../../../../components/footer/Footer';
+import Navbar from '../../../../../Components/navbar/Navbar';
+import Footer from '../../../../../Components/footer/Footer';
 
 function CementBill() {
 

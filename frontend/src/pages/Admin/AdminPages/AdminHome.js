@@ -3,14 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { handleSuccess } from '../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
 import styles from './AdminHome.module.css';
-import NavBar from '../../../Components/navBAr/Navbar';
+import NavBar from '../../../Components/navbar/Navbar';
 
 function AdminHome() {
   const [loggedInUser, setLoggedInUser] = useState('');
   const navigate = useNavigate();
 
 
-<<<<<<< HEAD
   const handleLogout = (e) => {
       localStorage.removeItem('token');
       localStorage.removeItem('loggedInUser');
@@ -20,17 +19,6 @@ function AdminHome() {
           navigate('/admin');
       }, 1000)
   }
-=======
-    const handleLogout = (e) => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('loggedInUser');
-        localStorage.removeItem('role');
-        handleSuccess('User Loggedout');
-        setTimeout(() => {
-            navigate('/admin');
-        }, 500)
-    }
->>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
 
   return (
     <div>

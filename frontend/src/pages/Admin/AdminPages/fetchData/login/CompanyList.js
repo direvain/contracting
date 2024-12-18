@@ -8,7 +8,7 @@ async function  CompanyList()
                 throw new Error('Failed to fetch suppliers');
             }
             const data = await response.json();
-            return data[0] || []; // Return the first element which should be the array of suppliers
+            return data || []; // Return the first element which should be the array of suppliers
         } catch (error) {
             console.error(error.message);
             return []; // Return an empty array in case of error
@@ -17,4 +17,4 @@ async function  CompanyList()
     };
 
 
-export default CompanyList;
+export default CompanyList; // reject approve request 

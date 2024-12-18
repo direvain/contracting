@@ -8,28 +8,19 @@ env.config();
 
 const registration = async (req, res) => {
     try {
-<<<<<<< HEAD
-        const { companyName, email, username, password, companyPhone, commercialRegister } = req.body;
-        const company = await CompanyModel.findOne({ username }); // this line for check if username is already exist 
-        if (company) {
-=======
         const { companyName, email, companyID, password, companyPhone, commercialRegister } = req.body;
         const checkCompanyName = await CompanyModel.findOne({ companyName });
         if (checkCompanyName) {
->>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
             return res.status(409)
                 .json({ message: 'Company name is already exist', success: false });
         }
-<<<<<<< HEAD
-        const companyModel = new CompanyModelRegister({ companyName, email, username, password, companyPhone, commercialRegister }); // const and password and save change it for what u want adn the new is name for the collection so change it 
-=======
+        // const companyModelRegistertion = new CompanyModelRegister({ companyName, email, username, password, companyPhone, commercialRegister }); // const and password and save change it for what u want adn the new is name for the collection so change it 
         const checkCompanyID = await CompanyModel.findOne({ companyID });
         if (checkCompanyID) {
             return res.status(409)
                 .json({ message: 'CompanyID is already exist', success: false });
         }
         const companyModel = new CompanyModel({ companyName, email, companyID, password, companyPhone, commercialRegister });
->>>>>>> a5572ed6e3751fba9d15c732b6f9bd7c5846724d
         companyModel.password = await bcrypt.hash(password, 10);
         await companyModel.save();
         res.status(201)
