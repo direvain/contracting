@@ -1,64 +1,49 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleError, handleSuccess } from '../../../utils/utils';
+import { handleSuccess } from '../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
 import styles from './AdminHome.module.css';
+import NavBar from '../../../Components/navbar/Navbar';
 
 function AdminHome() {
-    const [loggedInUser, setLoggedInUser] = useState('');
-    const [products, setProducts] = useState('');
-    const navigate = useNavigate();
+  const [loggedInUser, setLoggedInUser] = useState('');
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        setLoggedInUser(localStorage.getItem('loggedInUser'))
-    }, [])
 
-    const handleLogout = (e) => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('loggedInUser');
-        localStorage.removeItem('role');
-        handleSuccess('User Loggedout');
-        setTimeout(() => {
-            navigate('/admin');
-        }, 500)
-    }
+  const handleLogout = (e) => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('loggedInUser');
+      localStorage.removeItem('role');
+      handleSuccess('User Loggedout');
+      setTimeout(() => {
+          navigate('/admin');
+      }, 1000)
+  }
 
-    const fetchProducts = async () => {
-        try {
-            const url = `http://localhost:8080/products`;
-            const headers = {
-                headers: {
-                    'Authorization': localStorage.getItem('token'),
-                }
-            }
-            const response = await fetch(url, headers);
-            const result = await response.json();
-            console.log(result);
-            setProducts(result);
-        } catch (err) {
-            handleError(err);
-        }
-    }
-    useEffect(() => {
-        fetchProducts()
-    }, [])
+  return (
+    <div>
+      <NavBar
+        two="Pending"
+        two1="Request"
+        pathTwo1="/admin/home/request-order"
+        two2="Approve"
+        pathTwo2="/admin/home/approve-order"
+        two3="Reject"
+        pathTwo3="/admin/home/reject-order"
 
-    return (
-        <div>
-            <h1>Welcome {loggedInUser}</h1>
-            <button onClick={handleLogout}>Logout</button>
+        three="Add Admin"
+        pathThree="/admin/home/Add-admin"
+
+        logout={handleLogout}
+      />
+            
             <div>
-                {
-                    products && products?.map((item, index) => (
-                        <ul key={index}>
-                            <span>{item.name} : {item.price}</span>
-                        </ul>
-                    ))
-                }
             </div>
+            
             <ToastContainer />
-        </div>
-    )
+      <ToastContainer />
+    </div>
+  );
 }
 
 export default AdminHome;

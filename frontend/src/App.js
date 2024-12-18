@@ -35,7 +35,10 @@ import { Profile as CompanyProfile } from './pages/Company/CompanyPages/Profile/
 // Admin
 import AdminLogin from "./pages/Admin/Login/AdminLogin";
 import AdminHome from "./pages/Admin/AdminPages/AdminHome";
-
+import RequestRegister from './pages/Admin/AdminPages/RequestRegister/request';
+import RejectRegister from './pages/Admin/AdminPages/RejectRegister/Reject';
+import ApproveRegister from './pages/Admin/AdminPages/ApproveRegister/Approve';
+import AddAdmin from './pages/Admin/AdminPages/Add-admin/add-admin'
 
 function App() {
   // لادارة التنقل بين الصفحات
@@ -165,6 +168,31 @@ function App() {
                                             allowedRoles={['admin']}
                                             element={<AdminHome />}
                                           />} />
+        <Route path="/admin/home/approve-order" element={<PrivateRoute
+                                                isAuthenticated={isAuthenticated}
+                                                role={role}
+                                                allowedRoles={['admin']}
+                                                element={<ApproveRegister />}
+                                              />}/>
+        <Route path="/admin/home/reject-order" element={<PrivateRoute
+                                                isAuthenticated={isAuthenticated}
+                                                role={role}
+                                                allowedRoles={['admin']}
+                                                element={<RejectRegister />}
+                                              />}/>                                                                                            
+        <Route path="/admin/home/request-order" element={<PrivateRoute
+                                                isAuthenticated={isAuthenticated}
+                                                role={role}
+                                                allowedRoles={['admin']}
+                                                element={<RequestRegister />}
+                                              />}/>
+          <Route path="/admin/home/Add-admin" element={<PrivateRoute
+                                                isAuthenticated={isAuthenticated}
+                                                role={role}
+                                                allowedRoles={['admin']}
+                                                element={<AddAdmin/>}
+                                              />}/>                                           
+                      
       </Routes>
     </div>
   );
