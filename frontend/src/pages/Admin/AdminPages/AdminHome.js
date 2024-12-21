@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleSuccess } from '../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
-import styles from './AdminHome.module.css';
 import NavBar from '../../../Components/navbar/Navbar';
 
 function AdminHome() {
-  const [loggedInUser, setLoggedInUser] = useState('');
   const navigate = useNavigate();
 
 
@@ -23,16 +20,16 @@ function AdminHome() {
   return (
     <div>
       <NavBar
-        two="Pending"
-        two1="Request"
-        pathTwo1="/admin/home/request-order"
-        two2="Approve"
-        pathTwo2="/admin/home/approve-order"
-        two3="Reject"
-        pathTwo3="/admin/home/reject-order"
+        three="Approved"
+        pathThree="/admin/home/approve-order"
+        four="Rejected"
+        pathFour="/admin/home/reject-order"
 
-        three="Add Admin"
-        pathThree="/admin/home/Add-admin"
+        five="Pending"
+        pathFive="/admin/home/request-order"
+
+        six="Add Admin"
+        pathSix="/admin/home/Add-admin"
 
         logout={handleLogout}
       />
@@ -41,7 +38,7 @@ function AdminHome() {
             </div>
             
             <ToastContainer />
-      <ToastContainer />
+
     </div>
   );
 }

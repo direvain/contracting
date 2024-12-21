@@ -30,11 +30,12 @@ const CompanySchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'company'
-    }
+    },    
+    adminId: {
+        type: String,
+        default: 'admin'
+    },
 });
 
 const CompanyModel = mongoose.model('company', CompanySchema);
-
-
-
 export default CompanyModel;

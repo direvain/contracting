@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CompanyList from '../fetchData/login/CompanyList';
-import SupplierList from '../fetchData/login/SupplierList';
 import styles from './Approve.module.css';
 import NavBar from '../../../../Components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
@@ -13,12 +11,14 @@ function ApproveRegister()
     const [suppliers, setSuppliers] = useState([]); // Initialize as an empty array
     useEffect(() => {
         const getData = async () => {
-            try {
-                const companyData = await CompanyList(); // Fetch company data
-                setCompanies(companyData || []); // Ensure fallback to an empty array if data is null/undefined
-                const supplierData = await SupplierList(); // Fetch supplier data
+            try 
+            {
+                const { supplierData, companyData } = await fetchdata();
                 setSuppliers(supplierData || []); // Ensure fallback to an empty array if data is null/undefined
-            } catch (error) {
+                setCompanies(companyData || []); // Ensure fallback to an empty array if data is null/undefined
+            } 
+            catch (error) 
+            {
                 console.error("Failed to fetch companies and suppliers:", error);
             }
         };
@@ -38,68 +38,115 @@ function ApproveRegister()
             }, 1000)
         };
     
-
-
+        async function fetchdata() 
+        {
+            try {
+                    const supplierResponse = await fetch('http://localhost:8080/auth/supplier/supplierData', 
+                    {
+                        method: 'GET',
+                        headers: { Authorization: localStorage.getItem('token') },
+                    });
+                    const companyResponse = await fetch('http://localhost:8080/auth/company/companyData', 
+                    {
+                        method: 'GET',
+                        headers: { Authorization: localStorage.getItem('token') },
+                    });
+                    if (!supplierResponse.ok) {throw new Error('Failed to fetch suppliers asd');}
+                    if (!companyResponse.ok)  {throw new Error('Failed to fetch suppliers asd');}
+                    const companyData  = await companyResponse.json();
+                    const supplierData = await supplierResponse.json();        
+                    return { supplierData, companyData };
+                } catch (error) 
+                {
+                    console.error(error.message);
+                    return { supplierData: [], companyData: [] }; // Return an empty array in case of error
+                }
+        };
+        
     return (
-        <div>
+    <div>
         <NavBar
-        two="Pending"
-        two1="Request"
-        pathTwo1="/admin/home/request-order"
-        two2="Approve"
-        pathTwo2="/admin/home/approve-order"
-        two3="Reject"
-        pathTwo3="/admin/home/reject-order"
+            three="Approved"
+            pathThree="/admin/home/approve-order"
+            four="Rejected"
+            pathFour="/admin/home/reject-order"
 
-        three="Add Admin"
-        pathThree="/admin/home/Add-admin"
-        logout={handleLogout}
+            five="Pending"
+            pathFive="/admin/home/request-order"
+
+            six="Add Admin"
+            pathSix="/admin/home/Add-admin"
+
+            logout={handleLogout}
         />
 
-        <h2 className={styles.List}>Companies List:</h2>
+        <h2 className={styles.List}>Companies Approved List:</h2>
         <div className={styles.profileContainer}>
             {companies.length > 0 ? (
-                companies
-                    .map((company, index) => (
-                        <div className={styles.profileRow} key={index}>
-                            {/* Now each company will be in a separate div */}
-                            {Object.entries(company).map(([key, value]) => (
-                                // Check if the key is not "__v" or "_id" before rendering
-                                key !== "__v" && key !== "_id"  && key !== "role" &&  (
-                                    <div key={key}>
-                                        <strong>{key}:</strong> {value?.toString()}
-                                        
-                                    </div>
-                                )
-                            ))}
+                companies.map((field) => 
+                    (
+                        <div className={styles.profileRow} key={field._id}>
+                            <p>
+                                <strong>Company Name :</strong> {field.companyName} 
+                            </p>
+                            <p>
+                                <strong>Company email :</strong> {field.email} 
+                            </p>
+                            <p>
+                                <strong>Company ID :</strong> {field.companyID} 
+                            </p>
+                            <p>
+                                <strong>Company Phone:</strong> {field.companyPhone} 
+                            </p>
+                            <p>
+                                <strong>Commercial Register :</strong>  {JSON.stringify(field.commercialRegister)} 
+                            </p>
+                            <p>
+                                <strong>Admin Id :</strong> {field.adminId} 
+                            </p>
                         </div>
                     ))
             ) : (
                 <p>No companies found.</p>
             )}
         </div>
-        <h2 className={styles.List}>Supplier List:</h2>
+        <h2 className={styles.List}>Supplier Approved List:</h2>
             <div className={styles.profileContainer}>
                 {suppliers.length > 0 ? (
-                    suppliers
-                        .map((supplier, index) => (
-                            <div className={styles.profileRow} key={index}>
-                                {/* Now each supplier will be in a separate div */}
-                                {Object.entries(supplier).map(([key, value]) => (
-                                    // Check if the key is not "__v" or "_id" before rendering
-                                    key !== "__v" && key !== "_id"  && key !== "role" && (
-                                        <div key={key}>
-                                            <strong>{key}:</strong> {value?.toString()}
-                                        </div>
-                                    )
-                                ))}
+                    suppliers.map((field) => 
+                        (
+                            <div className={styles.profileRow} key={field._id}>
+                                <p>
+                                    <strong>supplier Name :</strong> {field.supplierName} 
+                                </p>
+                                <p>
+                                    <strong>supplier email :</strong> {field.email} 
+                                </p>
+                                <p>
+                                    <strong>supplier ID :</strong> {field.supplierID} 
+                                </p>
+                                <p>
+                                    <strong>supplier Phone:</strong> {field.supplierPhone} 
+                                </p>
+                                <p>
+                                    <strong>supplier Product:</strong> {field.supplierProduct} 
+                                </p>
+                                <p>
+                                    <strong>supplier item price :</strong> {field.price} jod
+                                </p>
+                                <p>
+                                    <strong>Commercial Register :</strong>  {JSON.stringify(field.commercialRegister)} 
+                                </p>
+                                <p>
+                                    <strong>Admin Id :</strong> {field.adminId} 
+                                </p>
                             </div>
                         ))
                 ) : (
                     <p>No suppliers found.</p>
                 )}
             </div>
-        </div>
+    </div>
     );
     
 }

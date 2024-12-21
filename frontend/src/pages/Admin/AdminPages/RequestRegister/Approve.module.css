@@ -71,8 +71,8 @@
 }
 
 .button32 {
-  background: #fff200;
-  border: 1px solid #f4e603;
+  background: #15ff00;
+  border: 1px solid #15ff00;
   border-radius: 6px;
   box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
   box-sizing: border-box;
@@ -100,7 +100,7 @@
 .button32:active {
   background-color: initial;
   background-position: 0 0;
-  color: #f4e603;
+  color: #15ff00;
 }
 
 .button32:active {

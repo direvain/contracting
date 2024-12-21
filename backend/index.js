@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import AdminRouter from "./Routes/AdminRouter.js";
 import SupplierRouter from "./Routes/SupplierRouter.js";
 import CompanyRouter from "./Routes/CompanyRouter.js";
+import RegistrationRouter from './Routes/RegistretionRouter.js';
 import cors from "cors";
 
 import './Models/db.js';
@@ -16,6 +17,7 @@ app.use(cors());
 const port = process.env.PORT;
 
 app.use("/auth", AdminRouter);
+app.use("/auth/register", RegistrationRouter);
 app.use("/auth/supplier", SupplierRouter);
 app.use("/auth/company", CompanyRouter);
 app.listen(port, () => {

@@ -22,9 +22,9 @@ const registration = async (req, res) => {
         }
         // console.log("after: " + commercialRegister)
 
-        // const supplierModela = new SupplierModelRegister({ supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister });
-        const supplierModel = new SupplierModel({ supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister });
-        supplierModel.password = await bcrypt.hash(password, 10);
+        const supplierModela = new SupplierModelRegister({ supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister });
+        // const supplierModel = new SupplierModel({ supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister });
+        SupplierModelRegister.password = await bcrypt.hash(password, 10);
         // supplierModel.commercialRegister = Buffer.from(commercialRegister, 'base64').toString('utf8');
         
 

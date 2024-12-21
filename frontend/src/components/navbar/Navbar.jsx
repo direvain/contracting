@@ -61,9 +61,13 @@ function Navbar(props) {
                         <li className={styles.navItem} onClick={props.onClickFive}> 
                             <Link className={styles.navLink} to={props.pathFive}>{props.five}</Link>
                         </li>
+                        <li className={styles.navItem} onClick={props.onClickSix}> 
+                            <Link className={styles.navLink} to={props.pathSix}>{props.six}</Link>
+                        </li>
                         <li className={styles.navItem}>
                             <button className={`${styles.navLink} ${styles.logout}`} onClick={props.logout}>Logout</button>
                         </li>
+                        
                     </ul>
                 </div>
             </div>
