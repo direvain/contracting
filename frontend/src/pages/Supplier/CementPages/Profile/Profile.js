@@ -24,8 +24,8 @@ function Profile() {
         }, 500)
     }    
 
-    const handleEditClick = () => {
-        navigate("/supplier/cement/profile/edit"); 
+    const handleEditPriceClick = () => {
+        navigate("/supplier/cement/profile/edit-price"); 
     };
 
     const fetchSupplierData = async () => {
@@ -67,17 +67,17 @@ function Profile() {
             <div className={styles.profileContainer}>
                 <div className={styles.profileRow}>
                     <h1 className={styles.profileH1}>{decodedData.supplierName} Profile</h1>
-                    <button className={styles.profileEditButton} onClick={handleEditClick}>Edit</button>
-                    <p><strong>Supplier Name:</strong> {decodedData.supplierName}</p>
+                    <button className={styles.profileEditPriceButton} onClick={handleEditPriceClick}>Edit price</button>
+                    <p><strong>Supplier name:</strong> {decodedData.supplierName}</p>
                     <p><strong>Supplier ID:</strong> {decodedData.supplierID}</p>
                     <p><strong>Email:</strong> {decodedData.email}</p>
                     <p><strong>Phone:</strong> {decodedData.supplierPhone}</p>
                     <p><strong>Product:</strong> {decodedData.supplierProduct}</p>
-                    <p><strong>Price:</strong> {supplierData.price} JD</p>
                     <p>
-                        <strong>Commercial Register: </strong> 
+                        <strong>Commercial register: </strong> 
                         <a href={`http://localhost:5000/uploads/${supplierData.commercialRegister}`} target="_blank" rel="noopener noreferrer">View PDF</a>
                     </p>
+                    <p><strong>Price of one bag:</strong> {supplierData.price} JD</p>
                 </div>
             </div>
 

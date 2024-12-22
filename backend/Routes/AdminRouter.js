@@ -8,6 +8,6 @@ const AdminRouter = express.Router();
 AdminRouter.post('/admin', loginValidation, login);
 
 // Add admin route
-AdminRouter.post('/addAdmin', loginValidation, register);
+AdminRouter.post('/add-admin', loginValidation, register);
 
 export default AdminRouter;

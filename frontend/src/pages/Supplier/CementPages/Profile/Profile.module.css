@@ -24,7 +24,7 @@
     margin-top: 0;
 }
 
-.profileEditButton {
+.profileEditPriceButton {
     position: absolute; /* يتيح التحكم بموقع الزر داخل الحاوية */
     top: 25px; 
     right: 25px; 
@@ -35,10 +35,9 @@
     border-radius: 5px;
     padding: 8px 12px; 
     cursor: pointer;
-    text-transform: uppercase;
 }
 
-.profileEditButton:hover {
+.profileEditPriceButton:hover {
     background-color: rgb(54, 54, 54); 
 }
 
@@ -94,7 +93,6 @@
     padding: 10px;
     cursor: pointer;
     margin: 10px 0;
-    text-transform: uppercase;
 }
 
 .profileButton:hover {

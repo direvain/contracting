@@ -64,7 +64,6 @@ body {
     padding: 10px;
     cursor: pointer;
     margin: 10px 0;
-    text-transform: uppercase;
 }
 
 .adminContainer .adminFormLogin .adminLoginButton:hover {

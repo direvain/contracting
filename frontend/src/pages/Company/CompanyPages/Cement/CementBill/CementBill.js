@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {jwtDecode} from "jwt-decode";
 import { handleError, handleSuccess } from '../../../../../utils/utils';
@@ -17,7 +17,8 @@ function CementBill() {
     const amountOfCement = queryParams.get('amountOfCement');
     const supplierName = queryParams.get('supplierName');
     const price = queryParams.get('price');
-    
+
+    const [currentDateTime, setCurrentDateTime] = useState("");
     const [cementBillInfo, setCementBillInfo] = useState({
         type: 'cement',
         recipientName: '',
@@ -129,6 +130,23 @@ function CementBill() {
         }
     }
 
+    useEffect(() => {
+        // تحديث الوقت الحالي بالتنسيق المطلوب
+        const updateCurrentDateTime = () => {
+            const now = new Date();
+            const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+                .toISOString()
+                .slice(0, 16); // استخدم التنسيق المناسب لحقل datetime-local
+            setCurrentDateTime(localDateTime);
+        };
+
+        updateCurrentDateTime(); // تحديث الوقت الحالي عند تحميل الصفحة
+
+        const interval = setInterval(updateCurrentDateTime, 60000); // تحديث كل دقيقة
+
+        return () => clearInterval(interval); // تنظيف الـ interval عند الخروج
+    }, []);
+
     return(
         <section className={styles.cementBillBody}>
             <Navbar 
@@ -205,7 +223,7 @@ function CementBill() {
                                 onChange={handleChange}
                                 type='datetime-local'
                                 name='deliveryTime'
-                                min = {new Date().toISOString().slice(0, 16)}
+                                min={currentDateTime}
                                 value={cementBillInfo.deliveryTime}
                             />
                         </div>
@@ -221,7 +239,7 @@ function CementBill() {
                         <div className={styles.cementBillDiv}>
                             <p className={styles.cementBillP}><strong>Supplier name:<br /></strong> {supplierName} </p>
                         </div>
-                        <button className={styles.cementBillButton} type='submit'>confirm order</button>
+                        <button className={styles.cementBillButton} type='submit'>Confirm Order</button>
                     </form>
                 </div>
             </div>

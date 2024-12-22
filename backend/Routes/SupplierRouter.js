@@ -12,19 +12,12 @@ const SupplierRouter = express.Router();
 // Login & Registration
 SupplierRouter.post('/login', loginValidation, login);
 SupplierRouter.post('/registration', registrationValidation, registration);
+
+// ----------------------------- Admin -----------------------------
 // fetch register supplier data 
 SupplierRouter.get('/register', ensureAuthenticated, async (req, res) => {
     try {
         const suppliers = await SupplierModelRegister.find(); // Fetch all documents
-        res.status(200).json([suppliers]); // Send them as array 
-    } catch (error) {
-        res.status(500).json({ error: "Failed to fetch data" });
-    }
-});
-// fetch supplier data
-SupplierRouter.get('/supplierData', ensureAuthenticated, async (req, res) => {
-    try {
-        const suppliers = await SupplierModel.find(); // Fetch all documents
         res.status(200).json([suppliers]); // Send them as array 
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch data" });
@@ -67,6 +60,7 @@ SupplierRouter.patch("/request/reject/:id", async (req, res) => {
 SupplierRouter.patch("/approve/:id", async (req, res) => {
     try 
         {
+            const adminId = jwt.decode(req.headers.authorization)._id;
             const SupplierId = req.params.id; 
             const SupplierData = await SupplierModelRegister.findById(SupplierId); // find the supplier by id
             // remove state from data "state" is a field in supplier collection  and ...dataWithoutState is name u give and this what will we use "
@@ -82,16 +76,11 @@ SupplierRouter.patch("/approve/:id", async (req, res) => {
         }
 });
 
-// ----------------------------- Concrete -----------------------------
-
-
 // ----------------------------- Cement -----------------------------
-
 // Define a route to handle PATCH requests for updating a cement order
-SupplierRouter.patch('/update-cement-order', ensureAuthenticated, async (req, res) => {
+SupplierRouter.patch('/update-order-status', ensureAuthenticated, async (req, res) => {
     try {
-        const { id } = req.body;
-        const { status } = req.body;
+        const { id, status } = req.body;
         const updateCementOrder = await OrderModel.findByIdAndUpdate(id, { status: status });
         if (!updateCementOrder) {
             return res.status(404).json({ message: "Order not found", success: false });
@@ -119,18 +108,36 @@ SupplierRouter.get('/supplier-data', ensureAuthenticated, async (req, res) => {
 });
 
 // Get All Data in Collection Order
-SupplierRouter.get('/order-cement-data', ensureAuthenticated, async (req, res) => {
+SupplierRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
     try {
         const statuses = req.query.statuses.split(',');
+        const fromDate = req.query.fromDate;
+        const toDate = req.query.toDate;
         const id = jwt.decode(req.headers.authorization)._id;
-        const dataCementOrders = await OrderModel.find({ supplierId: id, status: statuses });
-        if (!dataCementOrders || dataCementOrders.length === 0) return res.status(404).json({ message: 'Order not found', success: false });
 
+        var query = { supplierId: id, status:  statuses  }
+
+        // إضافة فلتر التاريخ
+        if (fromDate || toDate) {
+            query.deliveryTime = {};
+            if (fromDate) {
+                const fromDateTime = new Date(fromDate).setHours(0, 0, 0, 0);
+                query.deliveryTime.$gte = new Date(fromDateTime).toLocaleString('en-GB', {hour12: true}).replace(',', '');
+            }
+            if (toDate) {
+                const toDateTime = new Date(toDate).setHours(23, 59, 59, 999);
+                query.deliveryTime.$lte = new Date(toDateTime).toLocaleString('en-GB', {hour12: true}).replace(',', '');
+            }
+        }
+
+        const dataCementOrders = await OrderModel.find(query).sort({ deliveryTime: -1 });
+        if (!dataCementOrders || dataCementOrders.length === 0) return res.json([]);
+        
         // جلب بيانات المورد والشركة من قاعدة البيانات
         const companyIds = dataCementOrders.map(item => item.companyId);
         const dataSupplier = await SupplierModel.findById( id );
         const dataCompanies = await CompanyModel.find({ _id: { $in: companyIds } });
-
+        
         // تحويل البيانات حسب الحاجة
         const result = dataCementOrders.map(item => {
             const company = dataCompanies.find(c => c._id.toString() === item.companyId.toString());
@@ -151,7 +158,7 @@ SupplierRouter.get('/order-cement-data', ensureAuthenticated, async (req, res) =
                 companyPhone: company.companyPhone
             };
         });
-
+        
         res.json(result);
     } catch (error) {
         res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
@@ -175,18 +182,6 @@ SupplierRouter.patch('/update-cement-price', ensureAuthenticated, async (req, re
     }
 });
 
+// ----------------------------- Concrete -----------------------------
+
 export default SupplierRouter;
-
-
-
-
-
-
-
-// supplier + order not completed ---action---> completed
-
-// supplier + order completed ---action---> no action
-
-// company + order not completed ---action---> no action
-
-// company + order completed ---action---> delivered

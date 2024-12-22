@@ -53,7 +53,6 @@
   padding: 8px 10px; /* Reduced padding */
   text-align: center;
   text-rendering: geometricprecision;
-  text-transform: none;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
@@ -89,7 +88,6 @@
   padding: 8px 10px; /* Reduced padding */
   text-align: center;
   text-rendering: geometricprecision;
-  text-transform: none;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;

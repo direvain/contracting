@@ -11,23 +11,21 @@ const registration = async (req, res) => {
     // console.log(req.body.commercialRegister);
     try {
         const { supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister } = req.body;
-        const checkSupplierName = await SupplierModel.findOne({ supplierName });
-        if (checkSupplierName) {
+        const checkSupplier = await SupplierModel.findOne({
+            $or: [{ supplierName }, { supplierID }]
+        });
+        
+        if (checkSupplier) {
             return res.status(409)
-                .json({ message: 'Supplier name is already exist', success: false });
+                .json({ message: 'Supplier is already exist', success: false });
         }
-        const checkSupplierID = await SupplierModel.findOne({ supplierID });
-        if (checkSupplierID) {
-            return res.status(409)
-                .json({ message: 'SupplierID is already exist', success: false });
-        }
+        
         // console.log("after: " + commercialRegister)
 
         const supplierModel = new SupplierModel({ supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister });
         supplierModel.password = await bcrypt.hash(password, 10);
         // supplierModel.commercialRegister = Buffer.from(commercialRegister, 'base64').toString('utf8');
         
-
         await supplierModel.save();
         res.status(201)
             .json({

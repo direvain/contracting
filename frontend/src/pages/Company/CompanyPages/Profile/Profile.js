@@ -67,12 +67,12 @@ function Profile() {
             <div className={styles.profileContainer}>
                 <div className={styles.profileRow}>
                     <h1 className={styles.profileH1}>{decodedData.companyName} Profile</h1>
-                    <p><strong>Company Name:</strong> {decodedData.companyName}</p>
+                    <p><strong>Company name:</strong> {decodedData.companyName}</p>
                     <p><strong>Company ID:</strong> {decodedData.companyID}</p>
                     <p><strong>Email:</strong> {decodedData.email}</p>
                     <p><strong>Phone:</strong> {decodedData.companyPhone}</p>
                     <p>
-                        <strong>Commercial Register: </strong> 
+                        <strong>Commercial register: </strong> 
                         <a href={`http://localhost:5000/uploads/${companyCommercialRegister.commercialRegister}`} target="_blank" rel="noopener noreferrer">View PDF</a>
                     </p>
                 </div>

@@ -5,9 +5,10 @@ import { ToastContainer } from 'react-toastify';
 import styles from './PendingOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
+import OrderFilter from '../../../../components/orderFilter/OrderFilter';
 
 function PendingOrders() {
-    const [dataCementOrder, setDataCementOrder] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
 
     const navigate = useNavigate();
 
@@ -20,11 +21,28 @@ function PendingOrders() {
         }, 500)
     }
 
+    // Function to handle the filtering logic
+    const handleFilter = async (filterData) => {
+        try {
+            const statuses = "pending";
+            const response = await fetch(`http://localhost:8080/auth/company/order-data?statuses=${statuses}&type=${filterData.type}&supplierId=${filterData.supplierId}&fromDate=${filterData.fromDate}&toDate=${filterData.toDate}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                }
+            });
+            const result = await response.json();
+            setFilteredOrders(result); // Store the filtered orders
+        } catch (err) {
+            console.error('Error fetching filtered orders:', err);
+        }
+    };
+
     useEffect(() => {
-        const fetchDataCementOrder = async () => {
+        const fetchDataOrder = async () => {
             try {
                 const statuses = "pending";
-                const url = `http://localhost:8080/auth/company/order-cement-data?statuses=${statuses}`;
+                const url = `http://localhost:8080/auth/company/order-data?statuses=${statuses}`;
                 const response = await fetch(url, {
                     method: 'GET',
                     headers: {
@@ -32,13 +50,12 @@ function PendingOrders() {
                     }
                 });
                 const result = await response.json();
-                setDataCementOrder(result);
-                console.log(result)
+                setFilteredOrders(result); // Initialize filteredOrders with all data
             } catch (err) {
                 handleError(err);
             }
         }
-        fetchDataCementOrder();
+        fetchDataOrder();
     }, []);
 
     return(
@@ -61,13 +78,15 @@ function PendingOrders() {
                 pathFive="/company/home/profile"
                 logout={handleLogout}
             />
+            
+            <OrderFilter user='company' onFilter={handleFilter} />
 
             <div className={styles.pendingOrdersTitle}>
                 <h2 className={styles.pendingOrdersH2}>Pending Orders</h2>
             </div>
             <div className={styles.pendingOrdersContainer}>
-                {dataCementOrder && dataCementOrder.length > 0 ? (
-                    dataCementOrder.map((order, index) => (
+                {filteredOrders  && filteredOrders.length > 0 ? (
+                    filteredOrders.map((order, index) => (
                         <div className={styles.pendingOrdersRow} key={index}>
                             <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersSupplierName}`}>
                                 <strong>Supplier name:</strong> {order.supplierName}

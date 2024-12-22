@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { handleSuccess, handleError } from '../../../../utils/utils';
 import styles from './add-admin.module.css';
-import NavBar from '../../../../Components/navbar/Navbar';
+import NavBar from '../../../../components/navbar/Navbar';
 
 function AddAdmin() {
     const handleLogout = (e) => {
@@ -12,7 +12,7 @@ function AddAdmin() {
         handleSuccess('User Loggedout');
         setTimeout(() => {
             navigate('/admin');
-        }, 1000);
+        }, 500);
     }
 
     const [registrationInfo, setRegistrationInfo] = useState({
@@ -43,7 +43,7 @@ function AddAdmin() {
         }
 
         try {
-            const url = `http://localhost:8080/auth/addAdmin`;
+            const url = `http://localhost:8080/auth/add-admin`;
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -57,8 +57,8 @@ function AddAdmin() {
             if (success) {
                 handleSuccess(message);
                 setTimeout(() => {
-                    navigate(0);
-                }, 1000);
+                    navigate('/admin/request-order');
+                }, 500);
             } else if (error) {
                 // Check for details and handle accordingly
                 const errorMsg = error?.details?.[0]?.message || result.message || 'An unknown error occurred';
@@ -78,13 +78,13 @@ function AddAdmin() {
             <NavBar
                 two="Pending"
                 two1="Request"
-                pathTwo1="/admin/home/request-order"
+                pathTwo1="/admin/request-order"
                 two2="Approve"
-                pathTwo2="/admin/home/approve-order"
+                pathTwo2="/admin/approve-order"
                 two3="Reject"
-                pathTwo3="/admin/home/reject-order"
+                pathTwo3="/admin/reject-order"
                 three="Add Admin"
-                pathThree="/admin/home/Add-admin"
+                pathThree="/admin/add-admin"
                 logout={handleLogout}
             />
             <section className={styles.adminBody}>

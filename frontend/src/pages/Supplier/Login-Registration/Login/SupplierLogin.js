@@ -90,7 +90,7 @@ function SupplierLogin() {
                         />
                     </div>
                     <button className={styles.supplierLoginButton} type='submit'>Login</button>
-                    <span className={styles.supplierLoginSpan}>Does't have an account?
+                    <span className={styles.supplierLoginSpan}>Don't have an account?
                         <Link className={styles.supplierLoginLink} to="/supplier-registration"> Registration</Link>
                     </span>
                     <span className={styles.supplierLoginSpan}>If you are a company?

@@ -49,8 +49,8 @@ function AdminLogin() {
                 localStorage.setItem('token', jwtToken); // يقوم بتخزين المعلومات داخل المتصفح ( -Application in browser للتأكد من انه تم الحفظ تذهب الى - key 'token' تحت مفتاح localStorage في jwt هنا خزن قيمة )
                 localStorage.setItem('role', role);
                 setTimeout(() => { 
-                    navigate('/admin/home') // (function) سيتم تنفيذها بعد انتهاء الوقت
-                }, 500) // الوقت الذي سيتم الانتظار فيه قبل تنفيذ الدالة، وهو 1000 مللي ثانية، أي 1 ثانية
+                    navigate('/admin/request-order') // (function) سيتم تنفيذها بعد انتهاء الوقت
+                }, 500)
             } else if (!success) {
                 handleError(message);
             }

@@ -1,0 +1,114 @@
+.orderFilterAside {
+    background-color: #776B5D;
+    padding: 20px;
+    width: 15%;   
+    position: fixed;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    transform: translateX(0); 
+    transition: transform 0.3s ease-in-out;
+}
+
+.orderFilterAside.active {
+    transform: translateX(0); /* يظهر الشريط الجانبي */
+}
+
+.container{
+    position: absolute;
+}
+
+.orderFilterToggleBtn {
+    display: none;
+    position: absolute;
+    font-size: 16px;
+    background-color: #776B5D; /* لون أزرق */
+    color: hsl(0, 0%, 100%); /* لون النص */
+    border: none; /* إزالة الحدود */
+    padding: 10px 20px; /* مساحة داخلية */
+    font-weight: bold; /* النص عريض */
+    cursor: pointer; /* مؤشر الفأرة يصبح كالأزرار */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* تأثير الانتقال */
+    z-index: 10;
+}
+
+.orderFilterToggleBtn:hover {
+    color: yellow;
+    transform: scale(1.05); /* تكبير بسيط عند التمرير */
+}
+
+.orderFilterToggleBtn:active {
+    transform: scale(0.95); /* تصغير بسيط عند الضغط */
+}
+
+
+.orderFilterForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.orderFilterH2 {
+    font-size: 20px;
+    color: white; 
+    margin-bottom: 10px;
+}
+
+.orderFilterLabel {
+    font-size: 14px;
+    color: white;
+}
+
+.orderFilterSelect,
+.orderFilterInput {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    font-size: 14px;
+    color: #495057;
+}
+
+.orderFilterInput{
+    width: 90%;
+}
+
+.orderFilterSelect:focus,
+.orderFilterInput:focus {
+    outline: none;
+}
+
+.submitButton {
+    background-color:  rgba(253, 228, 0, 0.555);
+    border: none;
+    font-size: 18px; /* تقليل حجم الخط */
+    color: #fff;
+    border: 1px solid rgba(253, 228, 0, 0.555);
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+.submitButton:hover {
+    background-color: rgba(253, 228, 0, 0.76);
+    color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+    .orderFilterToggleBtn {
+        display: block;
+    }
+
+    .orderFilterAside {
+        transform: translateX(-100%); /* يظهر الشريط الجانبي */
+    }
+
+    .orderFilterAside.active {
+        transform: translateX(0); /* يظهر الشريط الجانبي */
+    }
+
+    .orderFilterForm {
+        margin-top: 45%;
+    }
+}

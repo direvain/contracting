@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CompanyList from '../fetchData/login/CompanyList';
 import SupplierList from '../fetchData/login/SupplierList';
 import styles from './Approve.module.css';
-import NavBar from '../../../../Components/navbar/Navbar';
+import NavBar from '../../../../components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
 
 function ApproveRegister()
@@ -35,25 +35,22 @@ function ApproveRegister()
             setTimeout(() => 
             {
                 navigate('/admin');
-            }, 1000)
+            }, 500)
         };
     
-
-
     return (
         <div>
         <NavBar
-        two="Pending"
-        two1="Request"
-        pathTwo1="/admin/home/request-order"
-        two2="Approve"
-        pathTwo2="/admin/home/approve-order"
-        two3="Reject"
-        pathTwo3="/admin/home/reject-order"
-
-        three="Add Admin"
-        pathThree="/admin/home/Add-admin"
-        logout={handleLogout}
+            two="Pending"
+            two1="Request"
+            pathTwo1="/admin/request-order"
+            two2="Approve"
+            pathTwo2="/admin/approve-order"
+            two3="Reject"
+            pathTwo3="/admin/reject-order"
+            three="Add Admin"
+            pathThree="/admin/add-admin"
+            logout={handleLogout}
         />
 
         <h2 className={styles.List}>Companies List:</h2>

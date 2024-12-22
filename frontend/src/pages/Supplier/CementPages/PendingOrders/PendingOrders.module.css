@@ -46,7 +46,7 @@
 }
 
 .pendingOrdersButtonReject{
-    background-color: red;
+    background-color: #C40C0C;
     width: 25%;
     border: none;
     font-size: 20px;
@@ -55,15 +55,14 @@
     padding: 10px;
     margin: 10px;
     cursor: pointer;
-    text-transform: uppercase;
 }
 
 .pendingOrdersButtonReject:hover{
-    background-color: #aa0000;
+    background-color: #ff0000fa;
 }
 
 .pendingOrdersButtonAccept{
-    background-color: #00aa00;
+    background-color: #059212;
     width: 25%;
     border: none;
     font-size: 20px;
@@ -72,11 +71,10 @@
     padding: 10px;
     margin: 10px;
     cursor: pointer;
-    text-transform: uppercase;
 }
 
 .pendingOrdersButtonAccept:hover{
-    background-color: green;
+    background-color: #01c514;
 }
 
 .pendingOrdersP{

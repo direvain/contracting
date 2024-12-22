@@ -55,7 +55,7 @@
 }
 
 .pendingOrdersButtonDelivered{
-    background-color: #00aa00;
+    background-color: #059212;
     width: 25%;
     border: none;
     font-size: 20px;
@@ -64,11 +64,10 @@
     padding: 10px;
     margin: 10px;
     cursor: pointer;
-    text-transform: uppercase;
 }
 
 .pendingOrdersButtonDelivered:hover{
-    background-color: green;
+    background-color: #01c514;
 }
 
 /* استعلام الوسائط للشاشات الأكبر */

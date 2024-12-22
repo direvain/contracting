@@ -5,9 +5,10 @@ import { ToastContainer } from 'react-toastify';
 import styles from './UnderPreparingOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
+import OrderFilter from '../../../../components/orderFilter/OrderFilter';
 
 function UnderPreparingOrders() {
-    const [dataCementOrder, setDataCementOrder] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
 
     const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ function UnderPreparingOrders() {
                 "id": id,
                 "status": "delivered"
             }
-            const url = 'http://localhost:8080/auth/company/update-cement-order';
+            const url = 'http://localhost:8080/auth/company/update-order-status';
             const response = await fetch(url, {
                 method: "PATCH",
                 headers: {
@@ -46,16 +47,34 @@ function UnderPreparingOrders() {
                 handleError(message);
             }
             console.log(result);
-            fetchDataCementOrder();
+            fetchDataOrder();
         } catch (error) {
             handleError('Error dropping order:', error);
         }
     }
 
-    const fetchDataCementOrder = async () => {
+    // Function to handle the filtering logic
+    const handleFilter = async (filterData) => {
+        console.log(filterData)
+        try {
+            const response = await fetch(`http://localhost:8080/auth/company/order-data?statuses=${filterData.selectedStatus}&type=${filterData.type}&supplierId=${filterData.supplierId}&fromDate=${filterData.fromDate}&toDate=${filterData.toDate}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                }
+            });
+            const result = await response.json();
+            setFilteredOrders(result); // Store the filtered orders
+        } catch (err) {
+            console.error('Error fetching filtered orders:', err);
+        }
+    };
+
+
+    const fetchDataOrder = async () => {
         try {
             const statuses = "under_preparing,completed";
-            const url = `http://localhost:8080/auth/company/order-cement-data?statuses=${statuses}`;
+            const url = `http://localhost:8080/auth/company/order-data?statuses=${statuses}`;
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -63,14 +82,14 @@ function UnderPreparingOrders() {
                 }
             });
             const result = await response.json();
-            setDataCementOrder(result);
+            setFilteredOrders(result);
         } catch (err) {
             handleError(err);
         }
     }
 
     useEffect(() => {
-        fetchDataCementOrder();
+        fetchDataOrder();
     }, []);
 
     return(
@@ -94,12 +113,14 @@ function UnderPreparingOrders() {
                 logout={handleLogout}
             />
             
+            <OrderFilter user='company' statuses={['under_preparing', 'completed']} onFilter={handleFilter} />
+
             <div className={styles.underPreparingOrdersTitle}>
                 <h2 className={styles.underPreparingOrdersH2}>Under Preparing Orders</h2>
             </div>
             <div className={styles.underPreparingOrdersContainer}>
-                {dataCementOrder && dataCementOrder.length > 0 ? (
-                    dataCementOrder.map((order, index) => (
+                {filteredOrders && filteredOrders.length > 0 ? (
+                    filteredOrders.map((order, index) => (
                         <div className={styles.underPreparingOrdersRow} key={index}>
                             <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
                                 <strong>Supplier name:</strong> {order.supplierName} 

@@ -18,7 +18,7 @@ const CompanyRouter = express.Router();
 CompanyRouter.post('/login', loginValidation, login);
 CompanyRouter.post('/registration', registrationValidation, registration);
 
-
+// ----------------------------- Admin -----------------------------
 // fetch register company data 
 CompanyRouter.get('/register', ensureAuthenticated, async (req, res) => {
     try {
@@ -30,7 +30,7 @@ CompanyRouter.get('/register', ensureAuthenticated, async (req, res) => {
 });
 
 // fetch company data
-CompanyRouter.get('/companyData', ensureAuthenticated, async (req, res) => {
+CompanyRouter.get('/company-data', ensureAuthenticated, async (req, res) => {
     try {
         const companies = await CompanyModel.find(); // Fetch all documents
         res.status(200).json([companies]); // Send them as array 
@@ -90,14 +90,9 @@ CompanyRouter.patch("/approve/:id", async (req, res) => {
         {
                 res.status(500).json({ error: `Failed to  approve Company` });
         }
-
-
     });
-// ----------------------------- Concrete -----------------------------
-
-
+    
 // ----------------------------- Cement -----------------------------
-
 // cement order
 CompanyRouter.post('/cement-order', ensureAuthenticated, cementOrder);
 
@@ -112,17 +107,25 @@ CompanyRouter.get('/company-commercial-register', ensureAuthenticated, async (re
         res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
     }
 });
-
+    
 // Get Price in Collection Supplier - in CementOrder
 CompanyRouter.get('/data-supplier', ensureAuthenticated, async (req, res) => {
     try {
-        const dataSupplier = await SupplierModel.find({ supplierProduct: 'cement' });
+        const supplierProducts = req.query.supplierProducts.split(',');
+        
+        const query = {};
+        if (supplierProducts){
+            query.supplierProduct = supplierProducts 
+        }
+
+        const dataSupplier = await SupplierModel.find(query);
         if (!dataSupplier) return res.status(404).json({ message: 'Supplier not found', success: false });
         res.json(dataSupplier.map( item => {
             return {
                 supplierId: item._id,
                 supplierName: item.supplierName,
                 price: item.price,
+                type: item.supplierProduct
             }
         }));
     } catch (error) {
@@ -131,7 +134,7 @@ CompanyRouter.get('/data-supplier', ensureAuthenticated, async (req, res) => {
 });
 
 // Define a route to handle PATCH requests for updating a cement order
-CompanyRouter.patch('/update-cement-order', ensureAuthenticated, async (req, res) => {
+CompanyRouter.patch('/update-order-status', ensureAuthenticated, async (req, res) => {
     try {
         const { id } = req.body;
         const { status } = req.body;
@@ -147,44 +150,91 @@ CompanyRouter.patch('/update-cement-order', ensureAuthenticated, async (req, res
 });
 
 // Get All Data in Collection Order
-CompanyRouter.get('/order-cement-data', ensureAuthenticated, async (req, res) => {
+CompanyRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
     try {
         const statuses = req.query.statuses.split(',');
+        const type = req.query.type;
+        const supplierId = req.query.supplierId;
+        const fromDate = req.query.fromDate;
+        const toDate = req.query.toDate;
         const id = jwt.decode(req.headers.authorization)._id;
-        const dataCementOrder = await OrderModel.find({ companyId: id, status: statuses });
-        if (!dataCementOrder || dataCementOrder.length === 0) return res.status(404).json({ message: 'Order not found', success: false });
 
+        var query = { companyId: id, status:  statuses  }
+
+        if(type){
+            query.type = type
+        }
+        if(supplierId){
+            query.supplierId = supplierId
+        }
+        // إضافة فلتر التاريخ
+        if (fromDate || toDate) {
+            query.deliveryTime = {};
+            if (fromDate) {
+                const fromDateTime = new Date(fromDate).setHours(0, 0, 0, 0);
+                query.deliveryTime.$gte = new Date(fromDateTime).toLocaleString('en-GB', {hour12: true}).replace(',', '');
+            }
+            if (toDate) {
+                const toDateTime = new Date(toDate).setHours(23, 59, 59, 999);
+                query.deliveryTime.$lte = new Date(toDateTime).toLocaleString('en-GB', {hour12: true}).replace(',', '');
+            }
+        }
+
+        const dataOrders = await OrderModel.find(query).sort({ deliveryTime: -1 });
+        if (!dataOrders || dataOrders.length === 0) return res.json([]);;
+        
         // جلب بيانات المورد والشركة من قاعدة البيانات
-        const supplierIds = dataCementOrder.map(item => item.supplierId);
+        const supplierIds = dataOrders.map(item => item.supplierId);
         const dataSupplier = await SupplierModel.find({ _id: { $in: supplierIds } });
         const dataCompany = await CompanyModel.findById( id );
-
+        
         // تحويل البيانات حسب الحاجة
-        const result = dataCementOrder.map(item => {
+        const result = dataOrders.map(item => {
             const supplier = dataSupplier.find(s => s._id.toString() === item.supplierId.toString());
-            return {
-                id: item._id,
-                type: item.type,
-                recipientName: item.recipientName,
-                recipientPhone: item.recipientPhone,
-                location: item.location,
-                deliveryTime: item.deliveryTime,
-                orderRequestTime: item.orderRequestTime,
-                status: item.status,
-                price: item.price ,
-                cementQuantity: item.cementQuantity,
-                cementNumberBags: item.cementNumberBags,
-                supplierName: supplier.supplierName,
-                companyName: dataCompany.companyName,
-                companyPhone: dataCompany.companyPhone
-            };
-        });
+                if(item.type == 'cement'){
+                    return {
+                        id: item._id,
+                        type: item.type,
+                        recipientName: item.recipientName,
+                        recipientPhone: item.recipientPhone,
+                        location: item.location,
+                        deliveryTime: item.deliveryTime,
+                        orderRequestTime: item.orderRequestTime,
+                        status: item.status,
+                        price: item.price ,
+                        cementQuantity: item.cementQuantity,
+                        cementNumberBags: item.cementNumberBags,
+                        supplierName: supplier.supplierName,
+                        companyName: dataCompany.companyName,
+                        companyPhone: dataCompany.companyPhone
+                    };
+                } else if(item.type == 'concrete'){
+                    return {
+                        id: item._id,
+                        type: item.type,
+                        recipientName: item.recipientName,
+                        recipientPhone: item.recipientPhone,
+                        location: item.location,
+                        deliveryTime: item.deliveryTime,
+                        orderRequestTime: item.orderRequestTime,
+                        status: item.status,
+                        price: item.price,
+                        // field cocrete
 
+                        supplierName: supplier.supplierName,
+                        companyName: dataCompany.companyName,
+                        companyPhone: dataCompany.companyPhone
+                    };
+                }
+        });
         res.json(result);
     } catch (error) {
         res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
     }
 });
+
+
+// ----------------------------- Concrete -----------------------------
 
 
 export default CompanyRouter;

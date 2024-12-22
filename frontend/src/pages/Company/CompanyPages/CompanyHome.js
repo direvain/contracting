@@ -89,6 +89,7 @@ function CompanyHome() {
                 <Card
                     sx={{
                         width: {
+                            xs: 250,  // for extra small screens
                             sm: 250,  // for small screens
                             md: 250,  // for medium screens
                             lg: 345   // for large screens

@@ -1,6 +1,6 @@
 async function SupplierList() {
     try {
-        const response = await fetch('http://localhost:8080/auth/supplier/supplierData', {
+        const response = await fetch('http://localhost:8080/auth/supplier/supplier-data', {
             headers: { Authorization: localStorage.getItem('token') },
         });
         if (!response.ok) {

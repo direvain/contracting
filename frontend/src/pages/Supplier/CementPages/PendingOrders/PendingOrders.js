@@ -5,9 +5,10 @@ import { ToastContainer } from 'react-toastify';
 import styles from './PendingOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
+import OrderFilter from '../../../../components/orderFilter/OrderFilter';
 
 function PendingOrders() {
-    const [orderData, setOrderData] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
 
     const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ function PendingOrders() {
                 "id": id,
                 "status": "under_preparing"
             }
-            const url = 'http://localhost:8080/auth/supplier/update-cement-order';
+            const url = 'http://localhost:8080/auth/supplier/update-order-status';
             const response = await fetch(url, {
                 method: "PATCH",
                 headers: {
@@ -58,7 +59,7 @@ function PendingOrders() {
                 "id": id,
                 "status": "rejected"
             }
-            const url = 'http://localhost:8080/auth/supplier/update-cement-order';
+            const url = 'http://localhost:8080/auth/supplier/update-order-status';
             const response = await fetch(url, {
                 method: "PATCH",
                 headers: {
@@ -83,11 +84,28 @@ function PendingOrders() {
             handleError('Error dropping order:', error);
         }
     }
+
+    // Function to handle the filtering logic
+    const handleFilter = async (filterData) => {
+        try {
+            const statuses = "pending";
+            const response = await fetch(`http://localhost:8080/auth/supplier/order-data?statuses=${statuses}&type=${filterData.type}&supplierId=${filterData.supplierId}&fromDate=${filterData.fromDate}&toDate=${filterData.toDate}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                }
+            });
+            const result = await response.json();
+            setFilteredOrders(result); // Store the filtered orders
+        } catch (err) {
+            console.error('Error fetching filtered orders:', err);
+        }
+    };
     
     const fetchOrderData = async () => {
         try {
             const statuses = "pending";
-            const url = `http://localhost:8080/auth/supplier/order-cement-data?statuses=${statuses}`;
+            const url = `http://localhost:8080/auth/supplier/order-data?statuses=${statuses}`;
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -95,11 +113,12 @@ function PendingOrders() {
                 }
             });
             const result = await response.json();
-            setOrderData(result);
+            setFilteredOrders(result);
         } catch (err) {
             handleError(err);
         }
     }
+
     useEffect(() => {
         fetchOrderData();
     }, []);
@@ -119,13 +138,14 @@ function PendingOrders() {
                 logout={handleLogout}
             />
 
+            <OrderFilter user='supplier' onFilter={handleFilter} />
             
             <div className={styles.pendingOrdersTitle}>
                 <h2 className={styles.pendingOrdersH2}>Pending Orders</h2>
             </div>
             <div className={styles.pendingOrdersContainer}>
-                {orderData && orderData.length > 0 ? (
-                    orderData.map((order, index) => (
+                {filteredOrders && filteredOrders.length > 0 ? (
+                    filteredOrders.map((order, index) => (
                         <div className={styles.pendingOrdersRow} key={index}> 
                             <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersSupplierName}`}>
                                 <strong>Supplier name:</strong> {order.supplierName} 
@@ -138,6 +158,7 @@ function PendingOrders() {
                                     <strong>Order type:</strong> {order.type} 
                                 </p>
                             </div>
+                            <hr />
                             <div className={styles.pendingOrdersDiv}>
                                 <p className={styles.pendingOrdersData}>
                                     <strong>Company name:</strong> {order.companyName} 

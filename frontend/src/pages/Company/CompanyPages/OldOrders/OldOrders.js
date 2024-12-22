@@ -5,9 +5,10 @@ import { ToastContainer } from 'react-toastify';
 import styles from './OldOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
+import OrderFilter from '../../../../components/orderFilter/OrderFilter';
 
 function OldOrders() {
-    const [dataCementOrder, setDataCementOrder] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
 
     const navigate = useNavigate();
 
@@ -20,11 +21,27 @@ function OldOrders() {
         }, 500)
     }
 
+    // Function to handle the filtering logic
+    const handleFilter = async (filterData) => {
+        try {
+            const response = await fetch(`http://localhost:8080/auth/company/order-data?statuses=${filterData.selectedStatus}&type=${filterData.type}&supplierId=${filterData.supplierId}&fromDate=${filterData.fromDate}&toDate=${filterData.toDate}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                }
+            });
+            const result = await response.json();
+            setFilteredOrders(result); // Store the filtered orders
+        } catch (err) {
+            console.error('Error fetching filtered orders:', err);
+        }
+    };
+
     useEffect(() => {
-        const fetchDataCementOrder = async () => {
+        const fetchDataOrder = async () => {
             try {
                 const statuses = "delivered,rejected";
-                const url = `http://localhost:8080/auth/company/order-cement-data?statuses=${statuses}`;
+                const url = `http://localhost:8080/auth/company/order-data?statuses=${statuses}`;
                 const response = await fetch(url, {
                     method: 'GET',
                     headers: {
@@ -32,12 +49,12 @@ function OldOrders() {
                     }
                 });
                 const result = await response.json();
-                setDataCementOrder(result);
+                setFilteredOrders(result);
             } catch (err) {
                 handleError(err);
             }
         }
-        fetchDataCementOrder();
+        fetchDataOrder();
     }, []);
 
     return(
@@ -61,13 +78,14 @@ function OldOrders() {
                 logout={handleLogout}
             />
 
+            <OrderFilter user='company' statuses={['delivered', 'rejected']} onFilter={handleFilter} />
             
             <div className={styles.oldOrdersTitle}>
                 <h2 className={styles.oldOrdersH2}>Old Orders</h2>
             </div>
             <div className={styles.oldOrdersContainer}>
-                {dataCementOrder && dataCementOrder.length > 0 ? (
-                    dataCementOrder.map((order, index) => (
+                {filteredOrders && filteredOrders.length > 0 ? (
+                    filteredOrders.map((order, index) => (
                         <div className={styles.oldOrdersRow} key={index}> 
                             <p className={`${styles.oldOrdersData} ${styles.oldOrdersSupplierName}`}>
                                 <strong>Supplier name:</strong> {order.supplierName} 

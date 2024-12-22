@@ -5,9 +5,10 @@ import { ToastContainer } from 'react-toastify';
 import styles from './UnderPreparingOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
+import OrderFilter from '../../../../components/orderFilter/OrderFilter';
 
 function UnderPreparingOrders() {
-    const [orderData, setOrderData] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
 
     const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ function UnderPreparingOrders() {
                 "id": id,
                 "status": "completed"
             }
-            const url = 'http://localhost:8080/auth/supplier/update-cement-order';
+            const url = 'http://localhost:8080/auth/supplier/update-order-status';
             const response = await fetch(url, {
                 method: "PATCH",
                 headers: {
@@ -52,10 +53,26 @@ function UnderPreparingOrders() {
         }
     }
 
+    // Function to handle the filtering logic
+    const handleFilter = async (filterData) => {
+        try {
+            const response = await fetch(`http://localhost:8080/auth/supplier/order-data?statuses=${filterData.selectedStatus}&type=${filterData.type}&supplierId=${filterData.supplierId}&fromDate=${filterData.fromDate}&toDate=${filterData.toDate}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                }
+            });
+            const result = await response.json();
+            setFilteredOrders(result); // Store the filtered orders
+        } catch (err) {
+            console.error('Error fetching filtered orders:', err);
+        }
+    };
+
     const fetchOrderData = async () => {
         try {
             const statuses = "under_preparing,completed";
-            const url = `http://localhost:8080/auth/supplier/order-cement-data?statuses=${statuses}`;
+            const url = `http://localhost:8080/auth/supplier/order-data?statuses=${statuses}`;
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -63,7 +80,7 @@ function UnderPreparingOrders() {
                 }
             });
             const result = await response.json();
-            setOrderData(result);
+            setFilteredOrders(result);
         } catch (err) {
             handleError(err);
         }
@@ -88,13 +105,14 @@ function UnderPreparingOrders() {
                 logout={handleLogout}
             />
 
+            <OrderFilter user='supplier' statuses={['under_preparing', 'completed']} onFilter={handleFilter} />
             
             <div className={styles.underPreparingOrdersTitle}>
                 <h2 className={styles.underPreparingOrdersH2}>Under Preparing Orders</h2>
             </div>
             <div className={styles.underPreparingOrdersContainer}>
-                {orderData && orderData.length > 0 ? (
-                    orderData.map((order, index) => (
+                {filteredOrders && filteredOrders.length > 0 ? (
+                    filteredOrders.map((order, index) => (
                         <div className={styles.underPreparingOrdersRow} key={index}> 
                             <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
                                 <strong>Supplier name:</strong> {order.supplierName} 
@@ -107,6 +125,7 @@ function UnderPreparingOrders() {
                                     <strong>Order type:</strong> {order.type} 
                                 </p>
                             </div>
+                            <hr />
                             <div className={styles.underPreparingOrdersDiv}>
                                 <p className={styles.underPreparingOrdersData}>
                                     <strong>Company name:</strong> {order.companyName} 
@@ -143,7 +162,7 @@ function UnderPreparingOrders() {
                             </div>
                             {order.status === 'under_preparing' && (
                                 <div className={styles.underPreparingOrdersDivButton}>
-                                    <button className={styles.underPreparingOrdersButtonCompleted} onClick={() => orderCompleted(order.id)}>completed</button>
+                                    <button className={styles.underPreparingOrdersButtonCompleted} onClick={() => orderCompleted(order.id)}>Completed</button>
                                 </div>
                             )}
                         </div>

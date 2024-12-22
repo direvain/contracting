@@ -8,16 +8,8 @@ env.config();
 const registration = async (req, res) => {
     try {
         const { companyName, email, companyID, password, companyPhone, commercialRegister } = req.body;
-        const checkCompanyName = await CompanyModel.findOne({ companyName });
-        if (checkCompanyName) {
-            return res.status(409)
-                .json({ message: 'Company name is already exist', success: false });
-        }
-        const checkCompanyID = await CompanyModel.findOne({ companyID });
-        if (checkCompanyID) {
-            return res.status(409)
-                .json({ message: 'CompanyID is already exist', success: false });
-        }
+        d:\A.L\مواد جامعة\Project\Project(L)\New Microsoft Word Document.docx
+        
         const companyModel = new CompanyModel({ companyName, email, companyID, password, companyPhone, commercialRegister });
         companyModel.password = await bcrypt.hash(password, 10);
         await companyModel.save();
@@ -72,3 +64,9 @@ const login = async (req, res) => {
 }
 
 export { registration, login };
+
+
+
+
+
+// (companyName && status $_in (pending || approved)) || (companyId && status $_in (pending || approved)) ---> not registration

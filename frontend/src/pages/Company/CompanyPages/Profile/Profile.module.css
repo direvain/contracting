@@ -4,6 +4,8 @@
     align-items: center;
     min-height: 62.2vh;
     padding: 20px; /* إضافة تباعد داخلي للشاشات الصغيرة */
+    margin-bottom: -1.4%;
+    margin-top: -1.55%;    
 }
 
 .profileRow {

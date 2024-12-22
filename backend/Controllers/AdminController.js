@@ -66,8 +66,7 @@ const register = async (req, res) => {
 
         res.status(201).json({
             message: "Admin added successfully",
-            success: true,
-            admin: newAdmin
+            success: true
         });
 
     } catch (error) {
