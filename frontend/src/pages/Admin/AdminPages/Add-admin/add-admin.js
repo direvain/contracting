@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { handleSuccess, handleError } from '../../../../utils/utils';
 import styles from './add-admin.module.css';
-import NavBar from '../../../../Components/navbar/Navbar';
+import NavBar from '../../../../components/navbar/Navbar';
 
 function AddAdmin() {
     const handleLogout = (e) => {

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { handleSuccess } from '../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
-import NavBar from '../../../Components/navbar/Navbar';
+import NavBar from '../../../components/navbar/Navbar';
 
 function AdminHome() {
   const navigate = useNavigate();

@@ -17,7 +17,7 @@ function Navbar(props) {
     return (
         <nav className={styles.navbar}>
             <div className={styles.container}>
-                <img src="/images/" alt="logo" className={styles.logo} />
+                <img src="/images/logo.png" alt="logo" className={styles.logo} />
                 <button
                     className={styles.toggleButton}
                     aria-expanded={isActive}

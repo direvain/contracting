@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import SupplierModel from "../Models/Supplier.js";
+import RegisterModel from '../Models/UserRegistration.js';
+import SupplierModel from '../Models/Supplier.js'
 import env from "dotenv";
+
 env.config();
 
 const registration = async (req, res) => {
@@ -9,26 +11,23 @@ const registration = async (req, res) => {
     // console.log(req.commercialRegister);
     // console.log(req.body.commercialRegister);
     try {
-        const { supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister } = req.body;
-        const checkSupplierName = await SupplierModel.findOne({ supplierName });
-        if (checkSupplierName) {
+        const { supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister,role } = req.body;
+        const checkSupplier = await SupplierModel.findOne({
+            $or: [{ supplierName }, { supplierID }]
+        });
+        
+        if (checkSupplier) {
             return res.status(409)
-                .json({ message: 'Supplier name is already exist', success: false });
-        }
-        const checkSupplierID = await SupplierModel.findOne({ supplierID });
-        if (checkSupplierID) {
-            return res.status(409)
-                .json({ message: 'SupplierID is already exist', success: false });
+                .json({ message: 'Supplier is already exist', success: false });
         }
         // console.log("after: " + commercialRegister)
 
-        const supplierModela = new SupplierModelRegister({ supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister });
-        // const supplierModel = new SupplierModel({ supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister });
-        SupplierModelRegister.password = await bcrypt.hash(password, 10);
+        const newUser = new RegisterModel({ supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister,role });
+        newUser.password = await bcrypt.hash(password, 10);
         // supplierModel.commercialRegister = Buffer.from(commercialRegister, 'base64').toString('utf8');
         
 
-        await supplierModel.save();
+        await newUser.save();
         res.status(201)
             .json({
                 message: "Registration successfully",

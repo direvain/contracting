@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './Approve.module.css';
-import NavBar from '../../../../Components/navbar/Navbar';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import styles from './request.module.css';
+import NavBar from '../../../../components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
 
 function RequestRegister() {
@@ -29,7 +31,7 @@ const handleLogout = (e) =>
         setTimeout(() => 
         {
             navigate('/admin');
-        }, 1000)
+        }, 500)
     }
 
     async function fetchData()
@@ -58,7 +60,11 @@ const handleLogout = (e) =>
                 method:'PATCH',
                 headers: { Authorization: localStorage.getItem('token') }
             });
-            if (response.ok) {setPending(rejectedUser => rejectedUser.filter(user => user.Id !== Id)); }
+            if (response.ok) 
+                {
+                    setPending(rejectedUser => rejectedUser.filter(user => user.Id !== Id)); 
+                    handleSuccess('User successfully rejected'); // Show success message
+                }
             else {console.error('Failed to delete user :', response.statusText); }
         }
         catch(err)
@@ -76,7 +82,11 @@ const handleLogout = (e) =>
                     method:'PATCH',
                     headers: { Authorization: localStorage.getItem('token') }
                 });
-            if (response.ok) {setPending(approvetUser => approvetUser.filter(user => user.Id !== Id)); }
+            if (response.ok) 
+            {
+                setPending(approvetUser => approvetUser.filter(user => user.Id !== Id)); 
+                handleSuccess('User successfully approved'); // Show success message
+            }
             else {console.error('Failed to approve user :', response.statusText); }
         }
         catch(err)
@@ -88,6 +98,8 @@ const handleLogout = (e) =>
 
     return (
         <div>
+            <ToastContainer />
+            
             <NavBar
                 three="Approved"
                 pathThree="/admin/home/approve-order"
@@ -102,98 +114,52 @@ const handleLogout = (e) =>
 
                 logout={handleLogout}
             />
-            <h2 className={styles.List}>Companies Pending List:</h2>
-            <div className={styles.profileContainer}>
-                {(() => 
+            <h2 className={styles.List}>Pending Registration:</h2>
+            <div className={styles.profileContainer}>   
+            {(() => 
+            {
+                const RegisterationData = Array.isArray(pending) ? pending : [];
+
+                const filteredData = RegisterationData.length > 0 ? 
+                RegisterationData.map((field) => 
                 {
-                    const companies = pending.filter(field => field.role === "company");
-                    return companies.length > 0  ? 
-                    (
-                        companies.map((field) =>
-                            field.role === "company"&&
-                            (
-                                <div className={styles.profileRow} key={field._id}>
-                                    <p>
-                                        <strong>Company Name :</strong> {field.Name} 
-                                    </p> 
-                                    <p>
-                                        <strong>Company email :</strong> {field.email} 
-                                    </p>
-                                    <p>
-                                        <strong>Company Id :</strong> {field.Id} 
-                                    </p>
-                                    <p>
-                                        <strong>Company Phone :</strong> {field.Phone} 
-                                    </p>
-                                    <p>
-                                        <strong>Commercial Register :</strong> {JSON.stringify(field.commercialRegister)} 
-                                    </p>
-                                    <button
-                                        className={styles.button32}
-                                        onClick={() => approveUser(field.Id)}
-                                    >
-                                        Approve
-                                    </button>
-                                    <button
-                                        className={styles.button24}
-                                        onClick={() => rejectUser(field.Id)}
-                                    >
-                                        Reject
-                                    </button> 
-                                </div>
-                            ))
-                    ) :(<p>No Pending companies found.</p>)
-                })()}
-            </div>
+                    return (
+                            <div className={styles.profileRow} key={field._id}>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} name:</strong> {field.Name}</p>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} email:</strong> {field.email}</p>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} ID:</strong> {field.Id}</p>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} phone:</strong> {field.Phone}</p>
+                                {field.role === "supplier" ? 
+                                (
+                                    <p><strong>Supplier product:</strong> {field.supplierProduct}</p>
+                                ) : (
+                                    <strong></strong> 
+                                    )
+                                }
+                                <p><strong>Commercial register:</strong> {JSON.stringify(field.commercialRegister)}</p>
 
+                                <button
+                                    className={styles.pendingButtonAccept}
+                                    onClick={() => approveUser(field.Id)}
+                                >
+                                    Approve
+                                </button>
+                                <button
+                                    className={styles.pendingButtonReject}
+                                    onClick={() => rejectUser(field.Id)}
+                                >
+                                    Reject
+                                </button>
+                            </div>
+                    );
+                
+                return null;
+            }) : 
+            <p>No Pending registrations found.</p>;
 
-            <h2 className={styles.List}>suppliers Pending List:</h2>
-            <div className={styles.profileContainer}>
-                {(() => 
-                {
-                    const suppliers = pending.filter(field => field.role === "supplier");
-                    return suppliers.length > 0  ? 
-                    (
-                        suppliers.map((field) =>
-                            field.role === "supplier"&&
-                            (
-                                <div className={styles.profileRow} key={field._id}>
-                                    <p>
-                                        <strong>Supplier Name :</strong> {field.Name} 
-                                    </p> 
-                                    <p>
-                                        <strong>Supplier email :</strong> {field.email} 
-                                    </p>
-                                    <p>
-                                        <strong>Supplier Id :</strong> {field.Id} 
-                                    </p>
-                                    <p>
-                                        <strong>Supplier Phone :</strong> {field.Phone} 
-                                    </p>
-                                    <p>
-                                        <strong>Supplier Product :</strong> {field.supplierProduct} 
-                                    </p>
-                                    <p>
-                                        <strong>Commercial Register :</strong> {JSON.stringify(field.commercialRegister)} 
-                                    </p>
-                                    <button
-                                        className={styles.button32}
-                                        onClick={() => approveUser(field.Id)}
-                                    >
-                                        Approve
-                                    </button>
-                                    <button
-                                        className={styles.button24}
-                                        onClick={() => rejectUser(field.Id)}
-                                    >
-                                        Reject
-                                    </button>
-
-                                </div>
-                            ))
-                    ) :(<p>No Pending companies found.</p>)
-                })()}
-            </div>   
+        return filteredData;
+    })()}
+</div>
         </div>
     );
     

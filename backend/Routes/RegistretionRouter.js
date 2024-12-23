@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import CompanyModel from "../Models/Company.js";     
 import SupplierModel from "../Models/Supplier.js";
 import RegisterModel from "../Models/UserRegistration.js"
+import AdminModel from '../Models/Admin.js'
 import ensureAuthenticated from "../Middlewares/Auth.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -24,31 +25,50 @@ app.use(bodyParser.json());
 RegistrationRouter.get('/fetchRegistrationData', ensureAuthenticated, async (req, res) => {
     try {
         const status = req.query.status; // save the query  new or rejected 
-        const registration  = await RegisterModel.find({status : status});  // fetch data that match the status
         if (status != "rejected" && status != "new"  ) 
         {
             return res.status(404).json({ error: "wrong status" });
         }
+        const registration  = await RegisterModel.find({status : status});  // fetch data that match the status
         
         if (registration.length === 0)
         {
             return res.status(404).json({ error: "No data found for the given status" });
-        }
+        } 
+
         res.json
         (
-            registration .map(data =>
+            registration.map(data =>
                 {
-                    return {
-                        _id:data._id, // return the id bc in for loop use for key " or i can use index 0 , 1, 2, etc"
-                        Name:data.Name,
-                        email:data.email,
-                        Id:data.Id,
-                        Phone:data.Phone,
-                        role:data.role,
-                        commercialRegister:data.commercialRegister,
-                        supplierProduct:data.supplierProduct,
-                        AdminId:data.AdminId
-                    };
+                    if (data.role === "supplier")
+                        {
+                            return {
+                                _id:data._id, // return the id bc in for loop use for key " or i can use index 0 , 1, 2, etc"
+                                Name:data.Name,
+                                email:data.email,
+                                Id:data.Id,
+                                Phone:data.Phone,
+                                role:data.role,
+                                commercialRegister:data.commercialRegister,
+                                supplierProduct:data.supplierProduct,
+                                AdminEmail:data.AdminEmail
+                            };
+                        }
+                        
+                        else if (data.role === "company") 
+                        { 
+                            return {
+                            _id:data._id, // return the id bc in for loop use for key " or i can use index 0 , 1, 2, etc"
+                            Name:data.Name,
+                            email:data.email,
+                            Id:data.Id,
+                            Phone:data.Phone,
+                            role:data.role,
+                            commercialRegister:data.commercialRegister,
+                            AdminEmail:data.AdminEmail
+                            };
+                        }
+
                 })
 
         );
@@ -63,7 +83,10 @@ RegistrationRouter.patch("/approve/:id", ensureAuthenticated,  async (req, res) 
         {
             const userId = req.params.id; // get the id of the Registration
             const registrationUser = await RegisterModel.findOne({Id:userId}); // find the user by id
-            const adminId  = jwt.decode(req.headers.authorization)._id; // extract the id of admin who is accept the request 
+
+            const adminId  = jwt.decode(req.headers.authorization)._id; // extract the id of admin who is accept the request
+            const { email: adminEmail } = await AdminModel.findById(adminId);
+
             if ( registrationUser.role =="company")
             {
                 const newCompany = new CompanyModel(
@@ -75,7 +98,7 @@ RegistrationRouter.patch("/approve/:id", ensureAuthenticated,  async (req, res) 
                     companyPhone:registrationUser.Phone,
                     commercialRegister:registrationUser.commercialRegister,
                     role:registrationUser.role,
-                    adminId: adminId , // Set the adminName field
+                    adminId: adminEmail , // Set the adminName field
                 });
                 newCompany.save();
             }
@@ -91,7 +114,7 @@ RegistrationRouter.patch("/approve/:id", ensureAuthenticated,  async (req, res) 
                     supplierProduct:registrationUser.supplierProduct,
                     commercialRegister:registrationUser.commercialRegister,
                     role:registrationUser.role,
-                    adminId: adminId, // Set the adminName field
+                    adminId: adminEmail, // Set the adminName field
                 });
                 newSupplier.save();
             }
@@ -112,14 +135,15 @@ RegistrationRouter.patch("/rejected/:id", ensureAuthenticated, async (req, res) 
     try 
         {   
             const UserId = req.params.id; 
-            const adminId  = jwt.decode(req.headers.authorization)._id; // extract the id of admin who is rejected the request 
+            const adminId  = jwt.decode(req.headers.authorization)._id; // extract the id of admin who is accept the request
+            const { email: adminEmail } = await AdminModel.findById(adminId);
             await RegisterModel.updateOne
             (
                 { Id: UserId },
                 {$set:
                 {
                     status: "rejected",
-                    AdminId: adminId, 
+                    AdminEmail: adminEmail, 
                 }}
             )
         res.status(200).json({ message: `user rejected successfully` });

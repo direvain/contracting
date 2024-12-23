@@ -35,104 +35,19 @@
     align-items: center;
 }
 
-/* .button32 {
-    background-color: #fff000;
-    border-radius: 12px;
-    color: #000;
-    cursor: pointer;
-    font-weight: bold;
-    padding: 10px 15px;
-    text-align: center;
-    transition: 200ms;
-    width: auto;
-    box-sizing: border-box;
-    border: 0;
-    font-size: 10px;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-}
 
-.button32:not(:disabled):hover,
-.button32:not(:disabled):focus {
-outline: 0;
-background: #f4e603;
-box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
-}
 
-.button32:disabled {
-filter: saturate(0.2) opacity(0.5);
--webkit-filter: saturate(0.2) opacity(0.5);
-cursor: not-allowed;
-} */.button24 {
-  background: #FF4742;
-  border: 1px solid #FF4742;
-  border-radius: 6px;
-  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
-  box-sizing: border-box;
-  color: #000000;
+.pendingButtonDrop{
+  background-color: #C40C0C;
+  width: 100%;
+  border: none;
+  font-size: 20px;
+  color: white;
+  border-radius: 5px;
+  padding: 8px;
   cursor: pointer;
-  display: inline-block;
-  font-family: nunito, roboto, proxima-nova, "proxima nova", sans-serif;
-  font-size: 14px; /* Smaller font size */
-  font-weight: 800;
-  line-height: 14px; /* Adjusted line height for smaller font */
-  min-height: 32px; /* Reduced min height */
-  outline: 0;
-  padding: 8px 10px; /* Reduced padding */
-  text-align: center;
-  text-rendering: geometricprecision;
-  text-transform: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: middle;
 }
 
-.button24:hover,
-.button24:active {
-  background-color: initial;
-  background-position: 0 0;
-  color: #FF4742;
-}
-
-.button24:active {
-  opacity: .5;
-}
-
-.button32 {
-  background: #fff200;
-  border: 1px solid #f4e603;
-  border-radius: 6px;
-  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
-  box-sizing: border-box;
-  color: #000000;
-  cursor: pointer;
-  display: inline-block;
-  font-family: nunito, roboto, proxima-nova, "proxima nova", sans-serif;
-  font-size: 14px; /* Smaller font size */
-  font-weight: 800;
-  line-height: 14px; /* Adjusted line height for smaller font */
-  min-height: 32px; /* Reduced min height */
-  outline: 0;
-  padding: 8px 10px; /* Reduced padding */
-  text-align: center;
-  text-rendering: geometricprecision;
-  text-transform: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: middle;
-  margin-right: 10px;
-}
-
-.button32:hover,
-.button32:active {
-  background-color: initial;
-  background-position: 0 0;
-  color: #f4e603;
-}
-
-.button32:active {
-  opacity: .5;
+.pendingButtonDrop:hover{
+  background-color: #ff0000fa;
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Approve.module.css';
-import NavBar from '../../../../Components/navbar/Navbar';
+import NavBar from '../../../../components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
 
 function ApproveRegister()
@@ -9,6 +9,8 @@ function ApproveRegister()
     const navigate = useNavigate();
     const [companies, setCompanies] = useState([]); // Initialize as an empty array
     const [suppliers, setSuppliers] = useState([]); // Initialize as an empty array
+    const [mixedData, setMixedData] = useState([]); // Single array for mixed data
+
     useEffect(() => {
         const getData = async () => {
             try 
@@ -16,6 +18,10 @@ function ApproveRegister()
                 const { supplierData, companyData } = await fetchdata();
                 setSuppliers(supplierData || []); // Ensure fallback to an empty array if data is null/undefined
                 setCompanies(companyData || []); // Ensure fallback to an empty array if data is null/undefined
+                const combinedData = [...supplierData, ...companyData]; // Combine data
+                const shuffledData = combinedData.sort(() => -0.8456567867878946675 - 0.2); // Shuffle the array
+                setMixedData(shuffledData); // Set the mixed data to state
+                console.log(shuffledData)
             } 
             catch (error) 
             {
@@ -79,66 +85,35 @@ function ApproveRegister()
 
             logout={handleLogout}
         />
-
-        <h2 className={styles.List}>Companies Approved List:</h2>
-        <div className={styles.profileContainer}>
-            {companies.length > 0 ? (
-                companies.map((field) => 
-                    (
-                        <div className={styles.profileRow} key={field._id}>
-                            <p>
-                                <strong>Company Name :</strong> {field.companyName} 
-                            </p>
-                            <p>
-                                <strong>Company email :</strong> {field.email} 
-                            </p>
-                            <p>
-                                <strong>Company ID :</strong> {field.companyID} 
-                            </p>
-                            <p>
-                                <strong>Company Phone:</strong> {field.companyPhone} 
-                            </p>
-                            <p>
-                                <strong>Commercial Register :</strong>  {JSON.stringify(field.commercialRegister)} 
-                            </p>
-                            <p>
-                                <strong>Admin Id :</strong> {field.adminId} 
-                            </p>
-                        </div>
-                    ))
-            ) : (
-                <p>No companies found.</p>
-            )}
-        </div>
-        <h2 className={styles.List}>Supplier Approved List:</h2>
+        <h2 className={styles.List}>Suppliers Approved List:</h2>
             <div className={styles.profileContainer}>
                 {suppliers.length > 0 ? (
                     suppliers.map((field) => 
                         (
                             <div className={styles.profileRow} key={field._id}>
                                 <p>
-                                    <strong>supplier Name :</strong> {field.supplierName} 
+                                    <strong>Supplier name:</strong> {field.supplierName} 
                                 </p>
                                 <p>
-                                    <strong>supplier email :</strong> {field.email} 
+                                    <strong>Supplier email:</strong> {field.email} 
                                 </p>
                                 <p>
-                                    <strong>supplier ID :</strong> {field.supplierID} 
+                                    <strong>Supplier ID:</strong> {field.supplierID} 
                                 </p>
                                 <p>
-                                    <strong>supplier Phone:</strong> {field.supplierPhone} 
+                                    <strong>Supplier phone:</strong> {field.supplierPhone} 
                                 </p>
                                 <p>
-                                    <strong>supplier Product:</strong> {field.supplierProduct} 
+                                    <strong>Supplier product:</strong> {field.supplierProduct} 
                                 </p>
                                 <p>
-                                    <strong>supplier item price :</strong> {field.price} jod
+                                    <strong>Supplier item price:</strong> {field.price} JD
                                 </p>
                                 <p>
-                                    <strong>Commercial Register :</strong>  {JSON.stringify(field.commercialRegister)} 
+                                    <strong>Commercial register:</strong>  {JSON.stringify(field.commercialRegister)} 
                                 </p>
                                 <p>
-                                    <strong>Admin Id :</strong> {field.adminId} 
+                                    <strong>Admin email:</strong> {field.adminId} 
                                 </p>
                             </div>
                         ))
@@ -146,6 +121,36 @@ function ApproveRegister()
                     <p>No suppliers found.</p>
                 )}
             </div>
+        <h2 className={styles.List}>Companies Approved List:</h2>
+        <div className={styles.profileContainer}>
+            {companies.length > 0 ? (
+                companies.map((field) => 
+                    (
+                        <div className={styles.profileRow} key={field._id}>
+                            <p>
+                                <strong>Company name:</strong> {field.companyName} 
+                            </p>
+                            <p>
+                                <strong>Company email:</strong> {field.email} 
+                            </p>
+                            <p>
+                                <strong>Company ID:</strong> {field.companyID} 
+                            </p>
+                            <p>
+                                <strong>Company phone:</strong> {field.companyPhone} 
+                            </p>
+                            <p>
+                                <strong>Commercial register:</strong>  {JSON.stringify(field.commercialRegister)} 
+                            </p>
+                            <p>
+                                <strong>Admin email:</strong> {field.adminId} 
+                            </p>
+                        </div>
+                    ))
+            ) : (
+                <p>No companies found.</p>
+            )}
+        </div>
     </div>
     );
     

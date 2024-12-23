@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from './Reject.module.css';
-import NavBar from '../../../../Components/navbar/Navbar';
+import NavBar from '../../../../components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
 
 function RejectRegister() {
@@ -31,7 +33,7 @@ const handleLogout = (e) =>
         setTimeout(() => 
         {
             navigate('/admin');
-        }, 1000)
+        }, 500)
     }
     async function fetchdata()
     {
@@ -52,28 +54,33 @@ const handleLogout = (e) =>
     }
 
     async function dropUser(Id) {
+        // pop message for check about drop user
+        const confirmDrop = window.confirm('Are you sure you want to drop this user?');
+        if (!confirmDrop) return; // If the user clicks "Cancel", exit the function and API don't call
+    
         try {
-            const response = await fetch(`http://localhost:8080/auth/register/delete/${Id}`,
-            {
-                method: 'DELETE',            
+            const response = await fetch(`http://localhost:8080/auth/register/delete/${Id}`, {
+                method: 'DELETE',
                 headers: { Authorization: localStorage.getItem('token') },
             });
     
             if (response.ok) {
-                // Update the suppliers state to remove the deleted supplier
                 setRejected(deleteUser => deleteUser.filter(user => user._id !== Id));
+                handleSuccess('User successfully dropped'); // Show success message
             } else {
-                console.error('Failed to delete user :', response.statusText);
+                console.error('Failed to delete user:', response.statusText);
             }
         } catch (err) {
             console.error(err);
         }
     }
-/*  */
+
 
 
     return (
         <div>
+     <ToastContainer />
+
             <NavBar
                 three="Approved"
                 pathThree="/admin/home/approve-order"
@@ -89,91 +96,46 @@ const handleLogout = (e) =>
                 logout={handleLogout}
             />
 
-            <h2 className={styles.List}>Companies Rejected List:</h2>
-            <div className={styles.profileContainer}>
-                {(() => 
-                {
-                    const companies = rejected.filter(field => field.role === "company");
-                    return companies.length > 0  ? (
-                        companies.map((field) => 
-                            field.role === "company"&&(
-                            <div className={styles.profileRow} key={field._id}>
-                                <p>
-                                    <strong>Company Name :</strong> {field.Name} 
-                                </p>
-                                <p>
-                                    <strong>Company email :</strong> {field.email} 
-                                </p>
-                                <p>
-                                    <strong>Company Id :</strong> {field.Id} 
-                                </p>
-                                <p>
-                                    <strong>Company Phone :</strong> {field.Phone} 
-                                </p>
-                                <p>
-                                    <strong>Commercial Register :</strong> {JSON.stringify(field.commercialRegister)} 
-                                </p>
-                                <p>
-                                    <strong>Admin Id :</strong> {field.AdminId}
-                                </p>
-                                <button
-                                    className={styles.button24}
-                                    onClick={() => dropUser(field._id)}
-                                >
-                                    Drop
-                                </button>
-                            </div>
-                        )
-                    )
-                    ) : (
-                        <p>No rejected companies found.</p>
-                    );
-                })()}
-            </div>
+<h2 className={styles.List}>Pending Registration:</h2>
+            <div className={styles.profileContainer}>   
+            {(() => 
+            {
+                const rejectedUsers = Array.isArray(rejected) ? rejected : [];
 
-            <h2 className={styles.List}>Suppliers Rejected List:</h2>
-            <div className={styles.profileContainer}>
-                {(() => {
-                    const suppliers = rejected.filter(field => field.role === "supplier");
-                    return  suppliers.length > 0  ? (
-                        suppliers.map((field) => 
-                            field.role === "supplier"&&(
+                const filteredData = rejectedUsers.length > 0 ? 
+                rejectedUsers.map((field) => 
+                {
+                    return (
                             <div className={styles.profileRow} key={field._id}>
-                                <p>
-                                    <strong>supplier Name :</strong> {field.Name} 
-                                </p>
-                                <p>
-                                    <strong>supplier email :</strong> {field.email} 
-                                </p>
-                                <p>
-                                    <strong>supplier Id :</strong> {field.Id} 
-                                </p>
-                                <p>
-                                    <strong>supplier Phone :</strong> {field.Phone} 
-                                </p>
-                                <p>
-                                    <strong>Commercial Register :</strong> {JSON.stringify(field.commercialRegister)} 
-                                </p>
-                                <p>
-                                    <strong>Supplier Product :</strong> {field.supplierProduct}
-                                </p>
-                                <p>
-                                    <strong>Admin Id :</strong> {field.AdminId}
-                                </p>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} name:</strong> {field.Name}</p>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} email:</strong> {field.email}</p>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} ID:</strong> {field.Id}</p>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} phone:</strong> {field.Phone}</p>
+                                {field.role === "supplier" ? 
+                                (
+                                    <p><strong>Supplier product:</strong> {field.supplierProduct}</p>
+                                ) : (
+                                    <strong></strong> 
+                                    )
+                                }
+                                <p><strong>Commercial register:</strong> {JSON.stringify(field.commercialRegister)}</p>
+                                <p><strong>Admin email:</strong> {field.AdminEmail} </p>
                                 <button
-                                    className={styles.button24}
-                                    onClick={() => dropUser(field._id)}
+                                    className={styles.pendingButtonDrop}
+                                    onClick={() => dropUser(field.Id)}
                                 >
                                     Drop
                                 </button>
                             </div>
-                        )
-                    )
-                    ) : (
-                        <p>No rejected suppliers found.</p>
                     );
-                })()}
-            </div>
+                
+                return null;
+            }) : 
+            <p>No Pending registrations found.</p>;
+
+        return filteredData;
+    })()}
+</div>
         </div>
 
     );

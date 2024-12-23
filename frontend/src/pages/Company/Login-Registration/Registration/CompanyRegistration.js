@@ -13,7 +13,8 @@ function CompanyRegistration() {
         password: '',
         confirmPassword: '',
         companyPhone: '',
-        commercialRegister: ''
+        commercialRegister: '',
+        role:'comapny'
     })
 
     const navigate = useNavigate();

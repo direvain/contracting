@@ -4,8 +4,8 @@ import { handleError, handleSuccess } from '../../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import styles from './Profile.module.css';
-import Navbar from '../../../../Components/navbar/Navbar';
-import Footer from '../../../../Components/footer/Footer';
+import Navbar from '../../../../components/navbar/Navbar';
+import Footer from '../../../../components/footer/Footer';
 
 function Profile() {
     const token = localStorage.getItem("token");
