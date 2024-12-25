@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import styles from './CementBill.module.css';
 import Navbar from '../../../../../components/navbar/Navbar';
 import Footer from '../../../../../components/footer/Footer';
+import moment from 'moment';
 
 function CementBill() {
 
@@ -25,7 +26,7 @@ function CementBill() {
         recipientPhone: '',
         location: '',
         deliveryTime: '',
-        orderRequestTime: new Date().toLocaleString('en-GB', {hour12: true}).replace(',', ''),
+        orderRequestTime: moment().unix(),
         cementQuantity: amountOfCement,
         cementNumberBags: amountOfCement * 20,
         price: (amountOfCement * 20 * price).toFixed(2),
@@ -91,11 +92,8 @@ function CementBill() {
             return;
         }
 
-        // Format deliveryTime to match the desired format
-        const formatDateTime = (dateTime) => {
-            return new Date(dateTime).toLocaleString('en-GB', {hour12: true}).replace(',', '');
-        };
-        const formattedDeliveryTime = formatDateTime(cementBillInfo.deliveryTime);
+        // Format deliveryTime using moment
+        const formattedDeliveryTime = moment(cementBillInfo.deliveryTime).unix();
         const cementBillData = {
             ...cementBillInfo,
             deliveryTime: formattedDeliveryTime, // Update deliveryTime format
@@ -131,21 +129,30 @@ function CementBill() {
     }
 
     useEffect(() => {
-        // تحديث الوقت الحالي بالتنسيق المطلوب
         const updateCurrentDateTime = () => {
-            const now = new Date();
-            const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-                .toISOString()
-                .slice(0, 16); // استخدم التنسيق المناسب لحقل datetime-local
-            setCurrentDateTime(localDateTime);
+            const now = moment().format('YYYY-MM-DDTHH:mm'); 
+            setCurrentDateTime(now);
         };
 
-        updateCurrentDateTime(); // تحديث الوقت الحالي عند تحميل الصفحة
+        updateCurrentDateTime();
+        const interval = setInterval(updateCurrentDateTime, 60000); // Update every 1 minute
 
-        const interval = setInterval(updateCurrentDateTime, 60000); // تحديث كل دقيقة
-
-        return () => clearInterval(interval); // تنظيف الـ interval عند الخروج
+        return () => clearInterval(interval); // Clear interval on unmount  
     }, []);
+
+    // Warning on page reload or leave 
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            const message = 'Are you sure you want to leave?';
+            event.returnValue = message; // Standard for most browsers
+        };  
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);  
 
     return(
         <section className={styles.cementBillBody}>

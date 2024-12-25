@@ -6,9 +6,13 @@ import styles from './PendingOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
 import OrderFilter from '../../../../components/orderFilter/OrderFilter';
+import moment from 'moment';
 
 function PendingOrders() {
     const [filteredOrders, setFilteredOrders] = useState([]);
+    const [showRejectModal, setShowRejectModal] = useState(false);  // لعرض صندوق النص
+    const [rejectReason, setRejectReason] = useState('');  // لتخزين السبب المدخل
+    const [currentOrderId, setCurrentOrderId] = useState(null);  // لتخزين id الطلب الحالي
 
     const navigate = useNavigate();
 
@@ -55,9 +59,14 @@ function PendingOrders() {
 
     const orderRejected = async (id) => {
         try{
+            if (!rejectReason) {
+                handleError('Please provide a reason for rejection');
+                return;
+            }
             const data = {
-                "id": id,
-                "status": "rejected"
+                "id": currentOrderId,
+                "status": "rejected",
+                "rejectReason": rejectReason
             }
             const url = 'http://localhost:8080/auth/supplier/update-order-status';
             const response = await fetch(url, {
@@ -80,8 +89,9 @@ function PendingOrders() {
             }
             console.log(result);
             fetchOrderData();
+            setShowRejectModal(false);
         } catch (error) {
-            handleError('Error dropping order:', error);
+            handleError('Error dropping order:'+ error);
         }
     }
 
@@ -173,7 +183,7 @@ function PendingOrders() {
                                     <strong>Recipient's phone:</strong> {order.recipientPhone} 
                                 </p>
                                 <p className={styles.pendingOrdersData}>
-                                    <strong>Delivery time:</strong> {order.deliveryTime} 
+                                    <strong>Delivery time:</strong> {moment(order.deliveryTime * 1000).format('D/MM/YYYY - h:mm a')}
                                 </p>
                                 <p className={styles.pendingOrdersData}>
                                     <strong>Location:</strong> {order.location} 
@@ -190,19 +200,33 @@ function PendingOrders() {
                                     <strong>Cement price:</strong> {order.price} JD
                                 </p>
                                 <p className={styles.pendingOrdersData}>
-                                    <strong>Order request time:</strong> {order.orderRequestTime} 
+                                    <strong>Order request time:</strong> {moment(order.orderRequestTime * 1000).format('D/MM/YYYY - h:mm a')}
                                 </p>
                             </div>
                             <div className={styles.pendingOrdersDivButton}>
                                 <button className={styles.pendingOrdersButtonAccept} onClick={() => orderAccepted(order.id)}>Accept</button>
-                                <button className={styles.pendingOrdersButtonReject} onClick={() => orderRejected(order.id)}>Reject</button>
+                                <button className={styles.pendingOrdersButtonReject} onClick={() => { setShowRejectModal(true); setCurrentOrderId(order.id); }}>Reject</button>
                             </div>
+                            {showRejectModal && (
+                                <div className={styles.rejectModalDiv}>
+                                    <h3 className={styles.rejectModalH3}>Enter rejection reason</h3>
+                                    <textarea
+                                        className={styles.rejectModalTextarea}
+                                        value={rejectReason}
+                                        onChange={(e) => setRejectReason(e.target.value)}
+                                        placeholder="Enter reason for rejection"
+                                    />
+                                    <button className={styles.rejectModalButtonCancel} onClick={() => setShowRejectModal(false)}>Cancel</button>
+                                    <button className={styles.rejectModalButtonSubmit} onClick={orderRejected}>Submit</button>
+                                </div>
+                            )}
                         </div>
                     ))
                 ) : (
                     <p className={styles.pendingOrdersP}>No pending orders found</p>
                 )}
             </div>
+            {/* Modal for entering rejection reason */}
 
             <Footer 
                 two="Orders"

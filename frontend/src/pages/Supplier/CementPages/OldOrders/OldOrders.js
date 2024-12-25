@@ -6,6 +6,7 @@ import styles from './OldOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
 import OrderFilter from '../../../../components/orderFilter/OrderFilter';
+import moment from 'moment';
 
 function OldOrders() {
     const [filteredOrders, setFilteredOrders] = useState([]);
@@ -107,7 +108,7 @@ function OldOrders() {
                                     <strong>Recipient's phone:</strong> {order.recipientPhone} 
                                 </p>
                                 <p className={styles.oldOrdersData}>
-                                    <strong>Delivery time:</strong> {order.deliveryTime} 
+                                    <strong>Delivery time:</strong> {moment(order.deliveryTime * 1000).format('D/MM/YYYY - h:mm a')} 
                                 </p>
                                 <p className={styles.oldOrdersData}>
                                     <strong>Location:</strong> {order.location} 
@@ -124,9 +125,14 @@ function OldOrders() {
                                     <strong>Cement price:</strong> {order.price} JD
                                 </p>
                                 <p className={styles.oldOrdersData}>
-                                    <strong>Order request time:</strong> {order.orderRequestTime} 
+                                    <strong>Order request time:</strong> {moment(order.orderRequestTime * 1000).format('D/MM/YYYY - h:mm a')} 
                                 </p>
                             </div>
+                            {order.status === 'rejected' && (
+                                <p className={styles.oldOrdersData}>
+                                    <strong>Reason for rejection:</strong> {order.message} 
+                                </p>
+                            )}
                         </div>
                         ))
                     ) : (

@@ -8,7 +8,14 @@ env.config();
 const registration = async (req, res) => {
     try {
         const { companyName, email, companyID, password, companyPhone, commercialRegister } = req.body;
-        d:\A.L\مواد جامعة\Project\Project(L)\New Microsoft Word Document.docx
+        const checkCompany = await CompanyModel.findOne({
+            $or: [{ companyName }, { companyID }]
+        });
+
+        if (checkCompany) {
+            return res.status(406)
+                .json({ message: 'Company is already exist', success: false });
+        }
         
         const companyModel = new CompanyModel({ companyName, email, companyID, password, companyPhone, commercialRegister });
         companyModel.password = await bcrypt.hash(password, 10);

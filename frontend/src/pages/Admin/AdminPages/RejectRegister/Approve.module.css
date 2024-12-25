@@ -65,6 +65,7 @@ filter: saturate(0.2) opacity(0.5);
 -webkit-filter: saturate(0.2) opacity(0.5);
 cursor: not-allowed;
 } */.button24 {
+  transition: background-color 0.3s ease;
   background: #FF4742;
   border: 1px solid #FF4742;
   border-radius: 6px;

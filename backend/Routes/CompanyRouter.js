@@ -149,6 +149,20 @@ CompanyRouter.patch('/update-order-status', ensureAuthenticated, async (req, res
     }
 });
 
+// Delete order in pending
+CompanyRouter.delete('/order-delete/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        const id  = req.params.id;
+        const deleteOrder = await OrderModel.deleteOne({_id: id});
+        if (!deleteOrder) {
+            return res.status(404).json({ message: "Order not found", success: false });
+        }
+        res.status(200).json({ message: "", success: true });
+    }catch (error) {
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
+    }
+});
+
 // Get All Data in Collection Order
 CompanyRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
     try {
@@ -171,16 +185,14 @@ CompanyRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
         if (fromDate || toDate) {
             query.deliveryTime = {};
             if (fromDate) {
-                const fromDateTime = new Date(fromDate).setHours(0, 0, 0, 0);
-                query.deliveryTime.$gte = new Date(fromDateTime).toLocaleString('en-GB', {hour12: true}).replace(',', '');
+                query.deliveryTime.$gte = fromDate;
             }
             if (toDate) {
-                const toDateTime = new Date(toDate).setHours(23, 59, 59, 999);
-                query.deliveryTime.$lte = new Date(toDateTime).toLocaleString('en-GB', {hour12: true}).replace(',', '');
+                query.deliveryTime.$lte = toDate;
             }
         }
 
-        const dataOrders = await OrderModel.find(query).sort({ deliveryTime: -1 });
+        const dataOrders = await OrderModel.find(query).sort({ orderRequestTime: -1 });
         if (!dataOrders || dataOrders.length === 0) return res.json([]);;
         
         // جلب بيانات المورد والشركة من قاعدة البيانات
@@ -201,7 +213,8 @@ CompanyRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
                         deliveryTime: item.deliveryTime,
                         orderRequestTime: item.orderRequestTime,
                         status: item.status,
-                        price: item.price ,
+                        price: item.price,
+                        message: item.message,
                         cementQuantity: item.cementQuantity,
                         cementNumberBags: item.cementNumberBags,
                         supplierName: supplier.supplierName,

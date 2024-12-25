@@ -80,8 +80,8 @@ SupplierRouter.patch("/approve/:id", async (req, res) => {
 // Define a route to handle PATCH requests for updating a cement order
 SupplierRouter.patch('/update-order-status', ensureAuthenticated, async (req, res) => {
     try {
-        const { id, status } = req.body;
-        const updateCementOrder = await OrderModel.findByIdAndUpdate(id, { status: status });
+        const { id, status, rejectReason } = req.body;
+        const updateCementOrder = await OrderModel.findByIdAndUpdate(id, { status: status, message: rejectReason });
         if (!updateCementOrder) {
             return res.status(404).json({ message: "Order not found", success: false });
         }
@@ -121,16 +121,14 @@ SupplierRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
         if (fromDate || toDate) {
             query.deliveryTime = {};
             if (fromDate) {
-                const fromDateTime = new Date(fromDate).setHours(0, 0, 0, 0);
-                query.deliveryTime.$gte = new Date(fromDateTime).toLocaleString('en-GB', {hour12: true}).replace(',', '');
+                query.deliveryTime.$gte = fromDate;
             }
             if (toDate) {
-                const toDateTime = new Date(toDate).setHours(23, 59, 59, 999);
-                query.deliveryTime.$lte = new Date(toDateTime).toLocaleString('en-GB', {hour12: true}).replace(',', '');
+                query.deliveryTime.$lte = toDate;
             }
         }
 
-        const dataCementOrders = await OrderModel.find(query).sort({ deliveryTime: -1 });
+        const dataCementOrders = await OrderModel.find(query).sort({ orderRequestTime: -1 });
         if (!dataCementOrders || dataCementOrders.length === 0) return res.json([]);
         
         // جلب بيانات المورد والشركة من قاعدة البيانات
@@ -151,6 +149,7 @@ SupplierRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
                 orderRequestTime: item.orderRequestTime,
                 status: item.status,
                 price: item.price ,
+                message: item.message,
                 cementQuantity: item.cementQuantity,
                 cementNumberBags: item.cementNumberBags,
                 supplierName: dataSupplier.supplierName,
@@ -166,7 +165,7 @@ SupplierRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
 });
 
 // Define a route to handle PATCH requests for updating a cement price
-SupplierRouter.patch('/update-cement-price', ensureAuthenticated, async (req, res) => {
+SupplierRouter.patch('/update-price', ensureAuthenticated, async (req, res) => {
     try {
         const id = jwt.decode(req.headers.authorization)._id;
         const { price } = req.body;

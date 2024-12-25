@@ -46,8 +46,8 @@
     text-align: center;
 }
 
-.pendingOrdersButton{
-    background-color: red;
+.pendingOrdersButtonDeleted{
+    background-color: #C40C0C;
     width: 50%;
     border: none;
     font-size: 20px;
@@ -56,10 +56,12 @@
     padding: 10px;
     margin: 10px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+
 }
 
-.pendingOrdersButton:hover{
-    background-color: #aa0000;
+.pendingOrdersButtonDeleted:hover{
+    background-color: #ff0000fa;
 }
 
 .pendingOrdersP{

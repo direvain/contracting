@@ -6,6 +6,7 @@ import styles from './PendingOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
 import OrderFilter from '../../../../components/orderFilter/OrderFilter';
+import moment from 'moment';
 
 function PendingOrders() {
     const [filteredOrders, setFilteredOrders] = useState([]);
@@ -19,6 +20,29 @@ function PendingOrders() {
         setTimeout(() => {
             navigate('/company-login');
         }, 500)
+    }    
+
+    const orderDelete= async (orderId) => {
+        try{
+            const response = await fetch(`http://localhost:8080/auth/company/order-delete/${orderId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                    'Content-Type': 'application/json'
+                },
+            });
+            const result = await response.json();
+            const { success, message } = result;
+            if (success) {
+                handleSuccess(message + "Order has been deleted");
+            } else if (!success) {
+                handleError(message);
+            }
+            console.log(result);
+            fetchOrderData();
+        } catch (error) {
+            handleError('Error dropping order:', error);
+        }
     }
 
     // Function to handle the filtering logic
@@ -38,24 +62,25 @@ function PendingOrders() {
         }
     };
 
-    useEffect(() => {
-        const fetchDataOrder = async () => {
-            try {
-                const statuses = "pending";
-                const url = `http://localhost:8080/auth/company/order-data?statuses=${statuses}`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': localStorage.getItem('token')
-                    }
-                });
-                const result = await response.json();
-                setFilteredOrders(result); // Initialize filteredOrders with all data
-            } catch (err) {
-                handleError(err);
-            }
+    const fetchOrderData = async () => {
+        try {
+            const statuses = "pending";
+            const url = `http://localhost:8080/auth/company/order-data?statuses=${statuses}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                }
+            });
+            const result = await response.json();
+            setFilteredOrders(result); // Initialize filteredOrders with all data
+        } catch (err) {
+            handleError(err);
         }
-        fetchDataOrder();
+    }
+
+    useEffect(() => {
+        fetchOrderData();
     }, []);
 
     return(
@@ -114,7 +139,7 @@ function PendingOrders() {
                                     <strong>Recipient's phone:</strong> {order.recipientPhone}
                                 </p>
                                 <p className={styles.pendingOrdersData}>
-                                    <strong>Delivery time:</strong> {order.deliveryTime}
+                                    <strong>Delivery time:</strong> {moment(order.deliveryTime * 1000).format('D/MM/YYYY - h:mm a')}
                                 </p>
                                 <p className={styles.pendingOrdersData}>
                                     <strong>Location:</strong> {order.location}
@@ -131,8 +156,11 @@ function PendingOrders() {
                                     <strong>Cement price:</strong> {order.price} JD
                                 </p>
                                 <p className={styles.pendingOrdersData}>
-                                    <strong>Order request time:</strong> {order.orderRequestTime}
+                                    <strong>Order request time:</strong> {moment(order.orderRequestTime * 1000).format('D/MM/YYYY - h:mm a')}
                                 </p>
+                            </div>
+                            <div className={styles.pendingOrdersDivButton}>
+                                <button className={styles.pendingOrdersButtonDeleted} onClick={() => orderDelete(order.id)}>Delete</button>
                             </div>
                         </div>
                     ))

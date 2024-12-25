@@ -20,11 +20,11 @@ const OrderSchema = new mongoose.Schema({
         required:true
     },
     deliveryTime:{
-        type:String,
+        type: Number,
         required:true
     },
     orderRequestTime:{
-        type:String,
+        type: Number,
         required:true
     },
     status: {
@@ -34,6 +34,10 @@ const OrderSchema = new mongoose.Schema({
     price: {
         type: String,
         required:true
+    },
+    message:{
+        type:String,
+        default: ''
     },
     // Special fields in cement
     cementQuantity:{

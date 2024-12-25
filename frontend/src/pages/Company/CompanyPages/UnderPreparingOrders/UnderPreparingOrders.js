@@ -6,6 +6,7 @@ import styles from './UnderPreparingOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
 import OrderFilter from '../../../../components/orderFilter/OrderFilter';
+import moment from 'moment';
 
 function UnderPreparingOrders() {
     const [filteredOrders, setFilteredOrders] = useState([]);
@@ -148,7 +149,7 @@ function UnderPreparingOrders() {
                                     <strong>Recipient's phone:</strong> {order.recipientPhone} 
                                 </p>
                                 <p className={styles.underPreparingOrdersData}>
-                                    <strong>Delivery time:</strong> {order.deliveryTime} 
+                                    <strong>Delivery time:</strong> {moment(order.deliveryTime * 1000).format('D/MM/YYYY - h:mm a')} 
                                 </p>
                                 <p className={styles.underPreparingOrdersData}>
                                     <strong>Location:</strong> {order.location} 
@@ -165,12 +166,12 @@ function UnderPreparingOrders() {
                                     <strong>Cement price:</strong> {order.price} JD
                                 </p>
                                 <p className={styles.underPreparingOrdersData}>
-                                    <strong>Order request time:</strong> {order.orderRequestTime} 
+                                    <strong>Order request time:</strong> {moment(order.orderRequestTime * 1000).format('D/MM/YYYY - h:mm a')} 
                                 </p>
                             </div>
                             {order.status === 'completed' && (
-                                <div className={styles.pendingOrdersDivButton}>
-                                    <button className={styles.pendingOrdersButtonDelivered} onClick={() => orderDelivered(order.id)}>Delivered</button>
+                                <div className={styles.underPreparingOrdersDivButton}>
+                                    <button className={styles.underPreparingOrdersButtonDelivered} onClick={() => orderDelivered(order.id)}>Delivered</button>
                                 </div>
                             )}
                         </div>

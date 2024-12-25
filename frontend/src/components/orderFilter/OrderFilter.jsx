@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { handleError } from '../../utils/utils';
 import styles from './OrderFilter.module.css';
+import moment from 'moment';
 
 const OrderFilter = (props) => {
-    const [dataSupplier, setDataSupplier] = useState([]);
+    const [dataSuppliers, setdataSuppliers] = useState([]);
+    const [supplierTypes, setSupplierTypes] = useState([]);
     const [type, setType] = useState('');
     const [supplierId, setSupplier] = useState('');
     const [fromDate, setFromDate] = useState('');
@@ -16,7 +18,7 @@ const OrderFilter = (props) => {
     };
 
     useEffect(() => {
-        const fetchDataSupplier = async () => {
+        const fetchdataSuppliers = async () => {
             try {
                 const supplierProducts= "cement,concrete"
                 const url = `http://localhost:8080/auth/company/data-supplier?supplierProducts=${supplierProducts}`;
@@ -27,18 +29,23 @@ const OrderFilter = (props) => {
                 };
                 const response = await fetch(url, headers);
                 const result = await response.json();
-                setDataSupplier(result); 
+                setdataSuppliers(result); 
+                setSupplierTypes([...new Set(result.map((supplier)=> {
+                    return supplier.type
+                }))]); 
             } catch (err) {
                 handleError(err);
             }
         };
-        fetchDataSupplier();
+        fetchdataSuppliers();
     }, []);
 
     const submitFilter = async (e) => {
         e.preventDefault();
         try{
-            await props.onFilter({ type, supplierId, fromDate, toDate, selectedStatus });
+            const unixFromDate = fromDate && moment(fromDate).isValid() ? moment(fromDate).unix() : '';
+            const unixToDate = toDate && moment(toDate).isValid() ? moment(toDate).unix() : '';
+            await props.onFilter({ type, supplierId, fromDate: unixFromDate, toDate: unixToDate, selectedStatus });
         } catch (err) {
             handleError(err);
         }
@@ -67,9 +74,9 @@ const OrderFilter = (props) => {
                                     value={type}
                                 >
                                     <option value="">All</option>
-                                    {dataSupplier.map((supplier, index) => (
-                                        <option key={index} value={supplier.type}>
-                                            {supplier.type}
+                                    {supplierTypes.map((type, index) => (
+                                        <option key={index} value={type}>
+                                            {type}
                                         </option>
                                     ))}
                                 </select>
@@ -82,7 +89,7 @@ const OrderFilter = (props) => {
                                     value={supplierId}
                                 >
                                     <option value="">All</option>
-                                    {dataSupplier.map((supplier, index) => (
+                                    {dataSuppliers.map((supplier, index) => (
                                         <option key={index} value={supplier.supplierId}>
                                             {supplier.supplierName}
                                         </option>
@@ -109,7 +116,7 @@ const OrderFilter = (props) => {
                         </label>
                     )}
                     <label className={styles.orderFilterLabel}>
-                        From Date:
+                        Delivery Date From:
                         <input
                             className={styles.orderFilterInput}
                             type="date"
@@ -119,7 +126,7 @@ const OrderFilter = (props) => {
                         />
                     </label>
                     <label className={styles.orderFilterLabel}>
-                        To Date:
+                        Delivery Date To:
                         <input
                             className={styles.orderFilterInput}
                             type="date"

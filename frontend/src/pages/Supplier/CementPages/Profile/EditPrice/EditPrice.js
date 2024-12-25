@@ -62,7 +62,7 @@ function EditPrice() {
             }
     
             try {
-                const url = `http://localhost:8080/auth/supplier/update-cement-price`;
+                const url = `http://localhost:8080/auth/supplier/update-price`;
                 const response = await fetch(url, {
                     method: "PATCH",
                     headers: {

@@ -35,6 +35,8 @@
     border-radius: 5px;
     padding: 8px 12px; 
     cursor: pointer;
+    transition: background-color 0.3s ease;
+
 }
 
 .profileEditPriceButton:hover {
@@ -93,6 +95,8 @@
     padding: 10px;
     cursor: pointer;
     margin: 10px 0;
+    transition: background-color 0.3s ease;
+
 }
 
 .profileButton:hover {

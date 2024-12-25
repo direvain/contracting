@@ -50,11 +50,11 @@
     height: 38.9vh;
 }
 
-.pendingOrdersDivButton{
+.underPreparingOrdersDivButton{
     text-align: center;
 }
 
-.pendingOrdersButtonDelivered{
+.underPreparingOrdersButtonDelivered{
     background-color: #059212;
     width: 25%;
     border: none;
@@ -64,9 +64,10 @@
     padding: 10px;
     margin: 10px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.pendingOrdersButtonDelivered:hover{
+.underPreparingOrdersButtonDelivered:hover{
     background-color: #01c514;
 }
 
