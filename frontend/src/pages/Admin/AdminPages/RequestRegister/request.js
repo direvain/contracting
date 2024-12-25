@@ -136,7 +136,7 @@ const handleLogout = (e) =>
                                     <strong></strong> 
                                     )
                                 }
-                                <p><strong>Commercial register:</strong> {JSON.stringify(field.commercialRegister)}</p>
+                                <p><strong>Commercial register:</strong> <a href={JSON.stringify(field.commercialRegister)}>view PDF</a> </p>                                
 
                                 <button
                                     className={styles.pendingButtonAccept}

@@ -65,7 +65,7 @@ const handleLogout = (e) =>
             });
     
             if (response.ok) {
-                setRejected(deleteUser => deleteUser.filter(user => user._id !== Id));
+                setRejected(deleteUser => deleteUser.filter(user => user.Id !== Id));
                 handleSuccess('User successfully dropped'); // Show success message
             } else {
                 console.error('Failed to delete user:', response.statusText);
@@ -79,8 +79,7 @@ const handleLogout = (e) =>
 
     return (
         <div>
-     <ToastContainer />
-
+            <ToastContainer />
             <NavBar
                 three="Approved"
                 pathThree="/admin/home/approve-order"
@@ -96,7 +95,7 @@ const handleLogout = (e) =>
                 logout={handleLogout}
             />
 
-<h2 className={styles.List}>Pending Registration:</h2>
+            <h2 className={styles.List}>Rejcted Registration:</h2>
             <div className={styles.profileContainer}>   
             {(() => 
             {
@@ -118,8 +117,8 @@ const handleLogout = (e) =>
                                     <strong></strong> 
                                     )
                                 }
-                                <p><strong>Commercial register:</strong> {JSON.stringify(field.commercialRegister)}</p>
-                                <p><strong>Admin email:</strong> {field.AdminEmail} </p>
+                            <p><strong>Commercial register:</strong> <a href={JSON.stringify(field.commercialRegister)}>view PDF</a> </p>                                
+                            <p><strong>Admin email:</strong> {field.AdminEmail} </p>
                                 <button
                                     className={styles.pendingButtonDrop}
                                     onClick={() => dropUser(field.Id)}

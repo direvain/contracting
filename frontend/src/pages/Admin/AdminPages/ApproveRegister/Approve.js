@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from './Approve.module.css';
 import NavBar from '../../../../components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
@@ -9,19 +11,15 @@ function ApproveRegister()
     const navigate = useNavigate();
     const [companies, setCompanies] = useState([]); // Initialize as an empty array
     const [suppliers, setSuppliers] = useState([]); // Initialize as an empty array
-    const [mixedData, setMixedData] = useState([]); // Single array for mixed data
 
     useEffect(() => {
         const getData = async () => {
             try 
             {
-                const { supplierData, companyData } = await fetchdata();
+                const  supplierData = await fetchSuppliersdata();
+                const  companyData  = await fetchCompaniesData();
                 setSuppliers(supplierData || []); // Ensure fallback to an empty array if data is null/undefined
                 setCompanies(companyData || []); // Ensure fallback to an empty array if data is null/undefined
-                const combinedData = [...supplierData, ...companyData]; // Combine data
-                const shuffledData = combinedData.sort(() => -0.8456567867878946675 - 0.2); // Shuffle the array
-                setMixedData(shuffledData); // Set the mixed data to state
-                console.log(shuffledData)
             } 
             catch (error) 
             {
@@ -33,7 +31,9 @@ function ApproveRegister()
     }, []); // Runs once when the component mounts
 
     const handleLogout = (e) =>
-        {
+        {console.log("Suppliers Data:", suppliers);
+console.log("Companies Data:", companies);
+
             localStorage.removeItem('token');
             localStorage.removeItem('loggedInUser');
             localStorage.removeItem('role');
@@ -41,10 +41,27 @@ function ApproveRegister()
             setTimeout(() => 
             {
                 navigate('/admin');
-            }, 1000)
+            }, 500)
         };
-    
-        async function fetchdata() 
+        async function fetchCompaniesData()
+        {   
+            try
+            {
+                    const companyResponse = await fetch('http://localhost:8080/auth/company/companyData', 
+                    {
+                        method: 'GET',
+                        headers: { Authorization: localStorage.getItem('token') },
+                    });
+                    if (!companyResponse.ok)  {throw new Error('Failed to fetch company ');}
+                    const companyData  = await companyResponse.json();
+                    return companyData;
+            }catch (error)
+            {
+                console.error('Failed to fetch company data:', error);
+                return{ companyData:[]};// Return an empty array in case of error
+            }
+        };
+        async function fetchSuppliersdata() 
         {
             try {
                     const supplierResponse = await fetch('http://localhost:8080/auth/supplier/supplierData', 
@@ -52,25 +69,62 @@ function ApproveRegister()
                         method: 'GET',
                         headers: { Authorization: localStorage.getItem('token') },
                     });
-                    const companyResponse = await fetch('http://localhost:8080/auth/company/companyData', 
-                    {
-                        method: 'GET',
-                        headers: { Authorization: localStorage.getItem('token') },
-                    });
-                    if (!supplierResponse.ok) {throw new Error('Failed to fetch suppliers asd');}
-                    if (!companyResponse.ok)  {throw new Error('Failed to fetch suppliers asd');}
-                    const companyData  = await companyResponse.json();
+                    if (!supplierResponse.ok) {throw new Error('Failed to fetch suppliers ');}
                     const supplierData = await supplierResponse.json();        
-                    return { supplierData, companyData };
+                    return supplierData
                 } catch (error) 
                 {
                     console.error(error.message);
-                    return { supplierData: [], companyData: [] }; // Return an empty array in case of error
+                    return { supplierData: []} ;// Return an empty array in case of error
                 }
         };
-        
+        async function deleteCompany(companyId) 
+        {
+            try
+            {
+                const response = await fetch(`http://localhost:8080/auth/company/delete/${companyId}`,
+                    {
+                        method: 'DELETE',
+                        headers: { Authorization: localStorage.getItem('token') },
+                    });
+                    if (response.ok) {
+                        setCompanies(deleteCompany => deleteCompany.filter(company => company.companyID !== companyId));
+                        handleSuccess('Company deleted successfully '); // Show success message
+                    } else {
+                        console.error('Failed to delete company:', response.statusText);
+                    }
+            }catch(error)
+            {
+                console.error('Failed to delete company:', error);
+            }
+        };
+        async function deleteSupplier(supplierId) 
+        {
+            console.log(supplierId)
+            try
+            {
+                const response = await fetch(`http://localhost:8080/auth/supplier/delete/${supplierId}`,
+                    {
+                        method: 'DELETE',
+                        headers: { Authorization: localStorage.getItem('token') },
+                    });
+                    if (response.ok) {
+                        setSuppliers(deleteSupplier => deleteSupplier.filter(supplier => supplier.supplierID !== supplierId));
+                        handleSuccess('supplier deleted successfully '); // Show success message
+                    } else {
+                        console.error('Failed to delete supplier:', response.statusText);
+                    }
+            }catch(error)
+            {
+                console.error('Failed to delete supplier:', error);
+            }
+        };
+
+    
     return (
     <div>
+        <ToastContainer />
+        
         <NavBar
             three="Approved"
             pathThree="/admin/home/approve-order"
@@ -82,11 +136,11 @@ function ApproveRegister()
 
             six="Add Admin"
             pathSix="/admin/home/Add-admin"
-
             logout={handleLogout}
         />
         <h2 className={styles.List}>Suppliers Approved List:</h2>
             <div className={styles.profileContainer}>
+
                 {suppliers.length > 0 ? (
                     suppliers.map((field) => 
                         (
@@ -110,11 +164,19 @@ function ApproveRegister()
                                     <strong>Supplier item price:</strong> {field.price} JD
                                 </p>
                                 <p>
-                                    <strong>Commercial register:</strong>  {JSON.stringify(field.commercialRegister)} 
+                                    <strong>Commercial register:</strong>  <a href={JSON.stringify(field.commercialRegister)}>view PDF</a> 
+                                    
                                 </p>
                                 <p>
                                     <strong>Admin email:</strong> {field.adminId} 
                                 </p>
+                                <button
+                                    className={styles.pendingButtonDrop}
+                                    
+                                    onClick={() =>deleteSupplier(field.supplierID)}
+                                >
+                                    Delete Supplier
+                                </button>
                             </div>
                         ))
                 ) : (
@@ -123,33 +185,40 @@ function ApproveRegister()
             </div>
         <h2 className={styles.List}>Companies Approved List:</h2>
         <div className={styles.profileContainer}>
-            {companies.length > 0 ? (
-                companies.map((field) => 
-                    (
-                        <div className={styles.profileRow} key={field._id}>
-                            <p>
-                                <strong>Company name:</strong> {field.companyName} 
-                            </p>
-                            <p>
-                                <strong>Company email:</strong> {field.email} 
-                            </p>
-                            <p>
-                                <strong>Company ID:</strong> {field.companyID} 
-                            </p>
-                            <p>
-                                <strong>Company phone:</strong> {field.companyPhone} 
-                            </p>
-                            <p>
-                                <strong>Commercial register:</strong>  {JSON.stringify(field.commercialRegister)} 
-                            </p>
-                            <p>
-                                <strong>Admin email:</strong> {field.adminId} 
-                            </p>
-                        </div>
-                    ))
-            ) : (
-                <p>No companies found.</p>
-            )}
+            {console.log(companies)}
+                {companies.length > 0 ? (
+                    companies.map((field) => 
+                        (
+                            <div className={styles.profileRow} key={field._id}>
+                                <p>
+                                    <strong>Company name:</strong> {field.companyName} 
+                                </p>
+                                <p>
+                                    <strong>Company email:</strong> {field.email} 
+                                </p>
+                                <p>
+                                    <strong>Company ID:</strong> {field.companyID} 
+                                </p>
+                                <p>
+                                    <strong>Company phone:</strong> {field.companyPhone} 
+                                </p>
+                                <p>
+                                    <strong>Commercial register:</strong> <a href={JSON.stringify(field.commercialRegister)}>view PDF</a> 
+                                </p>
+                                <p>
+                                    <strong>Admin email:</strong> {field.adminId} 
+                                </p>
+                                <button
+                                        className={styles.pendingButtonDrop}
+                                        onClick={() => deleteCompany(field.companyID)}
+                                    >
+                                        Delete Company
+                                    </button>
+                            </div>
+                        ))
+                ) : (
+                    <p>No companies found.</p>
+                )}
         </div>
     </div>
     );

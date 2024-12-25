@@ -45,6 +45,20 @@ CompanyRouter.get('/companyData', ensureAuthenticated, async (req, res) => {
     }
 }); 
 
+// delete company from collection 
+CompanyRouter.delete("/delete/:id", ensureAuthenticated, async (req, res) => {
+    try 
+        {
+            const companyId = (req.params.id); 
+            await CompanyModel.deleteOne({ companyID: companyId });
+            res.status(200).json({ message: "company  deleted successfully" });
+        }
+            catch (error) 
+        {
+                res.status(500).json({ error: "Failed to delete company" });
+        }
+}); 
+
 // ----------------------------- Concrete -----------------------------
 
 

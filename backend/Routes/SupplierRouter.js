@@ -37,6 +37,22 @@ SupplierRouter.get('/supplierData', ensureAuthenticated, async (req, res) => {
         res.status(500).json({ error: "Failed to fetch data" });
     }
 });
+
+// delete supplier from collection 
+SupplierRouter.delete("/delete/:id", ensureAuthenticated, async (req, res) => {
+    try 
+        {
+            const supplierId = (req.params.id); 
+            console.log(supplierId)
+            await SupplierModel.deleteOne({ supplierID: supplierId });
+            res.status(200).json({ message: "supplier  deleted successfully" });
+        }
+            catch (error) 
+        {
+                res.status(500).json({ error: "Failed to delete supplier" });
+        }
+}); 
+
 // ----------------------------- Concrete -----------------------------
 
 

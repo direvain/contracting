@@ -160,7 +160,7 @@ RegistrationRouter.delete("/delete/:id", ensureAuthenticated, async (req, res) =
     try 
         {
             const userId = (req.params.id); 
-            await RegisterModel.deleteOne({ _id: userId });
+            await RegisterModel.deleteOne({ Id: userId });
             res.status(200).json({ message: "user  deleted successfully" });
         }
             catch (error) 
