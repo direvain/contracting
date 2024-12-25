@@ -9,20 +9,18 @@ env.config();
 const registration = async (req, res) => {
     try {
         const { companyName, email, companyID, password, companyPhone, commercialRegister } = req.body;
-        const checkCompanyName = await CompanyModel.findOne({ companyName });
-        if (checkCompanyName) {
-            return res.status(409)
-                .json({ message: 'Company name is already exist', success: false });
+        const checkCompany = await CompanyModel.findOne({
+            $or: [{ companyName }, { companyID }]
+        });
+
+        if (checkCompany) {
+            return res.status(406)
+                .json({ message: 'Company is already exist', success: false });
         }
-        // const companyModelRegistertion = new CompanyModelRegister({ companyName, email, username, password, companyPhone, commercialRegister }); // const and password and save change it for what u want adn the new is name for the collection so change it 
-        const checkCompanyID = await CompanyModel.findOne({ companyID });
-        if (checkCompanyID) {
-            return res.status(409)
-                .json({ message: 'CompanyID is already exist', success: false });
-        }
-        const companyModel = new CompanyModel({ companyName, email, companyID, password, companyPhone, commercialRegister });
-        companyModel.password = await bcrypt.hash(password, 10);
-        await companyModel.save();
+        const newUser = new RegisterModel({ companyName, email, username, password, companyPhone, commercialRegister, role }); // const and password and save change it for what u want adn the new is name for the collection so change it 
+
+        newUser.password = await bcrypt.hash(password, 10);
+        await newUser.save();
         res.status(201)
             .json({
                 message: "Registration successfully",
@@ -74,9 +72,3 @@ const login = async (req, res) => {
 }
 
 export { registration, login };
-
-
-
-
-
-// (companyName && status $_in (pending || approved)) || (companyId && status $_in (pending || approved)) ---> not registration
