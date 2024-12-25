@@ -1,7 +1,6 @@
 import bodyParser from "body-parser";
 import { registration, login } from "../Controllers/CompanyController.js";
 import { registrationValidation, loginValidation } from "../Middlewares/CompanyValidation.js";
-import CompanyModelRegister from "../Models/registrationCompany.js"
 import CompanyModel from "../Models/Company.js"     
 import ensureAuthenticated from "../Middlewares/Auth.js"
 import express from "express";
@@ -18,7 +17,7 @@ const CompanyRouter = express.Router();
 CompanyRouter.post('/login', loginValidation, login);
 CompanyRouter.post('/registration', registrationValidation, registration);
 
-// ----------------------------- Admin -----------------------------
+
 // fetch register company data 
 CompanyRouter.get('/register', ensureAuthenticated, async (req, res) => {
     try {
@@ -30,26 +29,42 @@ CompanyRouter.get('/register', ensureAuthenticated, async (req, res) => {
 });
 
 // fetch company data
-CompanyRouter.get('/company-data', ensureAuthenticated, async (req, res) => {
+CompanyRouter.get('/companyData', ensureAuthenticated, async (req, res) => {
     try {
-        const companies = await CompanyModel.find(); // Fetch all documents
-        res.status(200).json([companies]); // Send them as array 
+        const companies = await CompanyModel.find({},
+        {  
+            _id:1,
+            companyName: 1,
+            email: 1,
+            companyID: 1,
+            companyPhone: 1,
+            commercialRegister: 1,
+            adminId: 1
+        }); 
+
+        if (companies.length === 0)
+        {
+            return res.status(404).json({ error: "No data found" });
+        }
+
+        res.json(companies);
+
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch data" });
     }
-});
+}); 
 
-// drop a company from collection "reject page's admin.js"
-CompanyRouter.delete("/:id", async (req, res) => {
+// delete company from collection 
+CompanyRouter.delete("/delete/:id", ensureAuthenticated, async (req, res) => {
     try 
         {
-            const ComapnyId = (req.params.id); 
-            await CompanyModelRegister.deleteOne({ _id: ComapnyId });
-            res.status(200).json({ message: "comapny  deleted successfully" });
+            const companyId = (req.params.id); 
+            await CompanyModel.deleteOne({ companyID: companyId });
+            res.status(200).json({ message: "company  deleted successfully" });
         }
             catch (error) 
         {
-                res.status(500).json({ error: "Failed to delete comapny" });
+                res.status(500).json({ error: "Failed to delete company" });
         }
 });
 
@@ -90,8 +105,12 @@ CompanyRouter.patch("/approve/:id", async (req, res) => {
         {
                 res.status(500).json({ error: `Failed to  approve Company` });
         }
+
+
     });
-    
+// ----------------------------- Concrete -----------------------------
+
+
 // ----------------------------- Cement -----------------------------
 // cement order
 CompanyRouter.post('/cement-order', ensureAuthenticated, cementOrder);

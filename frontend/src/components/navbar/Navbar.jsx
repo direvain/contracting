@@ -29,53 +29,41 @@ function Navbar(props) {
                 {/* The navbarCollapse class dynamically changes based on the isActive state */}
                 <div className={`${styles.navbarCollapse} ${isActive ? styles.active : ''}`}>
                     <ul className={styles.navbarNav}>
-                        {props.one && (
-                            <li className={styles.navItem}>
-                                <Link className={styles.navLink} to={props.pathOne}>{props.one}</Link>
-                            </li>
-                        )}
-                        {props.two && (
-                            <li className={`${styles.navItem} ${styles.dropdown}`}>
-                                <button
-                                    className={`${styles.navLink} ${styles.dropdownToggle}`}
-                                    aria-expanded={dropdownActive}
-                                    onClick={toggleDropdown}
-                                >
-                                    {props.two}
-                                </button>
-                                <ul className={`${styles.dropdownMenu} ${dropdownActive ? styles.show : ''}`}>
-                                    <li className={styles.dropdownItem}>
-                                        <Link className={styles.navLink} to={props.pathTwo1}>{props.two1}</Link>
-                                    </li>
-                                    <li className={styles.dropdownItem}>
-                                        <Link className={styles.navLink} to={props.pathTwo2}>{props.two2}</Link>
-                                    </li>
-                                    <li className={styles.dropdownItem}>
-                                        <Link className={styles.navLink} to={props.pathTwo3}>{props.two3}</Link>
-                                    </li>
-                                </ul>
-                            </li>
-                        )}
-                        {props.three && (
-                            <li className={styles.navItem}>
-                                <Link className={styles.navLink} to={props.pathThree}>{props.three}</Link>
-                            </li>
-                        )}
-                        {props.four && (
-                            <li className={styles.navItem}>
-                                <Link className={styles.navLink} to={props.pathFour}>{props.four}</Link>
-                            </li>
-                        )}
-                        {props.five && (
-                            <li className={styles.navItem}> 
-                                <Link className={styles.navLink} to={props.pathFive}>{props.five}</Link>
-                            </li>
-                        )}
-                        {props.logout && (
-                            <li className={styles.navItem}>
-                                <button className={`${styles.navLink} ${styles.logout}`} onClick={props.logout}>Logout</button>
-                            </li>
-                        )}
+                        <li className={styles.navItem} onClick={props.onClickOne} >
+                            <Link className={styles.navLink} to={props.pathOne}>{props.one}</Link>
+                        </li>
+                        <li className={`${styles.navItem} ${styles.dropdown}`}>
+                            <button
+                                className={`${styles.navLink} ${styles.dropdownToggle}`}
+                                aria-expanded={dropdownActive}
+                                onClick={toggleDropdown}
+                            >
+                                {props.two}
+                            </button>
+                            <ul className={`${styles.dropdownMenu} ${dropdownActive ? styles.show : ''}`} >
+                                <li className={styles.dropdownItem} onClick={props.onClickTwo1}>
+                                    <Link className={styles.navLink} to={props.pathTwo1}>{props.two1}</Link>
+                                </li>
+                                <li className={styles.dropdownItem} onClick={props.onClickTwo2}>
+                                    <Link className={styles.navLink} to={props.pathTwo2}>{props.two2}</Link>
+                                </li>
+                                <li className={styles.dropdownItem} onClick={props.onClickTwo3}>
+                                    <Link className={styles.navLink} to={props.pathTwo3}>{props.two3}</Link>
+                                </li>
+                            </ul>
+                        </li>
+                        <li className={styles.navItem} onClick={props.onClickThree}>
+                            <Link className={styles.navLink} to={props.pathThree}>{props.three}</Link>
+                        </li>
+                        <li className={styles.navItem} onClick={props.onClickFour}>
+                            <Link className={styles.navLink} to={props.pathFour}>{props.four}</Link>
+                        </li>
+                        <li className={styles.navItem} onClick={props.onClickFive}> 
+                            <Link className={styles.navLink} to={props.pathFive}>{props.five}</Link>
+                        </li>
+                        <li className={styles.navItem}>
+                            <button className={`${styles.navLink} ${styles.logout}`} onClick={props.logout}>Logout</button>
+                        </li>
                     </ul>
                 </div>
             </div>

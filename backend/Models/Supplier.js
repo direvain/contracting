@@ -39,9 +39,14 @@ const SupplierSchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'supplier',
+    },    
+    adminId: {
+        type: String,
+        default: 'admin'
     }
 });
 
 const SupplierModel = mongoose.model('suppliers', SupplierSchema);
+
 
 export default SupplierModel;

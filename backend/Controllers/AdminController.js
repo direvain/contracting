@@ -71,7 +71,7 @@ const register = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ message: "An error occurred", error: error.message, success: false });
-    }
+    }  
 };
 
 export { login, register };

@@ -78,13 +78,13 @@ function AddAdmin() {
             <NavBar
                 two="Pending"
                 two1="Request"
-                pathTwo1="/admin/request-order"
+                pathTwo1="/admin/home/request-order"
                 two2="Approve"
-                pathTwo2="/admin/approve-order"
+                pathTwo2="/admin/home/approve-order"
                 two3="Reject"
-                pathTwo3="/admin/reject-order"
+                pathTwo3="/admin/home/reject-order"
                 three="Add Admin"
-                pathThree="/admin/add-admin"
+                pathThree="/admin/home/Add-admin"
                 logout={handleLogout}
             />
             <section className={styles.adminBody}>

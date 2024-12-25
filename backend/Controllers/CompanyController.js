@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import CompanyModel from "../Models/Company.js";
+import CompanyModelRegister from "../Models/registrationCompany.js";
 import env from "dotenv";
 
 env.config();
@@ -8,15 +9,17 @@ env.config();
 const registration = async (req, res) => {
     try {
         const { companyName, email, companyID, password, companyPhone, commercialRegister } = req.body;
-        const checkCompany = await CompanyModel.findOne({
-            $or: [{ companyName }, { companyID }]
-        });
-
-        if (checkCompany) {
-            return res.status(406)
-                .json({ message: 'Company is already exist', success: false });
+        const checkCompanyName = await CompanyModel.findOne({ companyName });
+        if (checkCompanyName) {
+            return res.status(409)
+                .json({ message: 'Company name is already exist', success: false });
         }
-        
+        // const companyModelRegistertion = new CompanyModelRegister({ companyName, email, username, password, companyPhone, commercialRegister }); // const and password and save change it for what u want adn the new is name for the collection so change it 
+        const checkCompanyID = await CompanyModel.findOne({ companyID });
+        if (checkCompanyID) {
+            return res.status(409)
+                .json({ message: 'CompanyID is already exist', success: false });
+        }
         const companyModel = new CompanyModel({ companyName, email, companyID, password, companyPhone, commercialRegister });
         companyModel.password = await bcrypt.hash(password, 10);
         await companyModel.save();

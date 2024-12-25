@@ -3,28 +3,28 @@ import { useNavigate } from 'react-router-dom';
 import CompanyList from '../fetchData/register/CompanyList';
 import SupplierList from '../fetchData/register/SupplierList';
 import styles from './Approve.module.css';
-import NavBar from '../../../../components/navbar/Navbar';
+import NavBar from '../../../../Components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
 
 function RejectRegister() {
     const navigate = useNavigate();
-    const [companies, setCompanies] = useState([]); // Initialize as an empty array
-    const [suppliers, setSuppliers] = useState([]); // Initialize as an empty array
+    const [rejected, setRejected] = useState([]); // Initialize as an empty array
     useEffect(() => {
-        const getData = async () => {
-            try {
-                const companyData = await CompanyList(); // Fetch company data
-                setCompanies(companyData || []); // Ensure fallback to an empty array if data is null/undefined
-                const supplierData = await SupplierList(); // Fetch supplier data
-                setSuppliers(supplierData || []); // Ensure fallback to an empty array if data is null/undefined
-            } catch (error) {
-                console.error("Failed to fetch companies and suppliers:", error);
+        const getData = async () => 
+        {
+            try 
+            {
+                const rejectedData = await fetchdata(); // Fetch company data
+                setRejected(rejectedData || []); // Ensure fallback to an empty array if data is null/undefined
+            } 
+            catch (error) 
+            {
+                console.error("Failed to fetch rejected data :", error);
             }
         };
 
         getData();
     }, []); // Runs once when the component mounts
-
 const handleLogout = (e) =>
     {
         localStorage.removeItem('token');
@@ -35,113 +35,104 @@ const handleLogout = (e) =>
             navigate('/admin');
         }, 500)
     }
-    async function supplierDrop(supplierId) {
+    async function fetchdata()
+    {
+        try
+        {
+            const response = await fetch('http://localhost:8080/auth/register/fetchRegistrationData?status=rejected',
+            {
+                method:'GET',
+                headers: { Authorization: localStorage.getItem('token') }
+            });
+            const data = await response.json();
+            return data;
+        }
+        catch(err)
+        {
+            console.log(err.message);
+        }
+    }
+
+    async function dropUser(Id) {
+        // pop message for check about drop user
+        const confirmDrop = window.confirm('Are you sure you want to drop this user?');
+        if (!confirmDrop) return; // If the user clicks "Cancel", exit the function and API don't call
+    
         try {
-            const response = await fetch(`http://localhost:8080/auth/supplier/${supplierId}`, {
-                headers: { Authorization: localStorage.getItem('token') },
+            const response = await fetch(`http://localhost:8080/auth/register/delete/${Id}`, {
                 method: 'DELETE',
+                headers: { Authorization: localStorage.getItem('token') },
             });
     
             if (response.ok) {
-                // Update the suppliers state to remove the deleted supplier
-                setSuppliers(prevSuppliers => prevSuppliers.filter(supplier => supplier._id !== supplierId));
+                setRejected(deleteUser => deleteUser.filter(user => user.Id !== Id));
+                handleSuccess('User successfully dropped'); // Show success message
             } else {
-                console.error('Failed to delete supplier:', response.statusText);
+                console.error('Failed to delete user:', response.statusText);
             }
         } catch (err) {
             console.error(err);
         }
     }
 
-    async function CompanyDrop(companyId) {
-        try {
-            const response = await fetch(`http://localhost:8080/auth/company/${companyId}`, {
-                headers: { Authorization: localStorage.getItem('token') },
-                method: 'DELETE',
-            });
-    
-            if (response.ok) {
-                // Update the suppliers state to remove the deleted supplier
-                setCompanies(prevCompany => prevCompany.filter(company => company._id !== companyId));
-            } else {
-                console.error('Failed to delete company:', response.statusText);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    }
-/*  */
+
+
     return (
         <div>
+            <ToastContainer />
             <NavBar
                 two="Pending"
                 two1="Request"
-                pathTwo1="/admin/request-order"
+                pathTwo1="/admin/home/request-order"
                 two2="Approve"
-                pathTwo2="/admin/approve-order"
+                pathTwo2="/admin/home/approve-order"
                 two3="Reject"
-                pathTwo3="/admin/reject-order"
+                pathTwo3="/admin/home/reject-order"
                 three="Add Admin"
-                pathThree="/admin/add-admin"
+                pathThree="/admin/home/Add-admin"
                 logout={handleLogout}
             />
 
-            <h2 className={styles.List}>Companies List:</h2>
-            <div className={styles.profileContainer}>
-                {(() => {
-                    const filteredCompanies = companies.filter(company => company.state === "reject"); // Filter for rejected companies
-                    return filteredCompanies.length > 0 ? (
-                        filteredCompanies.map((company, index) => (
-                            <div className={styles.profileRow} key={index}>
-                                {Object.entries(company).map(([key, value]) =>
-                                    key !== "__v" && key !== "_id" && key !== "state" && key !== "role" &&
-                                    (
-                                        <div key={key}>
-                                            <strong>{key}:</strong> {value?.toString()}
-                                        </div>
-                                    )
-                                )}
-                                <button
-                                    className={styles.button24}
-                                    onClick={() => CompanyDrop(company._id)}
-                                >
-                                    Drop
-                                </button>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No rejected companies found.</p>
-                    );
-                })()}
-            </div>
+            <h2 className={styles.List}>Rejcted Registration:</h2>
+            <div className={styles.profileContainer}>   
+            {(() => 
+            {
+                const rejectedUsers = Array.isArray(rejected) ? rejected : [];
 
-            <h2 className={styles.List}>Supplier List:</h2>
-            <div className={styles.profileContainer}>
-                {(() => {
-                    const filteredSuppliers = suppliers.filter(supplier => supplier.state === "reject"); // Filter for rejected suppliers
-                    return filteredSuppliers.length > 0 ? (
-                        filteredSuppliers.map((supplier, index) => (
-                            <div className={styles.profileRow} key={index}>
-                                {Object.entries(supplier).map(([key, value]) =>
-                                    key !== "__v" && key !== "_id" && key !== "state" && key !== "role" && (
-                                        <div key={key}>
-                                            <strong>{key}:</strong> {value?.toString()}
-                                        </div>
+                const filteredData = rejectedUsers.length > 0 ? 
+                rejectedUsers.map((field) => 
+                {
+                    return (
+                            <div className={styles.profileRow} key={field._id}>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} name:</strong> {field.Name}</p>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} email:</strong> {field.email}</p>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} ID:</strong> {field.Id}</p>
+                                <p><strong>{field.role === "company" ? "Company" : "Supplier"} phone:</strong> {field.Phone}</p>
+                                {field.role === "supplier" ? 
+                                (
+                                    <p><strong>Supplier product:</strong> {field.supplierProduct}</p>
+                                ) : (
+                                    <strong></strong> 
                                     )
-                                )}
+                                }
+                            <p><strong>Commercial register:</strong> <a href={JSON.stringify(field.commercialRegister)}>view PDF</a> </p>                                
+                            <p><strong>Admin email:</strong> {field.AdminEmail} </p>
                                 <button
-                                    className={styles.button24}
-                                    onClick={() => supplierDrop(supplier._id)}
+                                    className={styles.pendingButtonDrop}
+                                    onClick={() => dropUser(field.Id)}
                                 >
                                     Drop
                                 </button>
                             </div>
-                        ))
-                    ) : (
-                        <p>No rejected suppliers found.</p>
                     );
-                })()}
-            </div>
+                
+                return null;
+            }) : 
+            <p>No Pending registrations found.</p>;
+
+        return filteredData;
+    })()}
+</div>
         </div>
 
     );
