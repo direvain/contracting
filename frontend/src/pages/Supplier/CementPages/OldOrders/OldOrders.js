@@ -130,7 +130,7 @@ function OldOrders() {
                             </div>
                             {order.status === 'rejected' && (
                                 <p className={styles.oldOrdersData}>
-                                    <strong>Reason for rejection:</strong> {order.message} 
+                                    <strong>Reason for rejection:</strong> {order.rejectionReason} 
                                 </p>
                             )}
                         </div>

@@ -7,6 +7,7 @@ import styles from './CementBill.module.css';
 import Navbar from '../../../../../components/navbar/Navbar';
 import Footer from '../../../../../components/footer/Footer';
 import moment from 'moment';
+import BackButtonHandler from '../../../../../components/ss/ss';
 
 function CementBill() {
 
@@ -140,6 +141,8 @@ function CementBill() {
         return () => clearInterval(interval); // Clear interval on unmount  
     }, []);
 
+    
+
     // Warning on page reload or leave 
     useEffect(() => {
         const handleBeforeUnload = (event) => {
@@ -175,6 +178,8 @@ function CementBill() {
                 logout={handleLogout}
             />
             
+            <BackButtonHandler />
+
             <div className={styles.cementBillContainer}>
                 <div className={styles.cementBillRow}>
                     <h1 className={styles.cementBillH1}>Cement Bill</h1>

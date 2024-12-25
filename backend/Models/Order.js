@@ -35,9 +35,8 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required:true
     },
-    message:{
-        type:String,
-        default: ''
+    rejectionReason:{
+        type:String
     },
     // Special fields in cement
     cementQuantity:{

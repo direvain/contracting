@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './Approve.module.css';
-import NavBar from '../../../../components/navbar/Navbar';
+import Navbar from '../../../../components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
 
 function ApproveRegister()
@@ -41,27 +41,102 @@ console.log("Companies Data:", companies);
             setTimeout(() => 
             {
                 navigate('/admin');
-            }, 1000)
+            }, 500)
         };
+        async function fetchCompaniesData()
+        {   
+            try
+            {
+                    const companyResponse = await fetch('http://localhost:8080/auth/company/companyData', 
+                    {
+                        method: 'GET',
+                        headers: { Authorization: localStorage.getItem('token') },
+                    });
+                    if (!companyResponse.ok)  {throw new Error('Failed to fetch company ');}
+                    const companyData  = await companyResponse.json();
+                    return companyData;
+            }catch (error)
+            {
+                console.error('Failed to fetch company data:', error);
+                return{ companyData:[]};// Return an empty array in case of error
+            }
+        };
+        async function fetchSuppliersdata() 
+        {
+            try {
+                    const supplierResponse = await fetch('http://localhost:8080/auth/supplier/supplierData', 
+                    {
+                        method: 'GET',
+                        headers: { Authorization: localStorage.getItem('token') },
+                    });
+                    if (!supplierResponse.ok) {throw new Error('Failed to fetch suppliers ');}
+                    const supplierData = await supplierResponse.json();        
+                    return supplierData
+                } catch (error) 
+                {
+                    console.error(error.message);
+                    return { supplierData: []} ;// Return an empty array in case of error
+                }
+        };
+        async function deleteCompany(companyId) 
+        {
+            try
+            {
+                const response = await fetch(`http://localhost:8080/auth/company/delete/${companyId}`,
+                    {
+                        method: 'DELETE',
+                        headers: { Authorization: localStorage.getItem('token') },
+                    });
+                    if (response.ok) {
+                        setCompanies(deleteCompany => deleteCompany.filter(company => company.companyID !== companyId));
+                        handleSuccess('Company deleted successfully '); // Show success message
+                    } else {
+                        console.error('Failed to delete company:', response.statusText);
+                    }
+            }catch(error)
+            {
+                console.error('Failed to delete company:', error);
+            }
+        };
+        async function deleteSupplier(supplierId) 
+        {
+            console.log(supplierId)
+            try
+            {
+                const response = await fetch(`http://localhost:8080/auth/supplier/delete/${supplierId}`,
+                    {
+                        method: 'DELETE',
+                        headers: { Authorization: localStorage.getItem('token') },
+                    });
+                    if (response.ok) {
+                        setSuppliers(deleteSupplier => deleteSupplier.filter(supplier => supplier.supplierID !== supplierId));
+                        handleSuccess('supplier deleted successfully '); // Show success message
+                    } else {
+                        console.error('Failed to delete supplier:', response.statusText);
+                    }
+            }catch(error)
+            {
+                console.error('Failed to delete supplier:', error);
+            }
+        };
+
     
-
-
     return (
     <div>
         <ToastContainer />
         
-        <NavBar
-        two="Pending"
-        two1="Request"
-        pathTwo1="/admin/home/request-order"
-        two2="Approve"
-        pathTwo2="/admin/home/approve-order"
-        two3="Reject"
-        pathTwo3="/admin/home/reject-order"
+        <Navbar
+            three="Approved"
+            pathThree="/admin/approve-order"
+            four="Rejected"
+            pathFour="/admin/reject-order"
 
-        three="Add Admin"
-        pathThree="/admin/home/Add-admin"
-        logout={handleLogout}
+            five="Pending"
+            pathFive="/admin/request-order"
+
+            six="Add Admin"
+            pathSix="/admin/Add-admin"
+            logout={handleLogout}
         />
         <h2 className={styles.List}>Suppliers Approved List:</h2>
             <div className={styles.profileContainer}>

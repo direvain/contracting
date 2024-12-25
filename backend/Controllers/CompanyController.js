@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import CompanyModel from "../Models/Company.js";
-import CompanyModelRegister from "../Models/registrationCompany.js";
+import RegisterModel from "../Models/UserRegistration.js";
 import env from "dotenv";
 
 env.config();

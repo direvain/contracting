@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CompanyList from '../fetchData/register/CompanyList';
-import SupplierList from '../fetchData/register/SupplierList';
-import styles from './Approve.module.css';
-import NavBar from '../../../../Components/navbar/Navbar';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import styles from './Reject.module.css';
+import Navbar from '../../../../components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
 
 function RejectRegister() {
@@ -80,16 +80,18 @@ const handleLogout = (e) =>
     return (
         <div>
             <ToastContainer />
-            <NavBar
-                two="Pending"
-                two1="Request"
-                pathTwo1="/admin/home/request-order"
-                two2="Approve"
-                pathTwo2="/admin/home/approve-order"
-                two3="Reject"
-                pathTwo3="/admin/home/reject-order"
-                three="Add Admin"
-                pathThree="/admin/home/Add-admin"
+            <Navbar
+                three="Approved"
+                pathThree="/admin/approve-order"
+                four="Rejected"
+                pathFour="/admin/reject-order"
+
+                five="Pending"
+                pathFive="/admin/request-order"
+
+                six="Add Admin"
+                pathSix="/admin/Add-admin"
+
                 logout={handleLogout}
             />
 

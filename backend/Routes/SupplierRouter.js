@@ -159,7 +159,7 @@ SupplierRouter.get('/order-data', ensureAuthenticated, async (req, res) => {
                 orderRequestTime: item.orderRequestTime,
                 status: item.status,
                 price: item.price ,
-                message: item.message,
+                rejectionReason: item.rejectionReason,
                 cementQuantity: item.cementQuantity,
                 cementNumberBags: item.cementNumberBags,
                 supplierName: dataSupplier.supplierName,

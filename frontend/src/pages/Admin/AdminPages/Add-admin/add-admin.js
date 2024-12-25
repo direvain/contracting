@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { handleSuccess, handleError } from '../../../../utils/utils';
 import styles from './add-admin.module.css';
-import NavBar from '../../../../components/navbar/Navbar';
+import Navbar from '../../../../components/navbar/Navbar';
 
 function AddAdmin() {
     const handleLogout = (e) => {
@@ -75,16 +75,16 @@ function AddAdmin() {
 
     return (
         <div>
-            <NavBar
+            <Navbar
                 two="Pending"
                 two1="Request"
-                pathTwo1="/admin/home/request-order"
+                pathTwo1="/admin/request-order"
                 two2="Approve"
-                pathTwo2="/admin/home/approve-order"
+                pathTwo2="/admin/approve-order"
                 two3="Reject"
-                pathTwo3="/admin/home/reject-order"
+                pathTwo3="/admin/reject-order"
                 three="Add Admin"
-                pathThree="/admin/home/Add-admin"
+                pathThree="/admin/Add-admin"
                 logout={handleLogout}
             />
             <section className={styles.adminBody}>
