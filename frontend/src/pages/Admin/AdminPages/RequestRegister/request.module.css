@@ -1,0 +1,69 @@
+.profileContainer {
+    display: flex;
+    flex-direction: column;  /* Ensure items are stacked vertically */
+    justify-content: center;
+    align-items: center;
+    min-height: 6vh;
+    gap: 20px;  /* Adds spacing between each profile */
+}
+
+.profileRow {
+    background-color: #ffffff9a;
+    padding: 20px 40px;  /* Adjusted padding for better spacing */
+    width: 80%;  /* Adjust width to make it more responsive */
+    max-width: 500px;  /* Set a max width for better control */
+    border-radius: 10px;
+    box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+    text-align: left;  /* Ensure text aligns properly */
+}
+
+.profileRow p {
+    font-size: 18px;
+    margin: 8px 0;  /* Adjusted margin for better spacing */
+}
+
+.profileRow a {
+    text-decoration: none;
+}
+
+.profileRow a:hover {
+    text-decoration: underline;
+}
+.List{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.pendingButtonReject{
+  background-color: #C40C0C;
+  width: 22%;
+  border: none;
+  font-size: 18px;
+  color: white;
+  border-radius: 5px;
+  padding: 8px;
+  margin: 8px;
+  cursor: pointer;
+}
+
+.pendingButtonReject:hover{
+  background-color: #ff0000fa;
+}
+
+.pendingButtonAccept{
+  background-color: #059212;
+  width: 22%;
+  border: none;
+  font-size: 18px;
+  color: white;
+  border-radius: 5px;
+  padding: 8px;
+  margin: 8px;
+  cursor: pointer;
+}
+
+.pendingButtonAccept:hover{
+  background-color: #01c514;
+}

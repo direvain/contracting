@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import SupplierModel from "../Models/Supplier.js";
+import RegisterModel from '../Models/UserRegistration.js';
+import SupplierModel from '../Models/Supplier.js'
 import env from "dotenv";
 
 env.config();
@@ -11,21 +12,24 @@ const registration = async (req, res) => {
     // console.log(req.body.commercialRegister);
     try {
         const { supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister } = req.body;
-        const checkSupplier = await SupplierModel.findOne({
-            $or: [{ supplierName }, { supplierID }]
-        });
-        
-        if (checkSupplier) {
+        const checkSupplierName = await SupplierModel.findOne({ supplierName });
+        if (checkSupplierName) {
             return res.status(409)
-                .json({ message: 'Supplier is already exist', success: false });
+                .json({ message: 'Supplier name is already exist', success: false });
         }
-        
+        const checkSupplierID = await SupplierModel.findOne({ supplierID });
+        if (checkSupplierID) {
+            return res.status(409)
+                .json({ message: 'SupplierID is already exist', success: false });
+        }
         // console.log("after: " + commercialRegister)
 
+        // const supplierModela = new SupplierModelRegister({ supplierName, email, username, supplierPhone, password, supplierProduct, commercialRegister });
         const supplierModel = new SupplierModel({ supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister });
         supplierModel.password = await bcrypt.hash(password, 10);
         // supplierModel.commercialRegister = Buffer.from(commercialRegister, 'base64').toString('utf8');
         
+
         await supplierModel.save();
         res.status(201)
             .json({

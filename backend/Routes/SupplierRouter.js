@@ -12,8 +12,6 @@ const SupplierRouter = express.Router();
 // Login & Registration
 SupplierRouter.post('/login', loginValidation, login);
 SupplierRouter.post('/registration', registrationValidation, registration);
-
-// ----------------------------- Admin -----------------------------
 // fetch register supplier data 
 SupplierRouter.get('/register', ensureAuthenticated, async (req, res) => {
     try {
@@ -23,14 +21,24 @@ SupplierRouter.get('/register', ensureAuthenticated, async (req, res) => {
         res.status(500).json({ error: "Failed to fetch data" });
     }
 });
+// fetch supplier data
+SupplierRouter.get('/supplierData', ensureAuthenticated, async (req, res) => {
+    try {
+        const suppliers = await SupplierModel.find(); // Fetch all documents
+        res.status(200).json([suppliers]); // Send them as array 
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch data" });
+    }
+});
 
-// drop a supplier from collection "reject page's admin.js"
-SupplierRouter.delete("/:id", async (req, res) => {
+// delete supplier from collection 
+SupplierRouter.delete("/delete/:id", ensureAuthenticated, async (req, res) => {
     try 
         {
-            const SupplierId = (req.params.id); 
-            await SupplierModelRegister.deleteOne({ _id: SupplierId });
-            res.status(200).json({ message: "Supplier deleted successfully" });
+            const supplierId = (req.params.id); 
+            console.log(supplierId)
+            await SupplierModel.deleteOne({ supplierID: supplierId });
+            res.status(200).json({ message: "supplier  deleted successfully" });
         }
             catch (error) 
         {
@@ -60,7 +68,6 @@ SupplierRouter.patch("/request/reject/:id", async (req, res) => {
 SupplierRouter.patch("/approve/:id", async (req, res) => {
     try 
         {
-            const adminId = jwt.decode(req.headers.authorization)._id;
             const SupplierId = req.params.id; 
             const SupplierData = await SupplierModelRegister.findById(SupplierId); // find the supplier by id
             // remove state from data "state" is a field in supplier collection  and ...dataWithoutState is name u give and this what will we use "
@@ -75,6 +82,9 @@ SupplierRouter.patch("/approve/:id", async (req, res) => {
                 res.status(500).json({ error: `Failed to  approve supplier` });
         }
 });
+
+// ----------------------------- Concrete -----------------------------
+
 
 // ----------------------------- Cement -----------------------------
 // Define a route to handle PATCH requests for updating a cement order

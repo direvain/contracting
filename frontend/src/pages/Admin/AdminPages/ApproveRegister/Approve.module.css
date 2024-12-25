@@ -36,7 +36,6 @@
 }
 
 .button24 {
-  transition: background-color 0.3s ease;
   background: #FF4742;
   border: 1px solid #FF4742;
   border-radius: 6px;
@@ -54,6 +53,7 @@
   padding: 8px 10px; /* Reduced padding */
   text-align: center;
   text-rendering: geometricprecision;
+  text-transform: none;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
@@ -89,6 +89,7 @@
   padding: 8px 10px; /* Reduced padding */
   text-align: center;
   text-rendering: geometricprecision;
+  text-transform: none;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
