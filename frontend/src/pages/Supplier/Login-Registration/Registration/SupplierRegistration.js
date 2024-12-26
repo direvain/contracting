@@ -154,8 +154,8 @@ function SupplierRegistration() {
                             onKeyPress={handleKeyPress}
                             type='supplierID'
                             name='supplierID'
-                            inputmode="numeric" 
-                            maxlength="9"
+                            inputMode="numeric" 
+                            maxLength="9"
                             placeholder='Enter your supplier ID ...'
                             value={registrationInfo.supplierID}
                         />
@@ -169,8 +169,8 @@ function SupplierRegistration() {
                             onBlur={(e) => handlePhoneValidation(e.target.value)}
                             type='tel'
                             name='supplierPhone'
-                            inputmode="numeric" 
-                            maxlength="10"
+                            inputMode="numeric" 
+                            maxLength="10"
                             placeholder='Enter your Supplier Phone...'
                             value={registrationInfo.supplierPhone}
                         />

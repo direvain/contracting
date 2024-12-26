@@ -20,11 +20,11 @@ const OrderSchema = new mongoose.Schema({
         required:true
     },
     deliveryTime:{
-        type:String,
+        type: Number,
         required:true
     },
     orderRequestTime:{
-        type:String,
+        type: Number,
         required:true
     },
     status: {
@@ -32,8 +32,11 @@ const OrderSchema = new mongoose.Schema({
         default: 'pending'
     },
     price: {
-        type:Number,
+        type: String,
         required:true
+    },
+    rejectionReason:{
+        type:String
     },
     // Special fields in cement
     cementQuantity:{

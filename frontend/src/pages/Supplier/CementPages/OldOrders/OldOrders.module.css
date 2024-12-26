@@ -25,9 +25,14 @@
     margin-bottom: 8px;
 }
 
-.oldOrdersSupplierName, .oldOrdersType{
+.oldOrdersSupplierName, .oldOrdersType, .oldOrdersStatus{
     font-size: 18pt;
     margin-top: 0;
+}
+
+.oldOrdersSupplierName{
+    text-align: center;
+    margin-bottom: 15px;    
 }
 
 .oldOrdersH2 {

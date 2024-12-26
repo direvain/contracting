@@ -9,8 +9,7 @@
 }
 
 /* Container Styles */
-.companyRegistrationContainer 
-{
+.companyRegistrationContainer {
     background-color: rgba(255, 255, 255, 0.6);
     padding: 32px 48px;
     border-radius: 10px;
@@ -70,7 +69,7 @@
     padding: 10px;
     cursor: pointer;
     margin: 10px 0;
-    text-transform: uppercase;
+    transition: background-color 0.3s ease;
 }
 
 .companyRegistrationButton:hover {

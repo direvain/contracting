@@ -20,6 +20,8 @@ app.use("/auth", AdminRouter);
 app.use("/auth/register", RegistrationRouter);
 app.use("/auth/supplier", SupplierRouter);
 app.use("/auth/company", CompanyRouter);
+
+
 app.listen(port, () => {
     console.log(`Server is running on ${port}`);
 });

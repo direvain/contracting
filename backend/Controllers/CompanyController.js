@@ -8,7 +8,7 @@ env.config();
 
 const registration = async (req, res) => {
     try {
-        const { companyName, email, companyID, password, companyPhone, commercialRegister, role } = req.body;
+        const { companyName, email, companyID, password, companyPhone, commercialRegister } = req.body;
         const checkCompany = await CompanyModel.findOne({
             $or: [{ companyName }, { companyID }]
         });

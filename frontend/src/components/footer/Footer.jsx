@@ -17,39 +17,48 @@ function Footer(props) {
                 </div>
                 <div className={styles.footerCollapse}>
                     <ul className={styles.itemList}>
-                        <li className={styles.item}>
-                            <Link className={styles.itemLink} to={props.pathOne}>{props.one}</Link>
-                        </li>
-                        <li className={`${styles.item} ${styles.dropdown}`}>
-                            <button
-                                className={`${styles.itemLink} ${styles.dropdownToggle}`}
-                                aria-expanded={dropdownActive}
-                                onClick={toggleDropdown}
-                            >
-                                {props.two}
-                            </button>
-                            <ul className={`${styles.dropdownMenu} ${dropdownActive ? styles.show : ''}`}>
-                                <li className={styles.dropdownItem}>
-                                    <Link className={styles.itemLink} to={props.pathTwo1}>{props.two1}</Link>
-                                </li>
-                                <li className={styles.dropdownItem}>
-                                    <Link className={styles.itemLink} to={props.pathTwo2}>{props.two2}</Link>
-                                </li>
-                                <li className={styles.dropdownItem}>
-                                    <Link className={styles.itemLink} to={props.pathTwo3}>{props.two3}</Link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li className={styles.item}>
-            
-                            <Link className={styles.itemLink} to={props.pathThree}>{props.three}</Link>
-                        </li>
-                        <li className={styles.item}>
-                            <Link className={styles.itemLink} to={props.pathFour}>{props.four}</Link>
-                        </li>
-                        <li className={styles.item}>
-                            <Link className={styles.itemLink} to={props.pathFive}>{props.five}</Link>
-                        </li>
+                        {props.one && (
+                            <li className={styles.item}>
+                                <Link className={styles.itemLink} to={props.pathOne}>{props.one}</Link>
+                            </li>
+                        )}
+                        {props.two && (
+                            <li className={`${styles.item} ${styles.dropdown}`}>
+                                <button
+                                    className={`${styles.itemLink} ${styles.dropdownToggle}`}
+                                    aria-expanded={dropdownActive}
+                                    onClick={toggleDropdown}
+                                >
+                                    {props.two}
+                                </button>
+                                <ul className={`${styles.dropdownMenu} ${dropdownActive ? styles.show : ''}`}>
+                                    <li className={styles.dropdownItem}>
+                                        <Link className={styles.itemLink} to={props.pathTwo1}>{props.two1}</Link>
+                                    </li>
+                                    <li className={styles.dropdownItem}>
+                                        <Link className={styles.itemLink} to={props.pathTwo2}>{props.two2}</Link>
+                                    </li>
+                                    <li className={styles.dropdownItem}>
+                                        <Link className={styles.itemLink} to={props.pathTwo3}>{props.two3}</Link>
+                                    </li>
+                                </ul>
+                            </li>
+                        )}
+                        {props.three && (
+                            <li className={styles.item}>
+                                <Link className={styles.itemLink} to={props.pathThree}>{props.three}</Link>
+                            </li>
+                        )}
+                        {props.four && (
+                            <li className={styles.item}>
+                                <Link className={styles.itemLink} to={props.pathFour}>{props.four}</Link>
+                            </li>
+                        )}
+                        {props.five && (
+                            <li className={styles.item}>
+                                <Link className={styles.itemLink} to={props.pathFive}>{props.five}</Link>
+                            </li>
+                        )}
                     </ul>
                 </div>
                 <div className={styles.copyright}>

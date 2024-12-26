@@ -89,7 +89,7 @@ function CompanyLogin() {
                         />
                     </div>
                     <button className={styles.companyLoginButton} type='submit'>Login</button>
-                    <span className={styles.companyLoginSpan}>Does't have an account?
+                    <span className={styles.companyLoginSpan}>Don't have an account?
                         <Link className={styles.companyLoginLink} to="/company-registration"> Registration</Link>
                     </span>
                     <span className={styles.companyLoginSpan}>If you are a supplier?

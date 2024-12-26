@@ -6,6 +6,8 @@ import { ToastContainer } from 'react-toastify';
 import styles from './CementBill.module.css';
 import Navbar from '../../../../../components/navbar/Navbar';
 import Footer from '../../../../../components/footer/Footer';
+import moment from 'moment';
+import BackButtonHandler from '../../../../../components/ss/ss';
 
 function CementBill() {
 
@@ -16,18 +18,19 @@ function CementBill() {
     const queryParams = new URLSearchParams(location.search);
     const amountOfCement = queryParams.get('amountOfCement');
     const supplierName = queryParams.get('supplierName');
-    
-    const [dataSupplier, setDataSupplier] = useState('');
+    const price = queryParams.get('price');
+
+    const [currentDateTime, setCurrentDateTime] = useState("");
     const [cementBillInfo, setCementBillInfo] = useState({
         type: 'cement',
         recipientName: '',
         recipientPhone: '',
         location: '',
         deliveryTime: '',
-        orderRequestTime: new Date().toLocaleString('en-GB', {hour12: true}).replace(',', ''),
+        orderRequestTime: moment().unix(),
         cementQuantity: amountOfCement,
         cementNumberBags: amountOfCement * 20,
-        price: '',
+        price: (amountOfCement * 20 * price).toFixed(2),
         supplierName: supplierName
     });
 
@@ -90,11 +93,8 @@ function CementBill() {
             return;
         }
 
-        // Format deliveryTime to match the desired format
-        const formatDateTime = (dateTime) => {
-            return new Date(dateTime).toLocaleString('en-GB', {hour12: true}).replace(',', '');
-        };
-        const formattedDeliveryTime = formatDateTime(cementBillInfo.deliveryTime);
+        // Format deliveryTime using moment
+        const formattedDeliveryTime = moment(cementBillInfo.deliveryTime).unix();
         const cementBillData = {
             ...cementBillInfo,
             deliveryTime: formattedDeliveryTime, // Update deliveryTime format
@@ -124,40 +124,38 @@ function CementBill() {
                 handleError(message);
             }
             console.log(result);
-        } catch (err) {
-            handleError(err);
+        } catch (error) {
+            handleError(error);
         }
     }
 
-    useEffect(() => {        
-        const fetchDataSupplier = async () => {
-            try {
-                const url = `http://localhost:8080/auth/company/data-supplier`;
-                const headers = {
-                    headers: {
-                        'Authorization': localStorage.getItem('token'),
-                    }
-                }
-                const response = await fetch(url, headers);
-                const result = await response.json();
-                console.log(result);
-                // i need change because always come data index 0
-                setDataSupplier(result[0]);
-            } catch (err) {
-                handleError(err);
-            }
-        }
-        fetchDataSupplier();
-    }, []);
-    
     useEffect(() => {
-        if (dataSupplier) {
-            setCementBillInfo((prev) => ({
-                ...prev,
-                price: amountOfCement * 20 * dataSupplier?.price 
-            }));
-        }
-    }, [dataSupplier]);
+        const updateCurrentDateTime = () => {
+            const now = moment().format('YYYY-MM-DDTHH:mm'); 
+            setCurrentDateTime(now);
+        };
+
+        updateCurrentDateTime();
+        const interval = setInterval(updateCurrentDateTime, 60000); // Update every 1 minute
+
+        return () => clearInterval(interval); // Clear interval on unmount  
+    }, []);
+
+    
+
+    // Warning on page reload or leave 
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            const message = 'Are you sure you want to leave?';
+            event.returnValue = message; // Standard for most browsers
+        };  
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);  
 
     return(
         <section className={styles.cementBillBody}>
@@ -180,6 +178,8 @@ function CementBill() {
                 logout={handleLogout}
             />
             
+            <BackButtonHandler />
+
             <div className={styles.cementBillContainer}>
                 <div className={styles.cementBillRow}>
                     <h1 className={styles.cementBillH1}>Cement Bill</h1>
@@ -211,8 +211,8 @@ function CementBill() {
                                 onBlur={(e) => handlePhoneValidation(e.target.value)}
                                 type='tel'
                                 name='recipientPhone'
-                                inputmode="numeric" 
-                                maxlength="10"
+                                inputMode="numeric" 
+                                maxLength="10"
                                 placeholder="Enter the recipient's phone"
                                 value={cementBillInfo.recipientPhone}
                             />
@@ -235,7 +235,7 @@ function CementBill() {
                                 onChange={handleChange}
                                 type='datetime-local'
                                 name='deliveryTime'
-                                min = {new Date().toISOString().slice(0, 16)}
+                                min={currentDateTime}
                                 value={cementBillInfo.deliveryTime}
                             />
                         </div>
@@ -246,12 +246,12 @@ function CementBill() {
                             <p className={styles.cementBillP}><strong>Number of bags:<br /></strong> {amountOfCement * 20} bags</p>
                         </div>
                         <div className={styles.cementBillDiv}>
-                            <p className={styles.cementBillP}><strong>The price:<br /></strong> {amountOfCement * 20 * dataSupplier?.price} JD</p>
+                            <p className={styles.cementBillP}><strong>The price:<br /></strong> {(amountOfCement * 20 * price).toFixed(2)} JD</p>
                         </div>
                         <div className={styles.cementBillDiv}>
                             <p className={styles.cementBillP}><strong>Supplier name:<br /></strong> {supplierName} </p>
                         </div>
-                        <button className={styles.cementBillButton} type='submit'>confirm order</button>
+                        <button className={styles.cementBillButton} type='submit'>Confirm Order</button>
                     </form>
                 </div>
             </div>

@@ -5,8 +5,11 @@ import { ToastContainer } from 'react-toastify';
 import styles from './UnderPreparingOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
+import OrderFilter from '../../../../components/orderFilter/OrderFilter';
+import moment from 'moment';
+
 function UnderPreparingOrders() {
-    const [orderData, setOrderData] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
 
     const navigate = useNavigate();
 
@@ -19,12 +22,13 @@ function UnderPreparingOrders() {
         }, 500)
     }
 
-    const orderCompleted = async () => {
+    const orderCompleted = async (id) => {
         try{
             const data = {
-                "status": "old"
+                "id": id,
+                "status": "completed"
             }
-            const url = 'http://localhost:8080/auth/supplier/update-cement-order';
+            const url = 'http://localhost:8080/auth/supplier/update-order-status';
             const response = await fetch(url, {
                 method: "PATCH",
                 headers: {
@@ -36,7 +40,7 @@ function UnderPreparingOrders() {
             const result = await response.json();
             const { success, message, error } = result;
             if (success) {
-                handleSuccess(message + 'Order has been delivered');
+                handleSuccess(message + 'Order has been completed');
             } else if (error) {
                 const details = error?.details[0].message;
                 handleError(details);
@@ -50,10 +54,26 @@ function UnderPreparingOrders() {
         }
     }
 
+    // Function to handle the filtering logic
+    const handleFilter = async (filterData) => {
+        try {
+            const response = await fetch(`http://localhost:8080/auth/supplier/order-data?statuses=${filterData.selectedStatus}&type=${filterData.type}&supplierId=${filterData.supplierId}&fromDate=${filterData.fromDate}&toDate=${filterData.toDate}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                }
+            });
+            const result = await response.json();
+            setFilteredOrders(result); // Store the filtered orders
+        } catch (err) {
+            console.error('Error fetching filtered orders:', err);
+        }
+    };
+
     const fetchOrderData = async () => {
         try {
-            const statuses = "under preparing,completed";
-            const url = `http://localhost:8080/auth/supplier/order-data?status=${statuses}`;
+            const statuses = "under_preparing,completed";
+            const url = `http://localhost:8080/auth/supplier/order-data?statuses=${statuses}`;
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -61,7 +81,7 @@ function UnderPreparingOrders() {
                 }
             });
             const result = await response.json();
-            setOrderData(result);
+            setFilteredOrders(result);
         } catch (err) {
             handleError(err);
         }
@@ -86,22 +106,27 @@ function UnderPreparingOrders() {
                 logout={handleLogout}
             />
 
+            <OrderFilter user='supplier' statuses={['under_preparing', 'completed']} onFilter={handleFilter} />
             
             <div className={styles.underPreparingOrdersTitle}>
                 <h2 className={styles.underPreparingOrdersH2}>Under Preparing Orders</h2>
             </div>
             <div className={styles.underPreparingOrdersContainer}>
-                {orderData && orderData.length > 0 ? (
-                    orderData.map((order) => (
-                        <div className={styles.underPreparingOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
+                {filteredOrders && filteredOrders.length > 0 ? (
+                    filteredOrders.map((order, index) => (
+                        <div className={styles.underPreparingOrdersRow} key={index}> 
+                            <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
+                                <strong>Supplier name:</strong> {order.supplierName} 
+                            </p>
                             <div className={styles.underPreparingOrdersDiv}>
-                                <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
-                                    <strong>Supplier name:</strong> {order.supplierName} 
+                                <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersStatus}`}>
+                                    <strong>Order status:</strong> {order.status} 
                                 </p>
                                 <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersType}`}>
                                     <strong>Order type:</strong> {order.type} 
                                 </p>
                             </div>
+                            <hr />
                             <div className={styles.underPreparingOrdersDiv}>
                                 <p className={styles.underPreparingOrdersData}>
                                     <strong>Company name:</strong> {order.companyName} 
@@ -116,7 +141,7 @@ function UnderPreparingOrders() {
                                     <strong>Recipient's phone:</strong> {order.recipientPhone} 
                                 </p>
                                 <p className={styles.underPreparingOrdersData}>
-                                    <strong>Delivery time:</strong> {order.deliveryTime} 
+                                    <strong>Delivery time:</strong> {moment(order.deliveryTime * 1000).format('D/MM/YYYY - h:mm a')}
                                 </p>
                                 <p className={styles.underPreparingOrdersData}>
                                     <strong>Location:</strong> {order.location} 
@@ -133,13 +158,14 @@ function UnderPreparingOrders() {
                                     <strong>Cement price:</strong> {order.price} JD
                                 </p>
                                 <p className={styles.underPreparingOrdersData}>
-                                    <strong>Order request time:</strong> {order.orderRequestTime} 
+                                    <strong>Order request time:</strong> {moment(order.orderRequestTime * 1000).format('D/MM/YYYY - h:mm a')}
                                 </p>
                             </div>
-                            <div className={styles.pendingOrdersDivButton}>
-                                {/* {if (status = 'under preparing') } */}
-                                <button className={styles.pendingOrdersButtonCompleted} onClick={() => orderCompleted()}>completed</button>
-                            </div>
+                            {order.status === 'under_preparing' && (
+                                <div className={styles.underPreparingOrdersDivButton}>
+                                    <button className={styles.underPreparingOrdersButtonCompleted} onClick={() => orderCompleted(order.id)}>Completed</button>
+                                </div>
+                            )}
                         </div>
                     ))
                 ) : (

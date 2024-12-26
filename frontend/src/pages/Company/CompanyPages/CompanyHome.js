@@ -4,7 +4,6 @@ import { ToastContainer } from 'react-toastify';
 import styles from './CompanyHome.module.css';
 import Navbar from '../../../components/navbar/Navbar';
 import Footer from '../../../components/footer/Footer';
-
 import { Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
 
 function CompanyHome() {
@@ -90,6 +89,7 @@ function CompanyHome() {
                 <Card
                     sx={{
                         width: {
+                            xs: 250,  // for extra small screens
                             sm: 250,  // for small screens
                             md: 250,  // for medium screens
                             lg: 345   // for large screens

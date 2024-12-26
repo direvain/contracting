@@ -46,6 +46,7 @@
   border-radius: 5px;
   padding: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .pendingButtonDrop:hover{

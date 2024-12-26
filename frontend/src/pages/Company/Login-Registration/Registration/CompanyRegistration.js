@@ -131,8 +131,8 @@ function CompanyRegistration() {
                             onKeyPress={handleKeyPress}
                             type='companyID'
                             name='companyID'
-                            inputmode="numeric" 
-                            maxlength="9"
+                            inputMode="numeric" 
+                            maxLength="9"
                             placeholder='Enter your company ID ...'
                             value={registrationInfo.companyID}
                         />
@@ -146,8 +146,8 @@ function CompanyRegistration() {
                             onBlur={(e) => handlePhoneValidation(e.target.value)}
                             type='tel'
                             name='companyPhone'
-                            inputmode="numeric" 
-                            maxlength="10"
+                            inputMode="numeric" 
+                            maxLength="10"
                             placeholder='Enter your Company Phone...'
                             value={registrationInfo.companyPhone}
                         />

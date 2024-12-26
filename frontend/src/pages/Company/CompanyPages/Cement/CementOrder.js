@@ -10,7 +10,8 @@ function CementOrder() {
     const [dataSupplier, setDataSupplier] = useState([]);
     const [inputValue, setInputValue] = useState({
         supplierName: '',
-        amountOfCement: ''
+        amountOfCement: '',
+        price: ''
     });
     const navigate = useNavigate();
 
@@ -26,7 +27,18 @@ function CementOrder() {
     const handleChange = (e) => {
         const { name, value } = e.target;
     
-        // تحقق من حقل "amountOfCement" فقط
+        if (name === 'supplierName') {
+            const selectedOption = e.target.options[e.target.selectedIndex];
+            const supplierPrice = selectedOption.getAttribute('data-price') || '';
+            setInputValue((prev) => ({
+                ...prev,
+                supplierName: value,
+                price: supplierPrice, // update price
+            }));
+            return;
+        }
+
+        // check just amountOfCement
         if (name === "amountOfCement") {
             if (value === ".") {
                 handleError("Dots alone are not acceptable input");
@@ -38,15 +50,14 @@ function CementOrder() {
                 handleError("Please ensure the input contains at most one decimal point");
                 return;
             } else if (value.includes(".")) {
-                const decimalPlaces = value.split(".")[2];
-                if (decimalPlaces && decimalPlaces.length > 1) {
-                    handleError("Ensure the number contains only one digit after the decimal point");
+                const decimalPlaces = value.split(".")[1];
+                if (decimalPlaces && decimalPlaces.length > 2) {
+                    handleError("Ensure the number contains only two digits after the decimal point");
                     return;
                 }
             }
         }
     
-        // تحديث الكائن بشكل ديناميكي
         setInputValue((prev) => ({
             ...prev,
             [name]: value,
@@ -69,14 +80,15 @@ function CementOrder() {
         }
 
         setTimeout(() => { 
-            navigate(`/company/home/cement-order/cement-bill?supplierName=${inputValue.supplierName}&amountOfCement=${inputValue.amountOfCement}`) // (function) سيتم تنفيذها بعد انتهاء الوقت
+            navigate(`/company/home/cement-order/cement-bill?supplierName=${inputValue.supplierName}&amountOfCement=${inputValue.amountOfCement}&price=${inputValue.price}`) // (function) سيتم تنفيذها بعد انتهاء الوقت
         }, 500)
     }
 
     useEffect(() => {
         const fetchDataSupplier = async () => {
             try {
-                const url = `http://localhost:8080/auth/company/data-supplier`;
+                const supplierProduct= 'cement'
+                const url = `http://localhost:8080/auth/company/data-supplier?supplierProducts=${supplierProduct}`;
                 const headers = {
                     headers: {
                         'Authorization': localStorage.getItem('token'),
@@ -85,9 +97,7 @@ function CementOrder() {
                 const response = await fetch(url, headers);
                 const result = await response.json();
                 console.log(result);
-                
-                setDataSupplier(result); // Set dataSupplier to the entire array
-                
+                setDataSupplier(result); 
             } catch (err) {
                 handleError(err);
             }
@@ -121,37 +131,37 @@ function CementOrder() {
                     <h1 className={styles.cementOrderH1}>Cement Order</h1>
                     <form className={styles.cementOrderForm} onSubmit= {handleCheckout}>
                         <div className={styles.cementOrderDiv}>
-                            <label className={styles.cementOrderLabel} htmlFor='supplierName'>Supplier name</label>
+                            <label className={styles.cementOrderLabel} htmlFor='supplierName'>Supplier Name</label>
                             <select
                                 className={styles.cementOrderSelect}
                                 name="supplierName" 
                                 onChange={handleChange}
                                 value={inputValue.supplierName} 
                             >
-                                <option value="">Select an option</option>
+                                <option value="">Select Supplier</option>
                                 {dataSupplier.map((supplier, index) => (
-                                    <option key={index} value={supplier.supplierName}>
+                                    <option key={index} value={supplier.supplierName} data-price={supplier.price}>
                                         {supplier.supplierName}
                                     </option>
                                 ))}
                             </select>
                         </div>
                         <div className={styles.cementOrderDiv}>
-                            <label className={styles.cementOrderLabel} htmlFor='amountOfCement'>Enter the required amount of cement in ton</label>
+                            <label className={styles.cementOrderLabel} htmlFor='amountOfCement'>Enter the required amount of Cement in ton</label>
                             <input
                                 className={styles.cementOrderInput}
                                 onChange= {handleChange}
                                 type='text'
                                 name='amountOfCement' 
-                                placeholder='Enter the required amount of cement in ton...'
+                                placeholder='Enter the required amount of Cement in ton...'
                                 value={inputValue.amountOfCement}
                                 autoFocus
                             />
                         </div>
                         <div className={styles.cementOrderDiv}>
-                            <p className={styles.cementOrderP}>20 bags of cement equals 1 ton</p>
+                            <p className={styles.cementOrderP}>20 bags of Cement equals 1 ton</p>
                         </div>
-                        <button className={styles.cementOrderButton} type='submit'>checkout</button>
+                        <button className={styles.cementOrderButton} type='submit'>Checkout</button>
                     </form>
                 </div>
             </div>

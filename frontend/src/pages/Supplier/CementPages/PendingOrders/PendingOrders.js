@@ -5,9 +5,14 @@ import { ToastContainer } from 'react-toastify';
 import styles from './PendingOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
+import OrderFilter from '../../../../components/orderFilter/OrderFilter';
+import moment from 'moment';
 
 function PendingOrders() {
-    const [orderData, setOrderData] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
+    const [showRejectModal, setShowRejectModal] = useState(false);  // لعرض صندوق النص
+    const [rejectReason, setRejectReason] = useState('');  // لتخزين السبب المدخل
+    const [currentOrderId, setCurrentOrderId] = useState(null);  // لتخزين id الطلب الحالي
 
     const navigate = useNavigate();
 
@@ -20,12 +25,13 @@ function PendingOrders() {
         }, 500)
     }
 
-    const acceptOrder = async () => {
+    const orderAccepted = async (id) => {
         try{
             const data = {
-                "status": "under preparing"
+                "id": id,
+                "status": "under_preparing"
             }
-            const url = 'http://localhost:8080/auth/supplier/update-cement-order';
+            const url = 'http://localhost:8080/auth/supplier/update-order-status';
             const response = await fetch(url, {
                 method: "PATCH",
                 headers: {
@@ -51,12 +57,18 @@ function PendingOrders() {
         }
     }
 
-    const rejectOrder = async () => {
+    const orderRejected = async (id) => {
         try{
-            const data = {
-                "status": "rejected"
+            if (!rejectReason) {
+                handleError('Please provide a reason for rejection');
+                return;
             }
-            const url = 'http://localhost:8080/auth/supplier/update-cement-order';
+            const data = {
+                "id": currentOrderId,
+                "status": "rejected",
+                "rejectReason": rejectReason
+            }
+            const url = 'http://localhost:8080/auth/supplier/update-order-status';
             const response = await fetch(url, {
                 method: "PATCH",
                 headers: {
@@ -77,15 +89,33 @@ function PendingOrders() {
             }
             console.log(result);
             fetchOrderData();
+            setShowRejectModal(false);
         } catch (error) {
-            handleError('Error dropping order:', error);
+            handleError('Error dropping order:'+ error);
         }
     }
+
+    // Function to handle the filtering logic
+    const handleFilter = async (filterData) => {
+        try {
+            const statuses = "pending";
+            const response = await fetch(`http://localhost:8080/auth/supplier/order-data?statuses=${statuses}&type=${filterData.type}&supplierId=${filterData.supplierId}&fromDate=${filterData.fromDate}&toDate=${filterData.toDate}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                }
+            });
+            const result = await response.json();
+            setFilteredOrders(result); // Store the filtered orders
+        } catch (err) {
+            console.error('Error fetching filtered orders:', err);
+        }
+    };
     
     const fetchOrderData = async () => {
         try {
-            const status = "pending";
-            const url = `http://localhost:8080/auth/supplier/order-data?status=${status}`;
+            const statuses = "pending";
+            const url = `http://localhost:8080/auth/supplier/order-data?statuses=${statuses}`;
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -93,11 +123,12 @@ function PendingOrders() {
                 }
             });
             const result = await response.json();
-            setOrderData(result);
+            setFilteredOrders(result);
         } catch (err) {
             handleError(err);
         }
     }
+
     useEffect(() => {
         fetchOrderData();
     }, []);
@@ -117,22 +148,27 @@ function PendingOrders() {
                 logout={handleLogout}
             />
 
+            <OrderFilter user='supplier' onFilter={handleFilter} />
             
             <div className={styles.pendingOrdersTitle}>
                 <h2 className={styles.pendingOrdersH2}>Pending Orders</h2>
             </div>
             <div className={styles.pendingOrdersContainer}>
-                {orderData && orderData.length > 0 ? (
-                    orderData.map((order) => (
-                        <div className={styles.pendingOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
+                {filteredOrders && filteredOrders.length > 0 ? (
+                    filteredOrders.map((order, index) => (
+                        <div className={styles.pendingOrdersRow} key={index}> 
+                            <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersSupplierName}`}>
+                                <strong>Supplier name:</strong> {order.supplierName} 
+                            </p>
                             <div className={styles.pendingOrdersDiv}>
-                                <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersSupplierName}`}>
-                                    <strong>Supplier name:</strong> {order.supplierName} 
+                                <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersStatus}`}>
+                                    <strong>Order status:</strong> {order.status} 
                                 </p>
                                 <p className={`${styles.pendingOrdersData} ${styles.pendingOrdersType}`}>
-                                    <strong>Order Type:</strong> {order.type} 
+                                    <strong>Order type:</strong> {order.type} 
                                 </p>
                             </div>
+                            <hr />
                             <div className={styles.pendingOrdersDiv}>
                                 <p className={styles.pendingOrdersData}>
                                     <strong>Company name:</strong> {order.companyName} 
@@ -147,7 +183,7 @@ function PendingOrders() {
                                     <strong>Recipient's phone:</strong> {order.recipientPhone} 
                                 </p>
                                 <p className={styles.pendingOrdersData}>
-                                    <strong>Delivery time:</strong> {order.deliveryTime} 
+                                    <strong>Delivery time:</strong> {moment(order.deliveryTime * 1000).format('D/MM/YYYY - h:mm a')}
                                 </p>
                                 <p className={styles.pendingOrdersData}>
                                     <strong>Location:</strong> {order.location} 
@@ -164,19 +200,33 @@ function PendingOrders() {
                                     <strong>Cement price:</strong> {order.price} JD
                                 </p>
                                 <p className={styles.pendingOrdersData}>
-                                    <strong>Order request time:</strong> {order.orderRequestTime} 
+                                    <strong>Order request time:</strong> {moment(order.orderRequestTime * 1000).format('D/MM/YYYY - h:mm a')}
                                 </p>
                             </div>
                             <div className={styles.pendingOrdersDivButton}>
-                                <button className={styles.pendingOrdersButtonAccept} onClick={() => acceptOrder()}>Accept</button>
-                                <button className={styles.pendingOrdersButtonReject} onClick={() => rejectOrder()}>Reject</button>
+                                <button className={styles.pendingOrdersButtonAccept} onClick={() => orderAccepted(order.id)}>Accept</button>
+                                <button className={styles.pendingOrdersButtonReject} onClick={() => { setShowRejectModal(true); setCurrentOrderId(order.id); }}>Reject</button>
                             </div>
+                            {showRejectModal && (
+                                <div className={styles.rejectModalDiv}>
+                                    <h3 className={styles.rejectModalH3}>Enter rejection reason</h3>
+                                    <textarea
+                                        className={styles.rejectModalTextarea}
+                                        value={rejectReason}
+                                        onChange={(e) => setRejectReason(e.target.value)}
+                                        placeholder="Enter reason for rejection"
+                                    />
+                                    <button className={styles.rejectModalButtonCancel} onClick={() => setShowRejectModal(false)}>Cancel</button>
+                                    <button className={styles.rejectModalButtonSubmit} onClick={orderRejected}>Submit</button>
+                                </div>
+                            )}
                         </div>
                     ))
                 ) : (
                     <p className={styles.pendingOrdersP}>No pending orders found</p>
                 )}
             </div>
+            {/* Modal for entering rejection reason */}
 
             <Footer 
                 two="Orders"

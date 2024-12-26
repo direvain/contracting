@@ -20,11 +20,11 @@ function RefrshHandler({ setIsAuthenticated, setRole, setSupplierProduct }) {
       // تعريف المسارات المسموحة لكل دور
       const allowedPaths = {
         supplier: {
-          cement: ['/supplier/cement/under-preparing-orders', '/supplier/cement/pending-orders', '/supplier/cement/old-orders', '/supplier/cement/profile'],
+          cement: ['/supplier/cement/under-preparing-orders', '/supplier/cement/pending-orders', '/supplier/cement/old-orders', '/supplier/cement/profile', '/supplier/cement/profile/edit-price'],
           concrete: ['/supplier/concrete/home'],
         },
-        company: ['/company/home', '/company/home/cement-order', '/company/home/concrete-order', '/company/home/profile', '/company/home/preparing-orders', '/company/home/pending-orders', '/company/home/past-orders'],
-        admin: ['/admin/home', '/admin/home/request-order', '/admin/home/approve-order', "/admin/home/reject-order","/admin/home/Add-admin" ],
+        company: ['/company/home', '/company/home/cement-order', '/company/home/concrete-order', '/company/home/profile', '/company/home/under-preparing-orders', '/company/home/pending-orders', '/company/home/old-orders', '/company/home/cement-order/cement-bill'],
+        admin: ['/admin/request-order', '/admin/approve-order', "/admin/reject-order","/admin/add-admin" ],
       };
 
       // التحقق إذا كان المسار الحالي من المسارات المسموحة
@@ -37,6 +37,8 @@ function RefrshHandler({ setIsAuthenticated, setRole, setSupplierProduct }) {
       if (!isAllowed) {
         if (role === 'supplier' && supplierProduct) {
           navigate(`/${role}/${supplierProduct}/pending-orders`, { replace: false });
+        } else if(role === 'admin'){
+          navigate(`/${role}/request-order`, { replace: false });
         } else {
           navigate(`/${role}/home`, { replace: false });
         }

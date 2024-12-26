@@ -5,9 +5,11 @@ import { ToastContainer } from 'react-toastify';
 import styles from './UnderPreparingOrders.module.css';
 import Navbar from '../../../../components/navbar/Navbar';
 import Footer from '../../../../components/footer/Footer';
+import OrderFilter from '../../../../components/orderFilter/OrderFilter';
+import moment from 'moment';
 
 function UnderPreparingOrders() {
-    const [dataCementOrder, setDataCementOrder] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
 
     const navigate = useNavigate();
 
@@ -20,24 +22,75 @@ function UnderPreparingOrders() {
         }, 500)
     }
 
-    useEffect(() => {
-        const fetchDataCementOrder = async () => {
-            try {
-                const status = "under preparing";
-                const url = `http://localhost:8080/auth/company/order-data?status=${status}`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': localStorage.getItem('token')
-                    }
-                });
-                const result = await response.json();
-                setDataCementOrder(result);
-            } catch (err) {
-                handleError(err);
+    const orderDelivered = async (id) => {
+        try{
+            const data = {
+                "id": id,
+                "status": "delivered"
             }
+            const url = 'http://localhost:8080/auth/company/update-order-status';
+            const response = await fetch(url, {
+                method: "PATCH",
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            const { success, message, error } = result;
+            if (success) {
+                handleSuccess(message + "Order has been delivered");
+            } else if (error) {
+                const details = error?.details[0].message;
+                handleError(details);
+            } else if (!success) {
+                handleError(message);
+            }
+            console.log(result);
+            fetchDataOrder();
+        } catch (error) {
+            handleError('Error dropping order:', error);
         }
-        fetchDataCementOrder();
+    }
+
+    // Function to handle the filtering logic
+    const handleFilter = async (filterData) => {
+        console.log(filterData)
+        try {
+            const response = await fetch(`http://localhost:8080/auth/company/order-data?statuses=${filterData.selectedStatus}&type=${filterData.type}&supplierId=${filterData.supplierId}&fromDate=${filterData.fromDate}&toDate=${filterData.toDate}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token'),
+                }
+            });
+            const result = await response.json();
+            setFilteredOrders(result); // Store the filtered orders
+        } catch (err) {
+            console.error('Error fetching filtered orders:', err);
+        }
+    };
+
+
+    const fetchDataOrder = async () => {
+        try {
+            const statuses = "under_preparing,completed";
+            const url = `http://localhost:8080/auth/company/order-data?statuses=${statuses}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                }
+            });
+            const result = await response.json();
+            setFilteredOrders(result);
+        } catch (err) {
+            handleError(err);
+        }
+    }
+
+    useEffect(() => {
+        fetchDataOrder();
     }, []);
 
     return(
@@ -60,18 +113,22 @@ function UnderPreparingOrders() {
                 pathFive="/company/home/profile"
                 logout={handleLogout}
             />
-
             
+            <OrderFilter user='company' statuses={['under_preparing', 'completed']} onFilter={handleFilter} />
+
             <div className={styles.underPreparingOrdersTitle}>
                 <h2 className={styles.underPreparingOrdersH2}>Under Preparing Orders</h2>
             </div>
             <div className={styles.underPreparingOrdersContainer}>
-                {dataCementOrder && dataCementOrder.length > 0 ? (
-                    dataCementOrder.map((order, index) => (
-                        <div className={styles.underPreparingOrdersRow} key={order._id}> {/* Use a unique key like order._id */}
+                {filteredOrders && filteredOrders.length > 0 ? (
+                    filteredOrders.map((order, index) => (
+                        <div className={styles.underPreparingOrdersRow} key={index}>
+                            <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
+                                <strong>Supplier name:</strong> {order.supplierName} 
+                            </p>
                             <div className={styles.underPreparingOrdersDiv}>
-                                <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersSupplierName}`}>
-                                    <strong>Supplier name:</strong> {order.supplierName} 
+                                <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersStatus}`}>
+                                    <strong>Order status:</strong> {order.status} 
                                 </p>
                                 <p className={`${styles.underPreparingOrdersData} ${styles.underPreparingOrdersType}`}>
                                     <strong>Order type:</strong> {order.type} 
@@ -92,7 +149,7 @@ function UnderPreparingOrders() {
                                     <strong>Recipient's phone:</strong> {order.recipientPhone} 
                                 </p>
                                 <p className={styles.underPreparingOrdersData}>
-                                    <strong>Delivery time:</strong> {order.deliveryTime} 
+                                    <strong>Delivery time:</strong> {moment(order.deliveryTime * 1000).format('D/MM/YYYY - h:mm a')} 
                                 </p>
                                 <p className={styles.underPreparingOrdersData}>
                                     <strong>Location:</strong> {order.location} 
@@ -109,13 +166,14 @@ function UnderPreparingOrders() {
                                     <strong>Cement price:</strong> {order.price} JD
                                 </p>
                                 <p className={styles.underPreparingOrdersData}>
-                                    <strong>Order request time:</strong> {order.orderRequestTime} 
+                                    <strong>Order request time:</strong> {moment(order.orderRequestTime * 1000).format('D/MM/YYYY - h:mm a')} 
                                 </p>
                             </div>
-                            {/* show when supplier press to button complete */}
-                            {/* <div className={styles.pendingOrdersDivButton}>
-                                <button className={styles.pendingOrdersButton} onClick={() => deliveredOrder(order._id)}>Delivered</button>
-                            </div> */}
+                            {order.status === 'completed' && (
+                                <div className={styles.underPreparingOrdersDivButton}>
+                                    <button className={styles.underPreparingOrdersButtonDelivered} onClick={() => orderDelivered(order.id)}>Delivered</button>
+                                </div>
+                            )}
                         </div>
                     ))
                 ) : (

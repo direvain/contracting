@@ -25,9 +25,14 @@
     margin-bottom: 8px;
 }
 
-.pendingOrdersSupplierName, .pendingOrdersType{
+.pendingOrdersSupplierName, .pendingOrdersType, .pendingOrdersStatus{
     font-size: 18pt;
     margin-top: 0;
+}
+
+.pendingOrdersSupplierName {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .pendingOrdersH2 {
@@ -41,7 +46,7 @@
 }
 
 .pendingOrdersButtonReject{
-    background-color: red;
+    background-color: #C40C0C;
     width: 25%;
     border: none;
     font-size: 20px;
@@ -50,15 +55,15 @@
     padding: 10px;
     margin: 10px;
     cursor: pointer;
-    text-transform: uppercase;
+    transition: background-color 0.3s ease;
 }
 
 .pendingOrdersButtonReject:hover{
-    background-color: #aa0000;
+    background-color: #ff0000fa;
 }
 
 .pendingOrdersButtonAccept{
-    background-color: #00aa00;
+    background-color: #059212;
     width: 25%;
     border: none;
     font-size: 20px;
@@ -67,11 +72,11 @@
     padding: 10px;
     margin: 10px;
     cursor: pointer;
-    text-transform: uppercase;
+    transition: background-color 0.3s ease;
 }
 
 .pendingOrdersButtonAccept:hover{
-    background-color: green;
+    background-color: #01c514;
 }
 
 .pendingOrdersP{
@@ -81,6 +86,69 @@
     justify-items: center;
     height: 38.9vh;
 }
+
+.rejectModalDiv {
+    width: 95%;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: -22px;
+}
+
+.rejectModalH3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.rejectModalTextarea {
+    width: 95%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+}
+
+.rejectModalTextarea::placeholder {
+    color: #aaa;
+}
+
+.rejectModalButtonSubmit, .rejectModalButtonCancel {
+    width: 25%;
+    border: none;
+    font-size: 20px;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.rejectModalButtonSubmit {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.rejectModalButtonSubmit:hover {
+    background-color: #c9302c;
+}
+
+
+.rejectModalButtonCancel {
+    background-color: #aaa;
+    color: #fff;
+}
+
+.rejectModalButtonCancel:hover {
+    background-color: #333;
+}
+
 
 /* استعلام الوسائط للشاشات الأكبر */
 @media (min-width: 768px) {

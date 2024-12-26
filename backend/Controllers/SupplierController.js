@@ -11,7 +11,7 @@ const registration = async (req, res) => {
     // console.log(req.commercialRegister);
     // console.log(req.body.commercialRegister);
     try {
-        const { supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister,role } = req.body;
+        const { supplierName, email, supplierID, supplierPhone, password, supplierProduct, commercialRegister } = req.body;
         const checkSupplier = await SupplierModel.findOne({
             $or: [{ supplierName }, { supplierID }]
         });

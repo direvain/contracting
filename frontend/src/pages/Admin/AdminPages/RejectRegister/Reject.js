@@ -82,15 +82,15 @@ const handleLogout = (e) =>
             <ToastContainer />
             <Navbar
                 three="Approved"
-                pathThree="/admin/home/approve-order"
+                pathThree="/admin/approve-order"
                 four="Rejected"
-                pathFour="/admin/home/reject-order"
+                pathFour="/admin/reject-order"
 
                 five="Pending"
-                pathFive="/admin/home/request-order"
+                pathFive="/admin/request-order"
 
                 six="Add Admin"
-                pathSix="/admin/home/Add-admin"
+                pathSix="/admin/Add-admin"
 
                 logout={handleLogout}
             />

@@ -77,7 +77,7 @@ body {
     padding: 10px;
     cursor: pointer;
     margin: 10px 0;
-    text-transform: uppercase;
+    transition: background-color 0.3s ease;
 }
 
 .adminRegistrationButton:hover {
