@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { handleSuccess, handleError } from '../../../../utils/utils';
 import styles from './add-admin.module.css';
-import NavBar from '../../../../components/navbar/Navbar';
+import Navbar from '../../../../components/navbar/Navbar';
 
 function AddAdmin() {
     const handleLogout = (e) => {
@@ -75,7 +75,7 @@ function AddAdmin() {
 
     return (
         <div>
-            <NavBar
+            <Navbar
                 three="Approved"
                 pathThree="/admin/home/approve-order"
                 four="Rejected"

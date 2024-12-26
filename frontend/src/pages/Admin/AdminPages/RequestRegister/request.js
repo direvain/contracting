@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './request.module.css';
-import NavBar from '../../../../components/navbar/Navbar';
+import Navbar from '../../../../components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
 
 function RequestRegister() {
@@ -100,7 +100,7 @@ const handleLogout = (e) =>
         <div>
             <ToastContainer />
             
-            <NavBar
+            <Navbar
                 three="Approved"
                 pathThree="/admin/home/approve-order"
                 four="Rejected"

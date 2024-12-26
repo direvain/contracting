@@ -33,7 +33,7 @@ RegistrationRouter.get('/fetchRegistrationData', ensureAuthenticated, async (req
         
         if (registration.length === 0)
         {
-            return res.status(404).json({ error: "No data found for the given status" });
+            return res.json([]);
         } 
 
         res.json

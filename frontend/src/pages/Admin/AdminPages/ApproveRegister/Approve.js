@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from './Approve.module.css';
-import NavBar from '../../../../components/navbar/Navbar';
+import Navbar from '../../../../components/navbar/Navbar';
 import { handleSuccess } from '../../../../utils/utils';
 
 function ApproveRegister()
@@ -43,6 +43,7 @@ console.log("Companies Data:", companies);
                 navigate('/admin');
             }, 500)
         };
+
         async function fetchCompaniesData()
         {   
             try
@@ -82,6 +83,8 @@ console.log("Companies Data:", companies);
         {
             try
             {
+                const confirmDrop = window.confirm('Are you sure you want to drop this user?');
+                if (!confirmDrop) return;
                 const response = await fetch(`http://localhost:8080/auth/company/delete/${companyId}`,
                     {
                         method: 'DELETE',
@@ -100,7 +103,8 @@ console.log("Companies Data:", companies);
         };
         async function deleteSupplier(supplierId) 
         {
-            console.log(supplierId)
+            const confirmDrop = window.confirm('Are you sure you want to drop this user?');
+            if (!confirmDrop) return;
             try
             {
                 const response = await fetch(`http://localhost:8080/auth/supplier/delete/${supplierId}`,
@@ -119,13 +123,13 @@ console.log("Companies Data:", companies);
                 console.error('Failed to delete supplier:', error);
             }
         };
-
     
     return (
     <div>
+        console.log()
         <ToastContainer />
         
-        <NavBar
+        <Navbar
             three="Approved"
             pathThree="/admin/home/approve-order"
             four="Rejected"
