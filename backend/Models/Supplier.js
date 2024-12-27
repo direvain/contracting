@@ -38,9 +38,9 @@ const SupplierSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: 'supplier',
+        default:"supplier"
     },    
-    adminId: {
+    adminEmail: {
         type: String,
         default: 'admin'
     }

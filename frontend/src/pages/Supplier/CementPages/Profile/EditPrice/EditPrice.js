@@ -10,6 +10,9 @@ function EditPrice() {
     const [supplierData, setSupplierData] = useState('');
     const [inputValue, setInputValue] = useState({
             price: '',
+            password: '',
+            confirmPassword: '',
+            supplierPhone: '',
     });
 
     const navigate = useNavigate();
@@ -44,6 +47,9 @@ function EditPrice() {
                     return;
                 }
             }
+        }
+        if (name==="phone"){
+            if (value=""){}
         }
 
         // تحديث الكائن بشكل ديناميكي
@@ -128,10 +134,10 @@ function EditPrice() {
 
             <div className={styles.editPriceContainer}>
                 <div className={styles.editPriceRow}>
-                    <h1 className={styles.editPriceH1}>Edit price</h1>
+                    <h1 className={styles.editPriceH1}>Edit information</h1>
                     <form className={styles.editPriceForm} onSubmit= {handleUpdatePrice}>
                         <div className={styles.editPriceDiv}>
-                            <label className={styles.editPriceLabel} htmlFor='price'><strong>Change the Cement price:</strong></label>
+                            <label className={styles.editPriceLabel} ><strong>Change the Cement price:</strong></label>
                             <input
                                 className={styles.editPriceInput}
                                 onChange= {handleChange}
@@ -139,6 +145,36 @@ function EditPrice() {
                                 name='price' 
                                 placeholder= {supplierData.price}
                                 value={inputValue.price}
+                                autoFocus
+                            />
+                            <br></br>
+                            <label className={styles.editPriceLabel} ><strong>Change the phone number:</strong></label>
+                            <input
+                                className={styles.editPriceInput}
+                                onChange= {handleChange}
+                                type='text'
+                                name='phone'
+                                placeholder= {supplierData.supplierPhone}
+                                autoFocus
+                            />
+                            <br></br>
+                            <label className={styles.editPriceLabel} ><strong>Change the password:</strong></label>
+                            <input
+                                className={styles.editPriceInput}
+                                onChange= {handleChange}
+                                type='text'
+                                name='password' 
+                                placeholder= 'password'
+                                autoFocus
+                            />
+                            <br></br>
+                            <label className={styles.editPriceLabel}><strong>Change the confirm password:</strong></label>
+                            <input
+                                className={styles.editPriceInput}
+                                onChange= {handleChange}
+                                type='text'
+                                name='password' 
+                                placeholder= 'confirm password'
                                 autoFocus
                             />
                         </div>

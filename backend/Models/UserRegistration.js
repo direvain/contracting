@@ -20,7 +20,7 @@ const UserRegister = new mongoose.Schema({
         required: true,
     },
     Phone: {
-        type: Number,
+        type: String,
         required: true
     },
     commercialRegister: {

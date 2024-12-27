@@ -31,8 +31,7 @@ function ApproveRegister()
     }, []); // Runs once when the component mounts
 
     const handleLogout = (e) =>
-        {console.log("Suppliers Data:", suppliers);
-console.log("Companies Data:", companies);
+        {
 
             localStorage.removeItem('token');
             localStorage.removeItem('loggedInUser');
@@ -126,8 +125,7 @@ console.log("Companies Data:", companies);
     
     return (
     <div>
-        console.log()
-        <ToastContainer />
+    <ToastContainer />
         
         <Navbar
             three="Approved"
@@ -189,7 +187,6 @@ console.log("Companies Data:", companies);
             </div>
         <h2 className={styles.List}>Companies Approved List:</h2>
         <div className={styles.profileContainer}>
-            {console.log(companies)}
                 {companies.length > 0 ? (
                     companies.map((field) => 
                         (

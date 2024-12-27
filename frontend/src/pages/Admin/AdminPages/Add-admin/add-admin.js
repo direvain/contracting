@@ -76,7 +76,6 @@ function AddAdmin() {
     return (
         <div>
             <Navbar
-<<<<<<< HEAD
                 three="Approved"
                 pathThree="/admin/home/approve-order"
                 four="Rejected"
@@ -88,17 +87,6 @@ function AddAdmin() {
                 six="Add Admin"
                 pathSix="/admin/home/Add-admin"
 
-=======
-                two="Pending"
-                two1="Request"
-                pathTwo1="/admin/request-order"
-                two2="Approve"
-                pathTwo2="/admin/approve-order"
-                two3="Reject"
-                pathTwo3="/admin/reject-order"
-                three="Add Admin"
-                pathThree="/admin/Add-admin"
->>>>>>> a0d0680a25b849a6c6b0ed93a5f95645b20382fb
                 logout={handleLogout}
             />
             <section className={styles.adminBody}>

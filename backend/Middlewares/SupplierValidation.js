@@ -15,6 +15,7 @@ const registrationValidation = (req, res, next) => {
         supplierPhone: Joi.string().length(10).required(),
         supplierProduct: Joi.string().required(),
         commercialRegister: Joi.string().required(),
+        role: Joi.string()
     });
     const { error } = schema.validate(req.body);
     if (error) {

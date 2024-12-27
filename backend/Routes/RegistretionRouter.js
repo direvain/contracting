@@ -86,7 +86,6 @@ RegistrationRouter.patch("/approve/:id", ensureAuthenticated,  async (req, res) 
 
             const adminId  = jwt.decode(req.headers.authorization)._id; // extract the id of admin who is accept the request
             const { email: adminEmail } = await AdminModel.findById(adminId);
-
             if ( registrationUser.role =="company")
             {
                 const newCompany = new CompanyModel(

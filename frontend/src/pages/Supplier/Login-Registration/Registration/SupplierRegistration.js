@@ -16,7 +16,7 @@ function SupplierRegistration() {
         supplierPhone: '',
         supplierProduct: '',
         commercialRegister: '',
-        role:'supplier'
+        role:'supplier',
     })
 
     // const [file, setFile] = useState(null);
@@ -84,6 +84,7 @@ function SupplierRegistration() {
         // }
 
         try {
+            console.log(registrationInfo)
             const url = `http://localhost:8080/auth/supplier/registration`;
             
             // const formData = new FormData(file);

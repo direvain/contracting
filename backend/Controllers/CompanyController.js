@@ -8,32 +8,42 @@ env.config();
 
 const registration = async (req, res) => {
     try {
-        const { companyName, email, companyID, password, companyPhone, commercialRegister } = req.body;
-        const checkCompany = await CompanyModel.findOne({
-            $or: [{ companyName }, { companyID }]
+        const { companyName, email, companyID, password, companyPhone, commercialRegister,role } = req.body;
+
+        // Check if the company already exists
+        const checkCompany = await RegisterModel.findOne({
+            $or: [{ Name: companyName }, {Id:companyID }]
         });
 
         if (checkCompany) {
             return res.status(406)
-                .json({ message: 'Company is already exist', success: false });
+                .json({ message: 'Company already exists', success: false });
         }
-        const newUser = new RegisterModel({ companyName, email, username, password, companyPhone, commercialRegister, role }); // const and password and save change it for what u want adn the new is name for the collection so change it 
+        // Create a new user object with proper field mappings
+        const newUser = new RegisterModel({
+            Name: companyName,
+            email,
+            Id: companyID,
+            password: await bcrypt.hash(password, 10), // Hash password
+            Phone: companyPhone,
+            commercialRegister: Buffer.from(commercialRegister, 'utf-8'), // Convert to binary if necessary
+            role
+        });
 
-        newUser.password = await bcrypt.hash(password, 10);
+        // Save the new user to the database
         await newUser.save();
-        res.status(201)
-            .json({
-                message: "Registration successfully",
-                success: true
-            })
+
+        res.status(201).json({
+            message: "Registration successful",
+            success: true
+        });
     } catch (err) {
-        res.status(500)
-            .json({
-                message: "Internal server error" + err.message,
-                success: false
-            })
+        res.status(500).json({
+            message: "Internal server error: " + err.message,
+            success: false
+        });
     }
-}
+};
 
 const login = async (req, res) => {
     try {
@@ -45,6 +55,7 @@ const login = async (req, res) => {
                 .json({ message: errorMsg, success: false });
         }
         const isPassEqual = await bcrypt.compare(password, company.password);
+
         if (!isPassEqual) {
             return res.status(403)
                 .json({ message: errorMsg, success: false });

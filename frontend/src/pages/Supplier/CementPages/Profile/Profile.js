@@ -24,7 +24,7 @@ function Profile() {
         }, 500)
     }    
 
-    const handleEditPriceClick = () => {
+    const handleEditinformationClick = () => {
         navigate("/supplier/cement/profile/edit-price"); 
     };
 
@@ -67,7 +67,6 @@ function Profile() {
             <div className={styles.profileContainer}>
                 <div className={styles.profileRow}>
                     <h1 className={styles.profileH1}>{decodedData.supplierName} Profile</h1>
-                    <button className={styles.profileEditPriceButton} onClick={handleEditPriceClick}>Edit price</button>
                     <p><strong>Supplier name:</strong> {decodedData.supplierName}</p>
                     <p><strong>Supplier ID:</strong> {decodedData.supplierID}</p>
                     <p><strong>Email:</strong> {decodedData.email}</p>
@@ -78,6 +77,8 @@ function Profile() {
                         <a href={`http://localhost:5000/uploads/${supplierData.commercialRegister}`} target="_blank" rel="noopener noreferrer">View PDF</a>
                     </p>
                     <p><strong>Price of one bag:</strong> {supplierData.price} JD</p>
+                    <button className={styles.profileEditPriceButton} onClick={handleEditinformationClick}>Edit information</button>
+
                 </div>
             </div>
 

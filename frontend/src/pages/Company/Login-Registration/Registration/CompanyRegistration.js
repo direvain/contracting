@@ -14,7 +14,7 @@ function CompanyRegistration() {
         confirmPassword: '',
         companyPhone: '',
         commercialRegister: '',
-        role:'comapny'
+        role:'company'
     })
 
     const navigate = useNavigate();
