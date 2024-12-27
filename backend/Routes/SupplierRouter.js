@@ -6,6 +6,7 @@ import ensureAuthenticated from "../Middlewares/Auth.js";
 import OrderModel from "../Models/Order.js";
 import SupplierModel from "../Models/Supplier.js";
 import CompanyModel from "../Models/Company.js";
+import AdminModel from "../Models/Admin.js";
 
 const SupplierRouter = express.Router();
 
@@ -30,11 +31,37 @@ SupplierRouter.get('/supplierData', ensureAuthenticated, async (req, res) => {
                 supplierProduct:1,
                 price:1,
                 commercialRegister: 1,
-                adminEmail: 1,
+                adminID: 1,
             });
+            /*
+            data 
+            id 1 
+            id 2 
+            id 3 
+            */
         if(suppliers.length===0){            return res.json({ error: "No data found" });        }
-        res.json(suppliers);
-    } catch (error) 
+
+        const suppliersWithAdmin = await Promise.all(suppliers.map(async (data) => {
+            // Find admin email using adminID
+            const admin = await AdminModel.findOne(
+                { _id: data.adminID },
+                { email: 1 }
+            );
+
+            return {
+                _id: data._id,
+                supplierName: data.supplierName,
+                email: data.email,
+                supplierID: data.supplierID,
+                supplierPhone: data.supplierPhone,
+                price: data.price,
+                commercialRegister: data.commercialRegister,
+                supplierProduct: data.supplierProduct,
+                adminEmail: admin ? admin.email : null,
+            };
+        }));
+        res.json(suppliersWithAdmin);
+       } catch (error) 
     {
         res.status(500).json({ error: "Failed to fetch data" });
     }

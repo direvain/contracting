@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { handleError, handleSuccess } from '../../../../../utils/utils';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import styles from './EditPrice.module.css';
+import styles from './EditProfile.module.css';
 import Navbar from '../../../../../components/navbar/Navbar';
 import Footer from '../../../../../components/footer/Footer';
 
-function EditPrice() {
+function EditProfile() {
     const [supplierData, setSupplierData] = useState('');
     const [inputValue, setInputValue] = useState({
             price: '',
@@ -200,4 +200,4 @@ function EditPrice() {
     );
 }
 
-export { EditPrice };
+export { EditProfile };

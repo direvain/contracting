@@ -64,7 +64,7 @@ const OrderFilter = (props) => {
             <aside className={`${styles.orderFilterAside} ${isSidebarVisible ? styles.active : ''}`}>
                 <form className={styles.orderFilterForm}>
                     <h2 className={styles.orderFilterH2}>Filter Orders</h2>
-                    {props.user === 'company' && (
+                    {props.user === 'company' || props.user === 'admin'&& (
                         <>
                             <label className={styles.orderFilterLabel}>
                                 Type:
@@ -115,26 +115,30 @@ const OrderFilter = (props) => {
                             </select>
                         </label>
                     )}
-                    <label className={styles.orderFilterLabel}>
-                        Delivery Date From:
-                        <input
-                            className={styles.orderFilterInput}
-                            type="date"
-                            value={fromDate}
-                            title='A date greater than or equal to the from date'
-                            onChange={(e) => setFromDate(e.target.value)}
-                        />
-                    </label>
-                    <label className={styles.orderFilterLabel}>
-                        Delivery Date To:
-                        <input
-                            className={styles.orderFilterInput}
-                            type="date"
-                            value={toDate}
-                            title='A date less than or equal to the to date'
-                            onChange={(e) => setToDate(e.target.value)}
-                        />
-                    </label>
+                    {props.user != 'admin' && (
+                        <>
+                        <label className={styles.orderFilterLabel}>
+                            Delivery Date From:
+                            <input
+                                className={styles.orderFilterInput}
+                                type="date"
+                                value={fromDate}
+                                title='A date greater than or equal to the from date'
+                                onChange={(e) => setFromDate(e.target.value)}
+                            />
+                        </label>
+                        <label className={styles.orderFilterLabel}>
+                            Delivery Date To:
+                            <input
+                                className={styles.orderFilterInput}
+                                type="date"
+                                value={toDate}
+                                title='A date less than or equal to the to date'
+                                onChange={(e) => setToDate(e.target.value)}
+                            />
+                        </label>
+                        </>
+                    )}
                     <button className={styles.submitButton} onClick={(e) => {submitFilter(e)}}>Submit</button>
                 </form>
             </aside>

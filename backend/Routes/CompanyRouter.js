@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import cementOrder from "../Controllers/OrderController.js";
 import SupplierModel from "../Models/Supplier.js";
 import OrderModel from "../Models/Order.js";
+import AdminModel from "../Models/Admin.js";
 
 const app = express();
 app.use(bodyParser.json()); 
@@ -29,11 +30,29 @@ CompanyRouter.get('/companyData', ensureAuthenticated, async (req, res) => {
             companyID: 1,
             companyPhone: 1,
             commercialRegister: 1,
-            adminEmail: 1
+            adminID: 1
         }); 
+        if (companies.length === 0){  return res.json({ error: "No data found" });        }
 
-        if (companies.length === 0){            return res.json({ error: "No data found" });        }
-        res.json(companies);
+        const companyWithAdmin = await Promise.all(companies.map(async (data)=>{
+
+            const admin = await AdminModel.findOne(
+                { _id: data.adminID },
+                { email: 1 }
+            );
+            return{
+                _id:data._id,
+                companyName:data.companyName,
+                email:data.email,
+                companyID:data.companyID,
+                companyPhone:data.companyPhone,
+                commercialRegister:data.commercialRegister,
+                adminEmail: admin ? admin.email : null,
+            
+            }
+        }))
+        res.json(companyWithAdmin)
+
 
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch data" });

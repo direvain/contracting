@@ -40,7 +40,7 @@ const SupplierSchema = new mongoose.Schema({
         type: String,
         default:"supplier"
     },    
-    adminEmail: {
+    adminID: {
         type: String,
         default: 'admin'
     }

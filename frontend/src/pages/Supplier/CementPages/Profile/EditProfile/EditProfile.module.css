@@ -1,4 +1,4 @@
-.editPriceContainer {
+.editProfileContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,7 +6,7 @@
     padding: 20px; 
 }
 
-.editPriceRow {
+.editProfileRow {
     background-color: #ffffff9a;
     padding: 20px;
     width: 90%; 
@@ -15,7 +15,7 @@
     box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
 }
 
-.editPriceH1 {
+.editProfileH1 {
     text-align: center;
     font-size: 20pt; 
     color: #333;
@@ -23,22 +23,22 @@
     margin-top: 0;
 }
 
-.editPriceForm {
+.editProfileForm {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.editPriceDiv {
+.editProfileDiv {
     display: flex;
     flex-direction: column;
 }
 
-.editPriceLabel strong {
+.editProfileLabel strong {
     font-size: 18px; 
 }
 
-.editPriceInput {
+.editProfileInput {
     width: 95%; 
     font-size: 18px; 
     padding: 10px;
@@ -49,12 +49,12 @@
     background-color: #ffffff00;
 }
 
-.editPriceInput::placeholder {
+.editProfileInput::placeholder {
     font-size: 12px;
     font-style: italic;
 }
 
-.editPriceButton {
+.editProfileButton {
     background-color: rgb(109, 102, 109);
     border: none;
     font-size: 18px; 
@@ -66,29 +66,29 @@
     transition: background-color 0.3s ease;
 }
 
-.editPriceButton:hover {
+.editProfileButton:hover {
     background-color: rgb(54, 54, 54);
 }
 
 @media (min-width: 768px) {
-    .editPriceRow {
+    .editProfileRow {
         width: 60%; /* عرض أكبر للشاشات المتوسطة */
         padding: 20px 48px; /* استعادة التباعد السابق */
     }
 
-    .editPriceH1 {
+    .editProfileH1 {
         font-size: 25pt; /* تكبير النص الرئيسي */
     }
 
-    .editPriceLabel {
+    .editProfileLabel {
         font-size: 16px;
     }
 
-    .editPriceContainer .editPriceInput {
+    .editProfileContainer .editProfileInput {
         font-size: 16px;
     }
 
-    .editPriceContainer .editPriceButton {
+    .editProfileContainer .editProfileButton {
         font-size: 16px;
         padding: 8px;
     }

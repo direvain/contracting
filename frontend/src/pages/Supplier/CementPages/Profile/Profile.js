@@ -25,7 +25,7 @@ function Profile() {
     }    
 
     const handleEditinformationClick = () => {
-        navigate("/supplier/cement/profile/edit-price"); 
+        navigate("/supplier/cement/profile/edit-profile"); 
     };
 
     const fetchSupplierData = async () => {

@@ -54,7 +54,7 @@ function ApproveRegister()
                     });
                     if (!companyResponse.ok)  {throw new Error('Failed to fetch company ');}
                     const companyData  = await companyResponse.json();
-                    return companyData;
+                    return await companyData;
             }catch (error)
             {
                 console.error('Failed to fetch company data:', error);
@@ -71,7 +71,7 @@ function ApproveRegister()
                     });
                     if (!supplierResponse.ok) {throw new Error('Failed to fetch suppliers ');}
                     const supplierData = await supplierResponse.json();        
-                    return supplierData
+                    return await supplierData;
                 } catch (error) 
                 {
                     console.error(error.message);
@@ -125,19 +125,18 @@ function ApproveRegister()
     
     return (
     <div>
-    <ToastContainer />
-        
+
         <Navbar
             three="Approved"
-            pathThree="/admin/approve-order"
+            pathThree="/admin/approve-user"
             four="Rejected"
-            pathFour="/admin/reject-order"
+            pathFour="/admin/reject-user"
 
             five="Pending"
-            pathFive="/admin/request-order"
+            pathFive="/admin/request-user"
 
             six="Add Admin"
-            pathSix="/admin/Add-admin"
+            pathSix="/admin/add-admin"
             logout={handleLogout}
         />
         <h2 className={styles.List}>Suppliers Approved List:</h2>
@@ -170,7 +169,7 @@ function ApproveRegister()
                                     
                                 </p>
                                 <p>
-                                    <strong>Admin email:</strong> {field.adminId} 
+                                    <strong>Admin email:</strong> {field.adminEmail} 
                                 </p>
                                 <button
                                     className={styles.pendingButtonDrop}
@@ -207,7 +206,7 @@ function ApproveRegister()
                                     <strong>Commercial register:</strong> <a href={JSON.stringify(field.commercialRegister)}>view PDF</a> 
                                 </p>
                                 <p>
-                                    <strong>Admin email:</strong> {field.adminId} 
+                                    <strong>Admin email:</strong> {field.adminEmail} 
                                 </p>
                                 <button
                                         className={styles.pendingButtonDrop}
@@ -221,6 +220,8 @@ function ApproveRegister()
                     <p>No companies found.</p>
                 )}
         </div>
+            <ToastContainer />
+
     </div>
     );
     

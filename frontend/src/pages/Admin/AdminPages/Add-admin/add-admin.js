@@ -77,15 +77,15 @@ function AddAdmin() {
         <div>
             <Navbar
                 three="Approved"
-                pathThree="/admin/home/approve-order"
+                pathThree="/admin/home/approve-user"
                 four="Rejected"
-                pathFour="/admin/home/reject-order"
+                pathFour="/admin/home/reject-user"
 
                 five="Pending"
-                pathFive="/admin/home/request-order"
+                pathFive="/admin/home/request-user"
 
                 six="Add Admin"
-                pathSix="/admin/home/Add-admin"
+                pathSix="/admin/add-admin"
 
                 logout={handleLogout}
             />

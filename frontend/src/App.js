@@ -18,7 +18,7 @@ import { UnderPreparingOrders as SupplierCementUnderPreparingOrders } from './pa
 import { PendingOrders as SupplierCementPendingOrders } from './pages/Supplier/CementPages/PendingOrders/PendingOrders';
 import { OldOrders as SupplierCementOldOrders } from './pages/Supplier/CementPages/OldOrders/OldOrders';
 import { Profile as SupplierCementProfile } from './pages/Supplier/CementPages/Profile/Profile';
-import { EditPrice as SupplierCementProfileEditPrice } from './pages/Supplier/CementPages/Profile/EditPrice/EditPrice';
+import { EditProfile as SupplierCementProfileEditProfile } from './pages/Supplier/CementPages/Profile/EditProfile/EditProfile';
 
 // Company
 import CompanyLogin from "./pages/Company/Login-Registration/Login/CompanyLogin";
@@ -99,12 +99,12 @@ function App() {
                                                 allowedRoles={['supplier']}
                                                 element={<SupplierCementProfile />}
                                               />}/>
-        <Route path="/supplier/cement/profile/edit-price" element={<PrivateRoute
+        <Route path="/supplier/cement/profile/edit-profile" element={<PrivateRoute
                                                 isAuthenticated={isAuthenticated}
                                                 role={role}
                                                 supplierProduct= {supplierProduct}
                                                 allowedRoles={['supplier']}
-                                                element={<SupplierCementProfileEditPrice />}
+                                                element={<SupplierCementProfileEditProfile />}
                                               />}/>
         
         {/* Company */}
@@ -161,19 +161,19 @@ function App() {
 
         {/* Admin */}
         <Route path="/admin" element={<AdminLogin />} /> 
-        <Route path="/admin/approve-order" element={<PrivateRoute
+        <Route path="/admin/approve-user" element={<PrivateRoute
                                                 isAuthenticated={isAuthenticated}
                                                 role={role}
                                                 allowedRoles={['admin']}
                                                 element={<ApproveRegister />}
                                               />}/>
-        <Route path="/admin/reject-order" element={<PrivateRoute
+        <Route path="/admin/reject-user" element={<PrivateRoute
                                                 isAuthenticated={isAuthenticated}
                                                 role={role}
                                                 allowedRoles={['admin']}
                                                 element={<RejectRegister />}
                                               />}/>                                                                                            
-        <Route path="/admin/request-order" element={<PrivateRoute
+        <Route path="/admin/request-user" element={<PrivateRoute
                                                 isAuthenticated={isAuthenticated}
                                                 role={role}
                                                 allowedRoles={['admin']}
