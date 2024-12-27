@@ -33,12 +33,6 @@ SupplierRouter.get('/supplierData', ensureAuthenticated, async (req, res) => {
                 commercialRegister: 1,
                 adminID: 1,
             });
-            /*
-            data 
-            id 1 
-            id 2 
-            id 3 
-            */
         if(suppliers.length===0){            return res.json({ error: "No data found" });        }
 
         const suppliersWithAdmin = await Promise.all(suppliers.map(async (data) => {

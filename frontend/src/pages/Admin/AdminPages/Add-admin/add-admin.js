@@ -119,7 +119,6 @@ function AddAdmin() {
                             />
                         </div>
                         <button className={styles.adminRegistrationButton} type='submit'>Add Admin</button>
-                        <ToastContainer />
                     </form>
                 </div>
             </section>

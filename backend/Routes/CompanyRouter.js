@@ -38,7 +38,7 @@ CompanyRouter.get('/companyData', ensureAuthenticated, async (req, res) => {
 
             const admin = await AdminModel.findOne(
                 { _id: data.adminID },
-                { email: 1 }
+                { email: 1, }
             );
             return{
                 _id:data._id,

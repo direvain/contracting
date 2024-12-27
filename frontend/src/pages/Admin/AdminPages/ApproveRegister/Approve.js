@@ -32,9 +32,7 @@ function ApproveRegister()
 
     const handleLogout = (e) =>
         {
-
             localStorage.removeItem('token');
-            localStorage.removeItem('loggedInUser');
             localStorage.removeItem('role');
             handleSuccess('User Loggedout');
             setTimeout(() => 
@@ -78,19 +76,19 @@ function ApproveRegister()
                     return { supplierData: []} ;// Return an empty array in case of error
                 }
         };
-        async function deleteCompany(companyId) 
+        async function deleteCompany(companyID) 
         {
             try
             {
                 const confirmDrop = window.confirm('Are you sure you want to drop this user?');
                 if (!confirmDrop) return;
-                const response = await fetch(`http://localhost:8080/auth/company/delete/${companyId}`,
+                const response = await fetch(`http://localhost:8080/auth/company/delete/${companyID}`,
                     {
                         method: 'DELETE',
                         headers: { Authorization: localStorage.getItem('token') },
                     });
                     if (response.ok) {
-                        setCompanies(deleteCompany => deleteCompany.filter(company => company.companyID !== companyId));
+                        setCompanies(deleteCompany => deleteCompany.filter(company => company.companyID !== companyID));
                         handleSuccess('Company deleted successfully '); // Show success message
                     } else {
                         console.error('Failed to delete company:', response.statusText);
@@ -125,7 +123,6 @@ function ApproveRegister()
     
     return (
     <div>
-
         <Navbar
             three="Approved"
             pathThree="/admin/approve-user"
@@ -140,8 +137,7 @@ function ApproveRegister()
             logout={handleLogout}
         />
         <h2 className={styles.List}>Suppliers Approved List:</h2>
-            <div className={styles.profileContainer}>
-
+        <div className={styles.profileContainer}>
                 {suppliers.length > 0 ? (
                     suppliers.map((field) => 
                         (
@@ -219,7 +215,7 @@ function ApproveRegister()
                 ) : (
                     <p>No companies found.</p>
                 )}
-        </div>
+        </div> 
             <ToastContainer />
 
     </div>
