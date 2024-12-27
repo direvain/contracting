@@ -106,7 +106,7 @@ const handleLogout = (e) =>
                 pathFour="/admin/reject-user"
 
                 five="Pending"
-                pathFive="/admin/=request-user"
+                pathFive="/admin/request-user"
 
                 six="Add Admin"
                 pathSix="/admin/add-admin"
