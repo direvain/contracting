@@ -168,7 +168,20 @@ RegistrationRouter.delete("/delete/:id", ensureAuthenticated, async (req, res) =
         }
 }); 
 
-
+// Get commercialRegister Data in Collection userRegistration 
+RegistrationRouter.get('/registration-commercial-register/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await RegisterModel.findOne({ID: id})
+        if (!user) return res.status(404).json({message: 'Commercial register not found', success: false});   
+        res.set({
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment;filename=${user.name}.pdf`,
+            }).send(user.commercialRegister) 
+        } catch (error) {
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
+    }
+});
 
 
 export default RegistrationRouter;

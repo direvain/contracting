@@ -9,6 +9,8 @@ import cementOrder from "../Controllers/OrderController.js";
 import SupplierModel from "../Models/Supplier.js";
 import OrderModel from "../Models/Order.js";
 import AdminModel from "../Models/Admin.js";
+import {formidableTransformer} from "../Middlewares/FormidableTransformer.js";
+
 
 const app = express();
 app.use(bodyParser.json()); 
@@ -73,6 +75,20 @@ CompanyRouter.delete("/delete/:id", ensureAuthenticated, async (req, res) => {
         }
 });
 
+CompanyRouter.get('/admin-commercial-register/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        const id = req.params.id;
+        console.log(id);
+        const company = await CompanyModel.findOne({companyID: id})
+        if (!company) return res.status(404).json({message: 'Commercial register not found', success: false});
+        res.set({
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment;filename=${company.companyName}.pdf`,
+            }).send(company.commercialRegister) 
+        } catch (error) {
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
+    }
+});
 
 // ----------------------------- Concrete -----------------------------
 
@@ -82,17 +98,21 @@ CompanyRouter.delete("/delete/:id", ensureAuthenticated, async (req, res) => {
 CompanyRouter.post('/cement-order', ensureAuthenticated, cementOrder);
 
 // Get commercialRegister Data in Collection Companies 
+
+
 CompanyRouter.get('/company-commercial-register', ensureAuthenticated, async (req, res) => {
     try {
         const id = jwt.decode(req.headers.authorization)._id;
-        const companyCommercialRegister = await CompanyModel.findOne({ _id: id })
-        if (!companyCommercialRegister) return res.status(404).json({ message: 'Commercial register not found', success: false });
-        res.json(companyCommercialRegister.commercialRegister);
-    } catch (error) {
+        const company = await CompanyModel.findOne({_id: id})
+        if (!company) return res.status(404).json({message: 'Commercial register not found', success: false});
+        res.set({
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment;filename=${company.companyName}.pdf`,
+            }).send(company.commercialRegister) 
+        } catch (error) {
         res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
     }
 });
-    
 // Get Price in Collection Supplier - in CementOrder
 CompanyRouter.get('/data-supplier', ensureAuthenticated, async (req, res) => {
     try {

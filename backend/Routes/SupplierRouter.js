@@ -184,6 +184,22 @@ SupplierRouter.patch('/update-price', ensureAuthenticated, async (req, res) => {
     }
 });
 
+// Get commercialRegister Data in Collection suppliers 
+SupplierRouter.get('/admin-commercial-register/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        const id = req.params.id;
+        console.log(id)
+        const supplier = await SupplierModel.findOne({supplierID : id})
+        if (!supplier) return res.status(404).json({message: 'Commercial register not found', success: false});   
+        res.set({
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment;filename=${supplier.supplierName}.pdf`,
+            }).send(supplier.commercialRegister) 
+        } catch (error) {
+        res.status(500).json({ message: "Internal server errror: " + error.message, success: false });
+    }
+});
+
 // ----------------------------- Concrete -----------------------------
 
 export default SupplierRouter;
